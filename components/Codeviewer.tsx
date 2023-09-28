@@ -25,6 +25,7 @@ export default function CodeViewer({
       showLineNumbers
       wrapLines
       lineProps={(lineNumber) => {
+        if (linesToHighlight.length === 0) return {};
         const style = !linesToHighlight.includes(lineNumber)
           ? { filter: "contrast(0.3)" }
           : {};

@@ -17,7 +17,7 @@ const nextConfig = {
   },
   images: {
     domains: ['github.com', 'lh3.googleusercontent.com']
-  }
+  },
 }
 
 export default withMDX(nextConfig)

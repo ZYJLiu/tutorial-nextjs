@@ -35,7 +35,7 @@ export default function ClientComponent({
             className="rounded-lg flex items-center justify-center text-center p-2"
             // defaultSize={defaultLayout[1]}
           >
-            {RightTopPanel}
+            <div className="overflow-auto h-full w-full">{RightTopPanel}</div>
           </Panel>
           {/* <PanelResizeHandle className="my-1 h-2 bg-slate-300" /> */}
           <ResizeHandle />

@@ -37,10 +37,5 @@ export const LineHighlightProvider: React.FC<LineHighlightProviderProps> = ({
 
 export const useLineHighlight = (): LineHighlightContextProps => {
   const context = useContext(LineHighlightContext);
-  if (!context) {
-    throw new Error(
-      "useLineHighlight must be used within a LineHighlightProvider"
-    );
-  }
-  return context;
+  return context!;
 };
