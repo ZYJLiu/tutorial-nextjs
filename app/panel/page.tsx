@@ -4,7 +4,7 @@ import CodeViewer from "@/components/Codeviewer";
 import getDefaultLayout from "@/utils/PanelDefault";
 import Doc from "./doc.mdx";
 import { useLineHighlight } from "@/context/LineHighlight";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 
 export default function Home() {
@@ -36,7 +36,13 @@ export default function Home() {
 
   const language = "javascript";
 
-  const { linesToHighlight } = useLineHighlight();
+  const { linesToHighlight, fileToHighlight } = useLineHighlight();
+
+  useEffect(() => {
+    if (fileToHighlight != null && fileToHighlight < files.length) {
+      setCurrentFile(files[fileToHighlight]);
+    }
+  }, [fileToHighlight]);
 
   return (
     <main className="h-[90vh] p-1">

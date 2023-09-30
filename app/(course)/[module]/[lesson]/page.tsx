@@ -29,6 +29,14 @@ function Lesson({ params }: LessonProps) {
 
   const [filesContent, setFilesContent] = useState<FilesContent>([]);
   const [currentFile, setCurrentFile] = useState(filesContent[0]);
+  const { linesToHighlight, fileToHighlight } = useLineHighlight();
+  const language = "typescript";
+
+  useEffect(() => {
+    if (fileToHighlight != null && fileToHighlight < filesContent.length) {
+      setCurrentFile(filesContent[fileToHighlight]);
+    }
+  }, [fileToHighlight]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,9 +63,6 @@ function Lesson({ params }: LessonProps) {
 
     fetchData();
   }, []);
-
-  const language = "typescript";
-  const { linesToHighlight } = useLineHighlight();
 
   return (
     <main className="h-[90vh] p-1">
