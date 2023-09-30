@@ -22,8 +22,7 @@ export default function ClientComponent({
     <PanelGroup direction="horizontal" onLayout={onLayout}>
       <Panel
         className="rounded-lg flex justify-center text-center p-2"
-        // defaultSize={defaultLayout[0]}
-        // minSize={20}
+        defaultSize={50}
       >
         <div className="overflow-auto w-full pl-5 pr-5">{LeftPanel}</div>
       </Panel>
@@ -33,7 +32,7 @@ export default function ClientComponent({
         <PanelGroup direction="vertical" onLayout={onLayout}>
           <Panel
             className="rounded-lg flex items-center justify-center text-center p-2"
-            // defaultSize={defaultLayout[1]}
+            defaultSize={90}
           >
             <div className="overflow-auto h-full w-full">{RightTopPanel}</div>
           </Panel>
@@ -41,7 +40,7 @@ export default function ClientComponent({
           <ResizeHandle />
           <Panel
             className="rounded-lg flex items-center justify-center text-center p-2"
-            // defaultSize={defaultLayout[2]}
+            defaultSize={10}
           >
             {RightBottomPanel}
           </Panel>
