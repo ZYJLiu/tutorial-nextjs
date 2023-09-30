@@ -1,32 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from 'path';
-import fs from 'fs';
+import path from "path";
+import fs from "fs";
 
-async function getFile(params: { module: string; lesson: string }) {
+async function getFiles(params: { module: string; lesson: string }) {
   console.log("params", params);
   const lessonDirPath = path.join(
     process.cwd(),
     "content",
     "course",
     `${params!.module}-module`,
-    `${params!.lesson}-lesson`
+    `${params!.lesson}-lesson`,
+    "code"
   );
 
-  const filePath = path.join(lessonDirPath, "file.ts");
-  console.log("filePath", filePath);
-  const codeString = fs.readFileSync(filePath, "utf-8");
+  try {
+    // Read the names of all files in the directory
+    const fileNames = await fs.promises.readdir(lessonDirPath);
 
-  return codeString;
+    const filesContent: { name: string; content: string }[] = [];
+
+    // Loop over all files and read their content
+    for (const fileName of fileNames) {
+      const filePath = path.join(lessonDirPath, fileName);
+      const fileContent = await fs.promises.readFile(filePath, "utf-8");
+      filesContent.push({
+        name: fileName,
+        content: fileContent,
+      });
+    }
+
+    return filesContent;
+  } catch (error) {
+    console.error("Error reading files:", error);
+    throw error;
+  }
 }
 
-
 export async function POST(request: NextRequest): Promise<NextResponse> {
-    const { module, lesson } = await request.json();
-    try {
-      const codeString =  await getFile({ module, lesson });
-      return NextResponse.json({ codeString }, { status: 200 });
-    } catch (error) {
-      console.error('Error in POST function: ', error);
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-    }
+  const { module, lesson } = await request.json();
+  try {
+    const filesContent = await getFiles({ module, lesson });
+    return NextResponse.json({ filesContent }, { status: 200 });
+  } catch (error) {
+    console.error("Error in POST function: ", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
+}

@@ -4,6 +4,7 @@ import ClientComponent from "@/components/ClientComponent";
 import CodeViewer from "@/components/Codeviewer";
 import { useLineHighlight } from "@/context/LineHighlight";
 import { useEffect, useMemo, useState } from "react";
+import { Tabs, Tab } from "@nextui-org/react";
 
 interface LessonProps {
   params: {
@@ -11,6 +12,9 @@ interface LessonProps {
     lesson: string;
   };
 }
+
+type FilesContent = { name: string; content: string }[];
+
 function Lesson({ params }: LessonProps) {
   const DynamicDoc = useMemo(
     () =>
@@ -23,7 +27,8 @@ function Lesson({ params }: LessonProps) {
     [params.module, params.lesson]
   );
 
-  const [codeString, setCodeString] = useState("");
+  const [filesContent, setFilesContent] = useState<FilesContent>([]);
+  const [currentFile, setCurrentFile] = useState(filesContent[0]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,20 +36,27 @@ function Lesson({ params }: LessonProps) {
         const response = await fetch(`${window.location.origin}/api/readfile`, {
           method: "POST",
           body: JSON.stringify(params),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
 
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
+
         const data = await response.json();
-        console.log("data", data.message);
-        setCodeString(data.codeString);
+        console.log("data", data);
+
+        setFilesContent(data.filesContent);
       } catch (error) {
         console.error("Failed to fetch the data", error);
       }
     };
 
     fetchData();
-  }, [params]);
+  }, []);
 
-  const language = "javascript";
+  const language = "typescript";
   const { linesToHighlight } = useLineHighlight();
 
   return (
@@ -52,11 +64,23 @@ function Lesson({ params }: LessonProps) {
       <ClientComponent
         LeftPanel={<DynamicDoc />}
         RightTopPanel={
-          <CodeViewer
-            language={language}
-            code={codeString}
-            linesToHighlight={linesToHighlight}
-          />
+          <Tabs
+            variant={"bordered"}
+            selectedKey={currentFile ? currentFile.name : ""}
+            onSelectionChange={(name) =>
+              setCurrentFile(filesContent.find((file) => file.name === name)!)
+            }
+          >
+            {filesContent.map((file) => (
+              <Tab key={file.name} title={file.name}>
+                <CodeViewer
+                  language={language}
+                  code={currentFile ? currentFile.content : ""}
+                  linesToHighlight={linesToHighlight}
+                />
+              </Tab>
+            ))}
+          </Tabs>
         }
         RightBottomPanel={<div>Custom Content for Right Bottom Panel</div>}
       />
@@ -65,53 +89,3 @@ function Lesson({ params }: LessonProps) {
 }
 
 export default Lesson;
-
-// interface LessonProps {
-//   params: {
-//     module: string;
-//     lesson: string;
-//   };
-// }
-
-// export default function Lesson({ params }: LessonProps) {
-//   return (
-//     <div className="flex flex-col justify-center items-center space-y-2 h-[50vh]">
-//       <span>Module {params.module}</span>
-//       <span>Lesson {params.lesson}</span>
-//       <Button href={`/`} as={Link}>
-//         Home
-//       </Button>
-//     </div>
-//   );
-// }
-
-// export const getStaticProps: GetStaticProps = async (context) => {
-//   const { params } = context;
-
-//   const lessonDirPath = path.join(
-//     process.cwd(),
-//     "content",
-//     "course",
-//     params!.module as string,
-//     `${params!.lesson}-lesson`
-//   );
-
-//   // // Importing README.mdx content
-//   // const readmePath = path.join(lessonDirPath, "README.mdx");
-//   // const docContent = fs.readFileSync(readmePath, "utf-8");
-
-//   // Importing file.ts content
-//   const filePath = path.join(lessonDirPath, "file.ts");
-//   const codeString = fs.existsSync(filePath)
-//     ? fs.readFileSync(filePath, "utf-8")
-//     : ""; // Check if file exists
-
-//   return {
-//     props: {
-//       module: params!.module,
-//       lesson: params!.lesson,
-//       // docContent,
-//       codeString,
-//     },
-//   };
-// };

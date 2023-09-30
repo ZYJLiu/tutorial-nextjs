@@ -13,7 +13,7 @@ interface Modules {
 }
 
 const modules: Modules = {
-  "1": ["Lesson 1"],
+  "1": ["Lesson 1", "Lesson 2"],
   "2": ["Lesson 1", "Lesson 2"],
   "3": ["Lesson 1", "Lesson 2", "Lesson 3"],
 };
