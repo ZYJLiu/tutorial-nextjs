@@ -5,7 +5,7 @@ import getDefaultLayout from "@/utils/PanelDefault";
 import Doc from "./doc.mdx";
 import { useLineHighlight } from "@/context/LineHighlight";
 import { useEffect, useState } from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/tabs";
 
 export default function Home() {
   const files = [

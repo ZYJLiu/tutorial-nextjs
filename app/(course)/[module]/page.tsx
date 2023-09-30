@@ -1,5 +1,4 @@
-"use client";
-import { Button, Spacer } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import Link from "next/link";
 
 interface ModuleProps {

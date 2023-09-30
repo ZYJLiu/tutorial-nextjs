@@ -1,6 +1,4 @@
 import type { MDXComponents } from "mdx/types";
-import React from "react";
-import { Card, CardBody } from "@nextui-org/react";
 import CustomCard from "./components/CustomCard";
 
 // This file allows you to provide custom React components

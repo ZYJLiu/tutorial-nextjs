@@ -10,6 +10,7 @@ import {
 } from "@nextui-org/navbar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import WalletMultiButton from "./WalletMultiButton";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -54,6 +55,9 @@ export const Nav = () => {
             <Link href={item.href}>{item.label}</Link>
           </NavbarItem>
         ))}
+        <NavbarItem>
+          <WalletMultiButton />
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   );

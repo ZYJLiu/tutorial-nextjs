@@ -1,6 +1,6 @@
 "use client";
 import React, { ReactNode } from "react";
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@nextui-org/card";
 import { useLineHighlight } from "@/context/LineHighlight";
 import { parseHighlightString } from "@/utils/ParseHighlightString";
 

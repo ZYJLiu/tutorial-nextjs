@@ -4,7 +4,7 @@ import ClientComponent from "@/components/ClientComponent";
 import CodeViewer from "@/components/Codeviewer";
 import { useLineHighlight } from "@/context/LineHighlight";
 import { useEffect, useMemo, useState } from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/tabs";
 import PageNav from "@/components/PageNav";
 
 interface LessonProps {

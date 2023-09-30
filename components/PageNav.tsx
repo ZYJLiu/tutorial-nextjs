@@ -1,6 +1,6 @@
-"use client";
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import Link from "next/link";
+import SendTransaction from "./SendTransaction";
 
 interface PageNavProps {
   module: string;
@@ -22,6 +22,7 @@ export default function PageNav({
       >
         Previous
       </Button>
+      <SendTransaction />
       <Button
         isDisabled={lesson >= totalLessons}
         href={`/${module}/${lesson + 1}`}
