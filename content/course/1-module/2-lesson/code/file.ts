@@ -5,16 +5,16 @@ import {
   SystemProgram,
   Transaction,
   sendAndConfirmTransaction,
+  Keypair,
 } from "@solana/web3.js";
-import { getOrCreateKeypair } from "./utils";
 
 (async () => {
   // Establish a connection to the Solana devnet cluster
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-  // Use existing keypairs or generate new ones if they don't exist
-  const wallet_1 = await getOrCreateKeypair("wallet_1");
-  const wallet_2 = await getOrCreateKeypair("wallet_2");
+  // Generate two Keypairs to act as wallets
+  const wallet_1 = new Keypair();
+  const wallet_2 = new Keypair();
 
   const preBalance1 = await connection.getBalance(wallet_1.publicKey);
   console.log("wallet_1 prebalance:", preBalance1 / LAMPORTS_PER_SOL);

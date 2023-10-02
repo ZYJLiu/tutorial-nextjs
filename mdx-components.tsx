@@ -1,5 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import CustomCard from "./components/CustomCard";
+import SendTransaction from "./components/SendTransaction";
 
 // This file allows you to provide custom React components
 // to be used in MDX files. You can import and use any
@@ -14,6 +15,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     // h1: H1,
     ...components,
     CustomCard,
+    SendTransaction,
   };
 }
 

@@ -1,12 +1,16 @@
-import { Connection, clusterApiUrl, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { getOrCreateKeypair } from "./utils";
+import {
+  Connection,
+  clusterApiUrl,
+  LAMPORTS_PER_SOL,
+  Keypair,
+} from "@solana/web3.js";
 
 (async () => {
   // Establish a connection to the Solana devnet cluster
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-  // Use existing keypairs or generate new ones if they don't exist
-  const wallet_1 = await getOrCreateKeypair("wallet_1");
+  // Generate Keypair to act as wallet
+  const wallet_1 = new Keypair();
 
   // Retrieve and log the new balance of each wallet after the transfer
   const preBalance = await connection.getBalance(wallet_1.publicKey);
