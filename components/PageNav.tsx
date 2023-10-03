@@ -7,6 +7,7 @@ interface PageNavProps {
   totalLessons: number;
 }
 
+// Page navigation component used in bottom right panel of lesson page
 export default function PageNav({
   module,
   lesson,

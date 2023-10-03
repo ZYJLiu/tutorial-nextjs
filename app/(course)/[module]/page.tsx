@@ -11,12 +11,14 @@ interface Modules {
   [key: string]: string[];
 }
 
+// Placeholder for total lessons per module
 const modules: Modules = {
   "1": ["Lesson 1", "Lesson 2"],
   "2": ["Lesson 1", "Lesson 2"],
   "3": ["Lesson 1", "Lesson 2", "Lesson 3"],
 };
 
+// Dynamic route to display the module page, with list of links to lesson page
 export default function Module({ params }: ModuleProps) {
   const lessons = modules[params.module] || [];
 

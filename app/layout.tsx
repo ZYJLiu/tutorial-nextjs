@@ -18,7 +18,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      {/* <body className="flex flex-col h-screen overflow-hidden"> */}
       <body suppressHydrationWarning={true}>
         <Provider>
           <Nav />

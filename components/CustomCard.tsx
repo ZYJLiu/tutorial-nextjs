@@ -12,6 +12,9 @@ interface CustomCardProps {
   file?: number;
 }
 
+// Component used in MDX files to select the static code snippet and lines to highlight in the right panel
+// Affects the "CodeViewer" component
+// ex. <CustomCard linesToHighlight="15-19, 26-27, 30-37" file={1}>
 export default function CustomCard({
   children,
   linesToHighlight,

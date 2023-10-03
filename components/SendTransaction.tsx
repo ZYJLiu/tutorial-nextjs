@@ -11,6 +11,9 @@ interface SendTransactionProps {
   type: TransactionType;
 }
 
+// Send transaction button used in MDX files
+// General idea is to send a devnet transaction to demo code displayed in the right panel
+// And display toast notification with link to Solana Explorer
 export default function SendTransaction({ type }: SendTransactionProps) {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();

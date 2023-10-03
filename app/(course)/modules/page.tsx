@@ -1,12 +1,12 @@
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
 
+// Page to display the list of modules in the course
 export default function Modules() {
-  // Define an array of modules with href and label.
+  // Links to each module page
   const modules = [
     { href: "/1", label: "Module 1" },
     { href: "/2", label: "Module 2" },
-    { href: "/3", label: "Module 3" },
   ];
 
   return (

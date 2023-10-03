@@ -3,10 +3,10 @@
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { useEffect, useMemo, useState } from "react";
 
-import ClientComponent from "@/components/ClientComponent";
 import CodeMirror from "@uiw/react-codemirror";
-import CodeViewer from "@/components/Codeviewer";
+import CodeViewer from "@/components/CodeViewer";
 import PageNav from "@/components/PageNav";
+import Panels from "@/components/Panels";
 import dynamic from "next/dynamic";
 import { javascript } from "@codemirror/lang-javascript";
 import { useLineHighlight } from "@/context/LineHighlight";
@@ -21,7 +21,16 @@ interface LessonProps {
 
 type FilesContent = { name: string; content: string }[];
 
+// Placeholder for total lessons per module
+const totalLessons: Record<string, number> = {
+  "1": 3,
+  "2": 2,
+  "3": 1,
+};
+
+// Dynamic route to display the module lesson page
 function Lesson({ params }: LessonProps) {
+  // Get the MDX file for the lesson
   const DynamicDoc = useMemo(
     () =>
       dynamic(
@@ -33,26 +42,24 @@ function Lesson({ params }: LessonProps) {
     [params.module, params.lesson],
   );
 
-  const totalLessons: Record<string, number> = {
-    "1": 3,
-    "2": 2,
-    "3": 1,
-  };
-
+  // State to store the files content
   const [filesContent, setFilesContent] = useState<FilesContent>([]);
+
+  // State to store the current file
   const [currentFile, setCurrentFile] = useState(filesContent[0]);
+
+  // Lines to highlight, used for static code viewer
   const { linesToHighlight, fileToHighlight } = useLineHighlight();
+  // language used for static code viewer, hardcoded for now
   const language = "typescript";
 
-  useEffect(() => {
-    if (fileToHighlight != null && fileToHighlight < filesContent.length) {
-      setCurrentFile(filesContent[fileToHighlight]);
-    }
-  }, [fileToHighlight]);
-
+  // Fetch the files content using nextjs API route, because can't use fs in the browser
+  // This fetches the files to display in the right panel
+  // TODO: find a better way to do this
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch the files content
         const response = await fetch(`${window.location.origin}/api/readfile`, {
           method: "POST",
           body: JSON.stringify(params),
@@ -67,6 +74,7 @@ function Lesson({ params }: LessonProps) {
         const data = await response.json();
         console.log("data", data);
 
+        // Set the files content
         setFilesContent(data.filesContent);
       } catch (error) {
         console.error("Failed to fetch the data", error);
@@ -76,9 +84,16 @@ function Lesson({ params }: LessonProps) {
     fetchData();
   }, []);
 
+  // Select the file to display in the right panel
+  useEffect(() => {
+    if (fileToHighlight != null && fileToHighlight < filesContent.length) {
+      setCurrentFile(filesContent[fileToHighlight]);
+    }
+  }, [fileToHighlight]);
+
   return (
     <main className="h-[90vh] p-1">
-      <ClientComponent
+      <Panels
         LeftPanel={<DynamicDoc />}
         RightTopPanel={
           <Tabs

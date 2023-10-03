@@ -14,12 +14,15 @@ import WalletMultiButton from "./WalletMultiButton";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
+// Hardcoded navigation items
+// Panel pages are for testing purposes
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Panel", href: "/panel" },
   { label: "Panel2", href: "/panel2" },
 ];
 
+// Navbar component
 export const Nav = () => {
   const pathname = usePathname();
   const menuToggleRef = useRef<HTMLButtonElement>(null);

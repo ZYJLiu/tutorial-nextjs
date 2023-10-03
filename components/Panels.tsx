@@ -4,7 +4,8 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 import ResizeHandle from "./ResizeHandle";
 
-export default function ClientComponent({
+// Layout for the panels for the lesson pages
+export default function Panels({
   //   defaultLayout,
   LeftPanel,
   RightTopPanel,

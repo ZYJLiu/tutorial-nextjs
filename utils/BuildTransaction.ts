@@ -14,7 +14,6 @@ import {
   getMinimumBalanceForRentExemptMint,
 } from "@solana/spl-token";
 
-// Establish a connection to the Solana devnet cluster
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 export enum TransactionType {
@@ -23,6 +22,8 @@ export enum TransactionType {
   CreateMint = "createMint",
 }
 
+// Build transaction based on type to demo
+// Used with "SendTransaction" button in MDX file
 export async function buildTransaction(
   type: TransactionType,
   pubkey: PublicKey,

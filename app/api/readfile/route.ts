@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
+// Get files in ./content/course/[module]-module/[lesson]-lesson/code
 async function getFiles(params: { module: string; lesson: string }) {
   console.log("params", params);
   const lessonDirPath = path.join(
@@ -37,6 +38,8 @@ async function getFiles(params: { module: string; lesson: string }) {
   }
 }
 
+// Nextjs API route to return code files ./api/readfile
+// Using API route to use "fs"
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const { module, lesson } = await request.json();
   try {

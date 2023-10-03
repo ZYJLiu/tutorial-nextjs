@@ -9,6 +9,7 @@ export type CodeViewerProps = {
   startingLineNumber?: number;
 };
 
+// Component for displaying static code snippets
 export default function CodeViewer({
   language,
   code,

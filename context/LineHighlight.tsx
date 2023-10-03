@@ -1,11 +1,12 @@
 "use client";
+
 import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
   createContext,
   useContext,
   useState,
-  ReactNode,
-  Dispatch,
-  SetStateAction,
 } from "react";
 
 interface LineHighlightContextProps {
@@ -23,6 +24,8 @@ interface LineHighlightProviderProps {
   children: ReactNode;
 }
 
+// Used to select the static code snippet and lines to highlight in the right pane
+// Affects the "CodeViewer" component
 export const LineHighlightProvider: React.FC<LineHighlightProviderProps> = ({
   children,
 }) => {

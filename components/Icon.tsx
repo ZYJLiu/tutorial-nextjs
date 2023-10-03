@@ -19,6 +19,8 @@ export type IconType =
   | "typescript"
   | "warning";
 
+// Copied from "react-resizable-panels" demo
+// Currently only using the panel icons
 export default function Icon({
   className = "",
   type,

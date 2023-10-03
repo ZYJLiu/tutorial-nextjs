@@ -2,6 +2,7 @@ import Icon from "./Icon";
 import { PanelResizeHandle } from "react-resizable-panels";
 import styles from "./ResizeHandle.module.css";
 
+// Copied from "react-resizable-panels" demo to apply custom styles to the resize handle for the panels
 export default function ResizeHandle({
   className = "",
   collapsed = false,

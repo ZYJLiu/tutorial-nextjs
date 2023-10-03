@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 
+// Unused currently due to client / server component mismatch
 export default function getDefaultLayout() {
   const layout = cookies().get("react-resizable-panels:layout");
   if (layout) {

@@ -1,3 +1,5 @@
+// Test panel for misc testing
+// Currently testing CodeMirror editor
 "use client";
 
 import * as parser from "@babel/parser";
@@ -6,10 +8,10 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@nextui-org/button";
-import ClientComponent from "@/components/ClientComponent";
 import CodeMirror from "@uiw/react-codemirror";
-import CodeViewer from "@/components/Codeviewer";
+import CodeViewer from "@/components/CodeViewer";
 import Doc from "./doc.mdx";
+import Panels from "@/components/Panels";
 import { createTheme } from "@uiw/codemirror-themes";
 import generate from "@babel/generator";
 import getDefaultLayout from "@/utils/PanelDefault";
@@ -157,7 +159,7 @@ export default function Home() {
 
   return (
     <main className="h-[90vh] p-1">
-      <ClientComponent
+      <Panels
         // defaultLayout={defaultLayout}
         LeftPanel={<Doc />}
         RightTopPanel={
