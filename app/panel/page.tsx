@@ -12,6 +12,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import CodeViewer from "@/components/CodeViewer";
 import Doc from "./doc.mdx";
 import Panels from "@/components/Panels";
+import ReactDiffViewer from "react-diff-viewer-continued";
 import { createTheme } from "@uiw/codemirror-themes";
 import generate from "@babel/generator";
 import getDefaultLayout from "@/utils/PanelDefault";
@@ -23,57 +24,44 @@ import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 
 type Key = string | number | bigint;
 
+// Placeholder
+const initialFiles = [
+  {
+    name: "file1",
+    content: `function HelloWorld() {
+    console.log('Hello, World!');
+    console.log('Hello, World!');
+  }`,
+  },
+  {
+    name: "file2",
+    content: `function HelloWorld() {
+    console.log('Hello, World!');
+    console.log('Hello, World!');
+  }`,
+  },
+  {
+    name: "file3",
+    content: `function HelloWorld() {
+    console.log('Hello, World!');
+  }`,
+  },
+];
+
+// Placeholder
+const solutions = {
+  file1: `function HelloWorld() {
+    console.log('Solution for File 2');
+  }`,
+  file2: `function HelloWorld() {
+    console.log('Solution for File 2');
+  }`,
+  file3: `function HelloWorld() {
+    console.log('Solution for File 3');
+  }`,
+};
+
 export default function Home() {
-  const initialFiles = [
-    {
-      name: "file1",
-      content: `const onChange = useCallback(
-      (val: string) => {
-        const updatedFiles = files.slice();
-        updatedFiles[currentFileIndex] = {
-          ...files[currentFileIndex],
-          content: val,
-        };
-        setFiles(updatedFiles);
-      },
-      [currentFileIndex, files],
-    );`,
-    },
-    {
-      name: "file2",
-      content: `function HelloWorld() {
-      console.log('Hello, World!');
-      console.log('Hello, World!');
-    }`,
-    },
-    {
-      name: "file3",
-      content: `function HelloWorld() {
-      console.log('Hello, World!');
-    }`,
-    },
-  ];
-
-  const solutions = {
-    file1: `const onChange = useCallback(
-      (val: string) => {
-        const updatedFiles = files.slice();
-        updatedFiles[currentFileIndex] = {
-          ...files[currentFileIndex],
-          content: val,
-        };
-        setFiles(updatedFiles);
-      },
-      [currentFileIndex, files],
-    );`,
-    file2: `function HelloWorld() {
-        console.log('Solution for File 2');
-    }`,
-    file3: `function HelloWorld() {
-        console.log('Solution for File 3');
-    }`,
-  };
-
   // const language = "javascript";
 
   // const { linesToHighlight, fileToHighlight } = useLineHighlight();
@@ -86,6 +74,7 @@ export default function Home() {
 
   const [files, setFiles] = useState(initialFiles);
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
+  const [showDiff, setShowDiff] = useState(false);
 
   const onChange = useCallback(
     (val: string) => {
@@ -157,6 +146,10 @@ export default function Home() {
     setFiles(updatedFiles);
   };
 
+  const toggleShowDiff = () => {
+    setShowDiff((prevState) => !prevState);
+  };
+
   return (
     <main className="h-[90vh] p-1">
       <Panels
@@ -187,8 +180,26 @@ export default function Home() {
         }
         RightBottomPanel={
           <>
-            <Button onClick={compareSolution}>Compare to Solution</Button>
-            <Button onClick={showSolution}>Show Solution</Button>
+            {showDiff && (
+              <ReactDiffViewer
+                oldValue={files[currentFileIndex].content}
+                newValue={
+                  solutions[
+                    files[currentFileIndex].name as keyof typeof solutions
+                  ]
+                }
+                splitView={false}
+                disableWordDiff={true}
+                showDiffOnly={true}
+                useDarkTheme={true}
+              />
+            )}
+
+            <div className="mt-2 flex w-full justify-center space-x-2">
+              <Button onClick={toggleShowDiff}>Hint</Button>
+              <Button onClick={compareSolution}>Check</Button>
+              <Button onClick={showSolution}>Answer</Button>
+            </div>
           </>
         }
       />
