@@ -24,7 +24,7 @@ interface LineHighlightProviderProps {
   children: ReactNode;
 }
 
-// Used to select the static code snippet and lines to highlight in the right pane
+// Used to select the static code snippet and lines to highlight in the right panel
 // Affects the "CodeViewer" component
 export const LineHighlightProvider: React.FC<LineHighlightProviderProps> = ({
   children,
