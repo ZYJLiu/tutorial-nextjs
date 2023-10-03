@@ -1,11 +1,13 @@
 "use client";
-import dynamic from "next/dynamic";
+
+import { Tab, Tabs } from "@nextui-org/tabs";
+import { useEffect, useMemo, useState } from "react";
+
 import ClientComponent from "@/components/ClientComponent";
 import CodeViewer from "@/components/Codeviewer";
-import { useLineHighlight } from "@/context/LineHighlight";
-import { useEffect, useMemo, useState } from "react";
-import { Tabs, Tab } from "@nextui-org/tabs";
 import PageNav from "@/components/PageNav";
+import dynamic from "next/dynamic";
+import { useLineHighlight } from "@/context/LineHighlight";
 
 interface LessonProps {
   params: {
@@ -23,9 +25,9 @@ function Lesson({ params }: LessonProps) {
         () =>
           import(
             `@/content/course/${params.module}-module/${params.lesson}-lesson/README.mdx`
-          )
+          ),
       ),
-    [params.module, params.lesson]
+    [params.module, params.lesson],
   );
 
   const totalLessons: Record<string, number> = {

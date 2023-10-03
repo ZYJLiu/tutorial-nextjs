@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
+
 import fs from "fs";
+import path from "path";
 
 async function getFiles(params: { module: string; lesson: string }) {
   console.log("params", params);
@@ -10,7 +11,7 @@ async function getFiles(params: { module: string; lesson: string }) {
     "course",
     `${params!.module}-module`,
     `${params!.lesson}-lesson`,
-    "code"
+    "code",
   );
 
   try {
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.error("Error in POST function: ", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

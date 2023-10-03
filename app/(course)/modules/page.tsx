@@ -10,7 +10,7 @@ export default function Modules() {
   ];
 
   return (
-    <div className="flex flex-col justify-center items-center space-y-2 h-[50vh]">
+    <div className="flex h-[50vh] flex-col items-center justify-center space-y-2">
       {modules.map((module) => (
         <Button key={module.href} href={module.href} as={Link}>
           {module.label}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+
 import ResizeHandle from "./ResizeHandle";
 
 export default function ClientComponent({
@@ -21,25 +22,25 @@ export default function ClientComponent({
   return (
     <PanelGroup direction="horizontal" onLayout={onLayout}>
       <Panel
-        className="rounded-lg flex justify-center text-center p-2"
+        className="flex justify-center rounded-lg p-2 text-center"
         defaultSize={50}
       >
-        <div className="overflow-auto w-full pl-5 pr-5">{LeftPanel}</div>
+        <div className="w-full overflow-auto pl-5 pr-5">{LeftPanel}</div>
       </Panel>
       {/* <PanelResizeHandle className="mx-1 w-2 bg-slate-300" /> */}
       <ResizeHandle />
       <Panel>
         <PanelGroup direction="vertical" onLayout={onLayout}>
           <Panel
-            className="rounded-lg flex items-center justify-center text-center p-2"
+            className="flex items-center justify-center rounded-lg p-2 text-center"
             defaultSize={90}
           >
-            <div className="overflow-auto h-full w-full">{RightTopPanel}</div>
+            <div className="h-full w-full overflow-auto">{RightTopPanel}</div>
           </Panel>
           {/* <PanelResizeHandle className="my-1 h-2 bg-slate-300" /> */}
           <ResizeHandle />
           <Panel
-            className="rounded-lg flex items-center justify-center text-center p-2"
+            className="flex items-center justify-center rounded-lg p-2 text-center"
             defaultSize={10}
           >
             {RightBottomPanel}

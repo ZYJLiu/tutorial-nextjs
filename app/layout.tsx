@@ -1,8 +1,9 @@
 import "@/styles/globals.css";
-import type { Metadata } from "next";
-import { Provider } from "./provider";
-import { Nav } from "@/components/Navbar";
+
 import Loading from "./loading";
+import type { Metadata } from "next";
+import { Nav } from "@/components/Navbar";
+import { Provider } from "./provider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -21,7 +22,6 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <Provider>
           <Nav />
-          {/* loading not working as expected */}
           <Suspense fallback={<Loading />}>
             <div className="flex-1 overflow-hidden">{children}</div>
           </Suspense>

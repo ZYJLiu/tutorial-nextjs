@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+
 import {
   Navbar,
   NavbarContent,
@@ -8,9 +8,11 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/navbar";
+
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import WalletMultiButton from "./WalletMultiButton";
+import { usePathname } from "next/navigation";
+import { useRef } from "react";
 
 const navItems = [
   { label: "Home", href: "/" },

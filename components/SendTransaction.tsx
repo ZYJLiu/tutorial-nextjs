@@ -1,11 +1,17 @@
-import { useState } from "react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { LAMPORTS_PER_SOL, SystemProgram, Transaction } from "@solana/web3.js";
-import { Button } from "@nextui-org/button";
+import { TransactionType, buildTransaction } from "@/utils/BuildTransaction";
 import toast, { Toaster } from "react-hot-toast";
-import { Link } from "@nextui-org/link";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
-export default function SendTransaction() {
+import { Button } from "@nextui-org/button";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { Link } from "@nextui-org/link";
+import { useState } from "react";
+
+interface SendTransactionProps {
+  type: TransactionType;
+}
+
+export default function SendTransaction({ type }: SendTransactionProps) {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const [isLoading, setIsLoading] = useState(false);
@@ -16,24 +22,31 @@ export default function SendTransaction() {
     setIsLoading(true);
 
     try {
-      // Define the amount to transfer
-      const transferAmount = 0.1; // 0.1 SOL
+      let transactionSignature: string;
+      if (type === TransactionType.Airdrop) {
+        // Request the airdrop
+        transactionSignature = await connection.requestAirdrop(
+          publicKey,
+          5 * LAMPORTS_PER_SOL,
+        );
 
-      // Create a transfer instruction for transferring SOL from wallet_1 to wallet_2
-      const transferInstruction = SystemProgram.transfer({
-        fromPubkey: publicKey,
-        toPubkey: publicKey,
-        lamports: transferAmount * LAMPORTS_PER_SOL, // Convert transferAmount to lamports
-      });
+        const { blockhash, lastValidBlockHeight } =
+          await connection.getLatestBlockhash();
 
-      // Add the transfer instruction to a new transaction
-      const transaction = new Transaction().add(transferInstruction);
-
-      // Send transaction
-      const transactionSignature = await sendTransaction(
-        transaction,
-        connection
-      );
+        // Confirm the airdrop transaction
+        await connection.confirmTransaction(
+          {
+            blockhash,
+            lastValidBlockHeight,
+            signature: transactionSignature,
+          },
+          "confirmed",
+        );
+      } else {
+        const transaction = await buildTransaction(type, publicKey);
+        // Send transaction
+        transactionSignature = await sendTransaction(transaction, connection);
+      }
 
       const notify = () =>
         toast.success(
@@ -50,11 +63,20 @@ export default function SendTransaction() {
               background: "#333",
               color: "#fff",
             },
-          }
+          },
         );
 
       notify();
     } catch (error) {
+      const notify = () =>
+        toast.error(`Transaction Fail: ${error}`, {
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+
+      notify();
       console.log(error);
     } finally {
       setIsLoading(false);

@@ -1,8 +1,10 @@
 "use client";
-import React, { ReactNode } from "react";
+
 import { Card, CardBody } from "@nextui-org/card";
-import { useLineHighlight } from "@/context/LineHighlight";
+import React, { ReactNode } from "react";
+
 import { parseHighlightString } from "@/utils/ParseHighlightString";
+import { useLineHighlight } from "@/context/LineHighlight";
 
 interface CustomCardProps {
   children: ReactNode;
