@@ -4,13 +4,15 @@
 
 import * as parser from "@babel/parser";
 
+import { DiffEditor, Editor } from "@monaco-editor/react";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@nextui-org/button";
 import CodeMirror from "@uiw/react-codemirror";
 import CodeViewer from "@/components/CodeViewer";
 import Doc from "./doc.mdx";
+import { ImperativePanelHandle } from "react-resizable-panels";
 import Panels from "@/components/Panels";
 import ReactDiffViewer from "react-diff-viewer-continued";
 import { createTheme } from "@uiw/codemirror-themes";
@@ -61,32 +63,13 @@ const solutions = {
   }`,
 };
 
-export default function Home() {
-  // const language = "javascript";
-
-  // const { linesToHighlight, fileToHighlight } = useLineHighlight();
-
-  // useEffect(() => {
-  //   if (fileToHighlight != null && fileToHighlight < initialFiles.length) {
-  //     setCurrentFile(initialFiles[fileToHighlight]);
-  //   }
-  // }, [fileToHighlight]);
-
+export default function TestPanel() {
   const [files, setFiles] = useState(initialFiles);
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [showDiff, setShowDiff] = useState(false);
 
-  const onChange = useCallback(
-    (val: string) => {
-      const updatedFiles = files.slice();
-      updatedFiles[currentFileIndex] = {
-        ...files[currentFileIndex],
-        content: val,
-      };
-      setFiles(updatedFiles);
-    },
-    [currentFileIndex, files],
-  );
+  const [rightTopPanelHeight, setRightTopPanelHeight] = useState("50vh");
+  const [rightBottomPanelHeight, setRightBottomPanelHeight] = useState("25vh");
 
   const handleTabSelection = (name: Key): void => {
     const newFileIndex = files.findIndex((file) => file.name === name);
@@ -150,10 +133,26 @@ export default function Home() {
     setShowDiff((prevState) => !prevState);
   };
 
+  // monaco editor
+  function handleEditorChange(value: string | undefined) {
+    if (value === undefined) return;
+    const updatedFiles = files.slice();
+    updatedFiles[currentFileIndex] = {
+      ...files[currentFileIndex],
+      content: value,
+    };
+    setFiles(updatedFiles);
+  }
+
+  console.log(rightBottomPanelHeight);
+  // console.log(rightTopPanelHeight);
+
   return (
     <main className="h-[90vh] p-1">
       <Panels
         // defaultLayout={defaultLayout}
+        setRightTopPanelHeight={setRightTopPanelHeight}
+        setRightBottomPanelHeight={setRightBottomPanelHeight}
         LeftPanel={<Doc />}
         RightTopPanel={
           <Tabs
@@ -163,17 +162,18 @@ export default function Home() {
           >
             {files.map((file, index) => (
               <Tab key={file.name} title={file.name}>
-                <CodeMirror
-                  value={index === currentFileIndex ? file.content : ""}
-                  extensions={[javascript({ jsx: true })]}
-                  theme={myTheme}
-                  onChange={onChange}
+                <Editor
+                  height={rightTopPanelHeight}
+                  defaultLanguage="javascript"
+                  theme="vs-dark"
+                  defaultValue={index === currentFileIndex ? file.content : ""}
+                  onChange={handleEditorChange}
+                  options={{
+                    minimap: { enabled: false },
+                    scrollBeyondLastLine: false,
+                    wordWrap: "on",
+                  }}
                 />
-                {/* <CodeViewer
-                  language={language}
-                  code={currentFile.content}
-                  linesToHighlight={linesToHighlight}
-                /> */}
               </Tab>
             ))}
           </Tabs>
@@ -181,17 +181,24 @@ export default function Home() {
         RightBottomPanel={
           <>
             {showDiff && (
-              <ReactDiffViewer
-                oldValue={files[currentFileIndex].content}
-                newValue={
+              <DiffEditor
+                original={files[currentFileIndex].content}
+                modified={
                   solutions[
                     files[currentFileIndex].name as keyof typeof solutions
                   ]
                 }
-                splitView={false}
-                disableWordDiff={true}
-                showDiffOnly={true}
-                useDarkTheme={true}
+                height={rightBottomPanelHeight}
+                language="javascript"
+                theme="vs-dark"
+                options={{
+                  renderSideBySide: false,
+                  minimap: { enabled: false },
+                  readOnly: true,
+                  scrollbar: { verticalScrollbarSize: 0 },
+                  scrollBeyondLastLine: false,
+                  wordWrap: "on",
+                }}
               />
             )}
 
@@ -206,93 +213,3 @@ export default function Home() {
     </main>
   );
 }
-
-const myTheme = createTheme({
-  theme: "dark",
-  settings: {
-    background: "#000000",
-    foreground: "#9cdcfe",
-    caret: "#c6c6c6",
-    selection: "#6199ff2f",
-    selectionMatch: "#72a1ff59",
-    lineHighlight: "#ffffff0f",
-    gutterBackground: "#000000",
-    gutterForeground: "#838383",
-    gutterActiveForeground: "#fff",
-    fontFamily:
-      'Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono", "Courier New", monospace',
-  },
-  styles: [
-    {
-      tag: [
-        t.keyword,
-        t.operatorKeyword,
-        t.modifier,
-        t.color,
-        t.constant(t.name),
-        t.standard(t.name),
-        t.standard(t.tagName),
-        t.special(t.brace),
-        t.atom,
-        t.bool,
-        t.special(t.variableName),
-      ],
-      color: "#569cd6",
-    },
-    {
-      tag: [t.controlKeyword, t.moduleKeyword],
-      color: "#c586c0",
-    },
-    {
-      tag: [
-        t.name,
-        t.deleted,
-        t.character,
-        t.macroName,
-        t.propertyName,
-        t.variableName,
-        t.labelName,
-        t.definition(t.name),
-      ],
-      color: "#9cdcfe",
-    },
-    { tag: t.heading, fontWeight: "bold", color: "#9cdcfe" },
-    {
-      tag: [
-        t.typeName,
-        t.className,
-        t.tagName,
-        t.number,
-        t.changed,
-        t.annotation,
-        t.self,
-        t.namespace,
-      ],
-      color: "#4ec9b0",
-    },
-    {
-      tag: [t.function(t.variableName), t.function(t.propertyName)],
-      color: "#dcdcaa",
-    },
-    { tag: [t.number], color: "#b5cea8" },
-    {
-      tag: [t.operator, t.punctuation, t.separator, t.url, t.escape, t.regexp],
-      color: "#d4d4d4",
-    },
-    {
-      tag: [t.regexp],
-      color: "#d16969",
-    },
-    {
-      tag: [t.special(t.string), t.processingInstruction, t.string, t.inserted],
-      color: "#ce9178",
-    },
-    { tag: [t.angleBracket], color: "#808080" },
-    { tag: t.strong, fontWeight: "bold" },
-    { tag: t.emphasis, fontStyle: "italic" },
-    { tag: t.strikethrough, textDecoration: "line-through" },
-    { tag: [t.meta, t.comment], color: "#6a9955" },
-    { tag: t.link, color: "#6a9955", textDecoration: "underline" },
-    { tag: t.invalid, color: "#ff0000" },
-  ],
-});
