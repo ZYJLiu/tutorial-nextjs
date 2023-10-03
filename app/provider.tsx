@@ -26,7 +26,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
     <NextUIProvider>
       <NextThemesProvider defaultTheme="dark">
         <ConnectionProvider endpoint={endpoint}>
-          <WalletProvider wallets={wallets} autoConnect>
+          <WalletProvider wallets={wallets}>
             <WalletModalProvider>
               <LineHighlightProvider>{children}</LineHighlightProvider>
             </WalletModalProvider>

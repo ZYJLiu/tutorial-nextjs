@@ -32,7 +32,7 @@ export default function ClientComponent({
       <Panel>
         <PanelGroup direction="vertical" onLayout={onLayout}>
           <Panel
-            className="flex items-center justify-center rounded-lg p-2 text-center"
+            // className="flex items-center justify-center rounded-lg p-2 text-center"
             defaultSize={90}
           >
             <div className="h-full w-full overflow-auto">{RightTopPanel}</div>
@@ -40,10 +40,12 @@ export default function ClientComponent({
           {/* <PanelResizeHandle className="my-1 h-2 bg-slate-300" /> */}
           <ResizeHandle />
           <Panel
-            className="flex items-center justify-center rounded-lg p-2 text-center"
+            // className="flex items-center justify-center rounded-lg p-2 text-center"
             defaultSize={10}
           >
-            {RightBottomPanel}
+            <div className="h-full w-full overflow-auto">
+              {RightBottomPanel}
+            </div>
           </Panel>
         </PanelGroup>
       </Panel>
