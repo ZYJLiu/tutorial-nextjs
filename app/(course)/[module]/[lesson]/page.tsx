@@ -72,7 +72,7 @@ async function getFiles(params: { module: string; lesson: string }) {
 }
 
 // Get the MDX content for the lesson
-export const getMdxContentByPath = async (params: {
+const getMdxContentByPath = async (params: {
   module: string;
   lesson: string;
 }) => {
