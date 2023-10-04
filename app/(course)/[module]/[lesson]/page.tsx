@@ -1,6 +1,7 @@
 import LessonContent from "@/components/LessonContent";
 import fs from "fs";
 import path from "path";
+import { serialize } from "next-mdx-remote/serialize";
 
 // placeholder
 export function generateStaticParams() {
@@ -24,9 +25,11 @@ interface LessonProps {
 async function Lesson({ params }: LessonProps) {
   const filesContent = await getFiles(params);
 
+  const mdxDoc = await getMdxContentByPath(params);
+
   return (
     <main className="h-[90vh] p-1">
-      <LessonContent params={params} files={filesContent} />
+      <LessonContent params={params} files={filesContent} mdxDoc={mdxDoc} />
     </main>
   );
 }
@@ -67,3 +70,20 @@ async function getFiles(params: { module: string; lesson: string }) {
     throw error;
   }
 }
+
+// Get the MDX content for the lesson
+export const getMdxContentByPath = async (params: {
+  module: string;
+  lesson: string;
+}) => {
+  const relativePath = `content/course/${params.module}-module/${params.lesson}-lesson/README.mdx`;
+  const fileContent = fs.readFileSync(relativePath, { encoding: "utf8" });
+
+  const mdxSource = await serialize(fileContent);
+  // const { frontmatter, content } = await compileMDX({
+  //   source: fileContent,
+  //   options: { parseFrontmatter: false },
+  // });
+
+  return mdxSource;
+};

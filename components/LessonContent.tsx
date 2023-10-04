@@ -1,12 +1,14 @@
 "use client";
 
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import CodeViewer from "@/components/CodeViewer";
+import CustomCard from "./CustomCard";
+import { MDXRemote } from "next-mdx-remote";
 import PageNav from "@/components/PageNav";
 import Panels from "@/components/Panels";
-import dynamic from "next/dynamic";
+import SendTransaction from "./SendTransaction";
 import { useLineHighlight } from "@/context/LineHighlight";
 
 interface LessonProps {
@@ -15,6 +17,7 @@ interface LessonProps {
     lesson: string;
   };
   files: FilesContent;
+  mdxDoc: any;
 }
 
 type FilesContent = { name: string; content: string }[];
@@ -27,19 +30,7 @@ const totalLessons: Record<string, number> = {
   "3": 1,
 };
 
-export default function LessonContent({ params, files }: LessonProps) {
-  // Get the MDX file for the lesson
-  const Doc = useMemo(
-    () =>
-      dynamic(
-        () =>
-          import(
-            `@/content/course/${params.module}-module/${params.lesson}-lesson/README.mdx`
-          ),
-      ),
-    [params.module, params.lesson],
-  );
-
+export default function LessonContent({ params, files, mdxDoc }: LessonProps) {
   // State to store the files content
   const [filesContent, setFilesContent] = useState<FilesContent>([]);
 
@@ -50,6 +41,8 @@ export default function LessonContent({ params, files }: LessonProps) {
   const { linesToHighlight, fileToHighlight } = useLineHighlight();
   // language used for static code viewer, hardcoded for now
   const language = "typescript";
+
+  const components = { CustomCard, SendTransaction };
 
   useEffect(() => {
     setFilesContent(files);
@@ -64,7 +57,11 @@ export default function LessonContent({ params, files }: LessonProps) {
   }, [fileToHighlight]);
   return (
     <Panels
-      LeftPanel={<Doc />}
+      LeftPanel={
+        <div className="prose w-full max-w-none dark:prose-dark">
+          <MDXRemote {...mdxDoc} components={components} />
+        </div>
+      }
       RightTopPanel={
         <Tabs
           variant={"bordered"}
