@@ -96,29 +96,31 @@ export default function LessonContent({
         </div>
       }
       RightTopPanel={
-        <Tabs
-          variant={"bordered"}
-          selectedKey={files[currentFileIndex].name}
-          onSelectionChange={handleTabSelection}
-        >
-          {filesContent.map((file, index) => (
-            <Tab key={file.name} title={file.name}>
-              <Editor
-                height={rightTopPanelHeight}
-                defaultLanguage="javascript"
-                theme="vs-dark"
-                value={index === currentFileIndex ? file.content : ""}
-                onChange={handleEditorChange}
-                options={{
-                  minimap: { enabled: false },
-                  scrollBeyondLastLine: false,
-                  quickSuggestions: false,
-                  wordWrap: "on",
-                }}
-              />
-            </Tab>
-          ))}
-        </Tabs>
+        <>
+          <Tabs
+            variant={"bordered"}
+            selectedKey={files[currentFileIndex].name}
+            onSelectionChange={handleTabSelection}
+          >
+            {filesContent.map((file) => (
+              <Tab key={file.name} title={file.name} />
+            ))}
+          </Tabs>
+          <Spacer y={2} />
+          <Editor
+            height={rightTopPanelHeight}
+            defaultLanguage="javascript"
+            theme="vs-dark"
+            value={filesContent ? filesContent[currentFileIndex].content : ""}
+            onChange={handleEditorChange}
+            options={{
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              quickSuggestions: false,
+              wordWrap: "on",
+            }}
+          />
+        </>
       }
       RightBottomPanel={
         <>
