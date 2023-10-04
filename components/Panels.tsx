@@ -31,7 +31,7 @@ export default function Panels({
   const handleRightTopPanelResize = () => {
     const size = rightTopPanelRef.current?.getSize("pixels");
     if (size !== undefined && setRightTopPanelHeight) {
-      setRightTopPanelHeight(size - 70);
+      setRightTopPanelHeight(size - 55);
     }
   };
 
@@ -47,26 +47,27 @@ export default function Panels({
       <Panel
         className="flex justify-center rounded-lg p-2 text-center"
         defaultSize={50}
+        collapsible
       >
         <div className="w-full overflow-auto pl-5 pr-5">{LeftPanel}</div>
       </Panel>
-      {/* <PanelResizeHandle className="mx-1 w-2 bg-slate-300" /> */}
       <ResizeHandle />
-      <Panel>
+      <Panel collapsible>
         <PanelGroup direction="vertical">
           <Panel
             defaultSize={60}
             ref={rightTopPanelRef}
             onResize={handleRightTopPanelResize}
+            collapsible
           >
             <div className="h-full w-full overflow-auto">{RightTopPanel}</div>
           </Panel>
-          {/* <PanelResizeHandle className="my-1 h-2 bg-slate-300" /> */}
           <ResizeHandle />
           <Panel
             defaultSize={40}
             ref={rightBottomPanelRef}
             onResize={handleRightBottomPanelResize}
+            collapsible
           >
             <div className="h-full w-full overflow-auto">
               {RightBottomPanel}

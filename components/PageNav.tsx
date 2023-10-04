@@ -14,7 +14,7 @@ export default function PageNav({
   totalLessons,
 }: PageNavProps) {
   return (
-    <div className="flex space-x-4">
+    <div className="flex space-x-2">
       <Button
         isDisabled={lesson <= 1}
         href={`/${module}/${lesson - 1}`}

@@ -9,7 +9,6 @@ import CustomCard from "./CustomCard";
 import PageNav from "@/components/PageNav";
 import Panels from "@/components/Panels";
 import SendTransaction from "./SendTransaction";
-import { Spacer } from "@nextui-org/react";
 import { compareSolution } from "@/utils/LessonContent";
 import { useState } from "react";
 
@@ -96,7 +95,7 @@ export default function LessonContent({
         </div>
       }
       RightTopPanel={
-        <>
+        <div className="space-y-2">
           <Tabs
             variant={"bordered"}
             selectedKey={files[currentFileIndex].name}
@@ -106,7 +105,6 @@ export default function LessonContent({
               <Tab key={file.name} title={file.name} />
             ))}
           </Tabs>
-          <Spacer y={2} />
           <Editor
             height={rightTopPanelHeight}
             defaultLanguage="javascript"
@@ -120,11 +118,39 @@ export default function LessonContent({
               wordWrap: "on",
             }}
           />
-        </>
+        </div>
       }
       RightBottomPanel={
-        <>
-          <div className="mb-2 flex justify-center space-x-2 ">
+        <div className="flex h-full flex-col">
+          <div className="flex-grow">
+            <DiffEditor
+              original={
+                showDiff &&
+                solutions[currentFileIndex] &&
+                filesContent[currentFileIndex]
+                  ? filesContent[currentFileIndex].content
+                  : "// Hint"
+              }
+              modified={
+                showDiff && solutions[currentFileIndex]
+                  ? solutions[currentFileIndex].content
+                  : "// Hint"
+              }
+              height={rightBottomPanelHeight}
+              language="javascript"
+              theme="vs-dark"
+              options={{
+                renderSideBySide: false,
+                minimap: { enabled: false },
+                readOnly: true,
+                scrollbar: { verticalScrollbarSize: 0 },
+                scrollBeyondLastLine: false,
+                wordWrap: "on",
+              }}
+            />
+          </div>
+
+          <div className="mt-2 flex justify-center space-x-2 ">
             <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
               Hint
             </Button>
@@ -142,31 +168,13 @@ export default function LessonContent({
             <Button isDisabled={!hasSolution()} onClick={showSolution}>
               Answer
             </Button>
-            <Spacer x={24} />
             <PageNav
               module={params.module}
               lesson={Number(params.lesson)}
               totalLessons={totalLessons[params.module]}
             />
           </div>
-          {showDiff && solutions[currentFileIndex] && (
-            <DiffEditor
-              original={filesContent[currentFileIndex].content}
-              modified={solutions[currentFileIndex].content}
-              height={rightBottomPanelHeight}
-              language="javascript"
-              theme="vs-dark"
-              options={{
-                renderSideBySide: false,
-                minimap: { enabled: false },
-                readOnly: true,
-                scrollbar: { verticalScrollbarSize: 0 },
-                scrollBeyondLastLine: false,
-                wordWrap: "on",
-              }}
-            />
-          )}
-        </>
+        </div>
       }
       setRightTopPanelHeight={setRightTopPanelHeight}
       setRightBottomPanelHeight={setRightBottomPanelHeight}
