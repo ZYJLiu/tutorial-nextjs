@@ -1,6 +1,11 @@
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
 
+// placeholder
+export function generateStaticParams() {
+  return [{ module: "1" }, { module: "2" }, { module: "3" }];
+}
+
 interface ModuleProps {
   params: {
     module: string;
