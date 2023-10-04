@@ -3,14 +3,11 @@
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { useEffect, useMemo, useState } from "react";
 
-import CodeMirror from "@uiw/react-codemirror";
 import CodeViewer from "@/components/CodeViewer";
 import PageNav from "@/components/PageNav";
 import Panels from "@/components/Panels";
 import dynamic from "next/dynamic";
-import { javascript } from "@codemirror/lang-javascript";
 import { useLineHighlight } from "@/context/LineHighlight";
-import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 
 interface LessonProps {
   params: {
@@ -116,12 +113,6 @@ function Lesson({ params }: LessonProps) {
         }
         RightBottomPanel={
           <div className="space-y-4">
-            {/* <CodeMirror
-              value={currentFile ? currentFile.content : ""}
-              theme={vscodeDark}
-              extensions={[javascript({ jsx: true })]}
-              // onChange={onChange}
-            /> */}
             <div className="flex items-center justify-center ">
               <PageNav
                 module={params.module}
