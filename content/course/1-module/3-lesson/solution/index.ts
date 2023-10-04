@@ -1,8 +1,8 @@
 import {
   Connection,
-  clusterApiUrl,
-  LAMPORTS_PER_SOL,
   Keypair,
+  LAMPORTS_PER_SOL,
+  clusterApiUrl,
 } from "@solana/web3.js";
 
 (async () => {
@@ -19,12 +19,12 @@ import {
   // Request the airdrop
   const transactionSignature = await connection.requestAirdrop(
     wallet_1.publicKey,
-    2 * LAMPORTS_PER_SOL
+    2 * LAMPORTS_PER_SOL,
   );
 
   console.log(
     "Transaction Signature:",
-    `https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`
+    `https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`,
   );
 
   const { blockhash, lastValidBlockHeight } =
@@ -37,7 +37,7 @@ import {
       lastValidBlockHeight,
       signature: transactionSignature,
     },
-    "confirmed"
+    "confirmed",
   );
 
   // Retrieve and log the new balance of each wallet after the transfer

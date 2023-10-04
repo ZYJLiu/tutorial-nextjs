@@ -1,15 +1,17 @@
 "use client";
 
+import { DiffEditor, Editor } from "@monaco-editor/react";
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { useEffect, useState } from "react";
 
-import CodeViewer from "@/components/CodeViewer";
+import { Button } from "@nextui-org/button";
 import CustomCard from "./CustomCard";
-import { MDXRemote } from "next-mdx-remote";
 import PageNav from "@/components/PageNav";
 import Panels from "@/components/Panels";
 import SendTransaction from "./SendTransaction";
-import { useLineHighlight } from "@/context/LineHighlight";
+import { Spacer } from "@nextui-org/react";
+import { compareSolution } from "@/utils/LessonContent";
+import { useState } from "react";
 
 interface LessonProps {
   params: {
@@ -17,11 +19,12 @@ interface LessonProps {
     lesson: string;
   };
   files: FilesContent;
-  mdxDoc: any;
+  solutions: FilesContent;
+  mdxDoc: MDXRemoteSerializeResult;
 }
 
 type FilesContent = { name: string; content: string }[];
-type CurrentFilesContent = { name: string; content: string };
+type Key = string | number | bigint;
 
 // Placeholder for total lessons per module
 const totalLessons: Record<string, number> = {
@@ -30,31 +33,61 @@ const totalLessons: Record<string, number> = {
   "3": 1,
 };
 
-export default function LessonContent({ params, files, mdxDoc }: LessonProps) {
-  // State to store the files content
-  const [filesContent, setFilesContent] = useState<FilesContent>([]);
-
-  // State to store the current file
-  const [currentFile, setCurrentFile] = useState<CurrentFilesContent>();
-
-  // Lines to highlight, used for static code viewer
-  const { linesToHighlight, fileToHighlight } = useLineHighlight();
-  // language used for static code viewer, hardcoded for now
-  const language = "typescript";
-
+export default function LessonContent({
+  params,
+  files,
+  solutions,
+  mdxDoc,
+}: LessonProps) {
+  const [filesContent, setFilesContent] = useState<FilesContent>(files);
+  const [currentFileIndex, setCurrentFileIndex] = useState(0);
+  const [rightTopPanelHeight, setRightTopPanelHeight] = useState<
+    number | string
+  >("50vh");
+  const [rightBottomPanelHeight, setRightBottomPanelHeight] = useState<
+    number | string
+  >("25vh");
+  const [showDiff, setShowDiff] = useState(false);
   const components = { CustomCard, SendTransaction };
 
-  useEffect(() => {
-    setFilesContent(files);
-    setCurrentFile(files[0]);
-  }, [files]);
-
-  // Select the file to display in the right panel
-  useEffect(() => {
-    if (fileToHighlight != null && fileToHighlight < filesContent.length) {
-      setCurrentFile(filesContent[fileToHighlight]);
+  const handleTabSelection = (name: Key): void => {
+    const newFileIndex = files.findIndex((file) => file.name === name);
+    if (newFileIndex !== -1) {
+      setCurrentFileIndex(newFileIndex);
     }
-  }, [fileToHighlight]);
+  };
+
+  const handleEditorChange = (value: string | undefined): void => {
+    if (value === undefined) return;
+    const updatedFiles = files.slice();
+    updatedFiles[currentFileIndex] = {
+      ...files[currentFileIndex],
+      content: value,
+    };
+    setFilesContent(updatedFiles);
+  };
+
+  const toggleShowDiff = () => {
+    setShowDiff((prevState) => !prevState);
+  };
+
+  const showSolution = () => {
+    const solution = solutions[currentFileIndex];
+
+    const updatedFiles = [...files];
+    updatedFiles[currentFileIndex] = {
+      ...filesContent[currentFileIndex],
+      content: solution.content,
+    };
+
+    setFilesContent(updatedFiles);
+  };
+
+  const hasSolution = () => {
+    const currentFileName = files[currentFileIndex].name;
+    return !!solutions.find((solution) => solution.name === currentFileName);
+  };
+
   return (
     <Panels
       LeftPanel={
@@ -65,33 +98,76 @@ export default function LessonContent({ params, files, mdxDoc }: LessonProps) {
       RightTopPanel={
         <Tabs
           variant={"bordered"}
-          selectedKey={currentFile ? currentFile.name : ""}
-          onSelectionChange={(name) =>
-            setCurrentFile(filesContent.find((file) => file.name === name)!)
-          }
+          selectedKey={files[currentFileIndex].name}
+          onSelectionChange={handleTabSelection}
         >
-          {filesContent.map((file) => (
+          {filesContent.map((file, index) => (
             <Tab key={file.name} title={file.name}>
-              <CodeViewer
-                language={language}
-                code={currentFile ? currentFile.content : ""}
-                linesToHighlight={linesToHighlight}
+              <Editor
+                height={rightTopPanelHeight}
+                defaultLanguage="javascript"
+                theme="vs-dark"
+                value={index === currentFileIndex ? file.content : ""}
+                onChange={handleEditorChange}
+                options={{
+                  minimap: { enabled: false },
+                  scrollBeyondLastLine: false,
+                  quickSuggestions: false,
+                  wordWrap: "on",
+                }}
               />
             </Tab>
           ))}
         </Tabs>
       }
       RightBottomPanel={
-        <div className="space-y-4">
-          <div className="flex items-center justify-center ">
+        <>
+          <div className="mb-2 flex justify-center space-x-2 ">
+            <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
+              Hint
+            </Button>
+            <Button
+              isDisabled={!hasSolution()}
+              onClick={() =>
+                compareSolution(
+                  filesContent[currentFileIndex].content,
+                  solutions[currentFileIndex].content,
+                )
+              }
+            >
+              Check
+            </Button>
+            <Button isDisabled={!hasSolution()} onClick={showSolution}>
+              Answer
+            </Button>
+            <Spacer x={24} />
             <PageNav
               module={params.module}
               lesson={Number(params.lesson)}
               totalLessons={totalLessons[params.module]}
             />
           </div>
-        </div>
+          {showDiff && solutions[currentFileIndex] && (
+            <DiffEditor
+              original={filesContent[currentFileIndex].content}
+              modified={solutions[currentFileIndex].content}
+              height={rightBottomPanelHeight}
+              language="javascript"
+              theme="vs-dark"
+              options={{
+                renderSideBySide: false,
+                minimap: { enabled: false },
+                readOnly: true,
+                scrollbar: { verticalScrollbarSize: 0 },
+                scrollBeyondLastLine: false,
+                wordWrap: "on",
+              }}
+            />
+          )}
+        </>
       }
+      setRightTopPanelHeight={setRightTopPanelHeight}
+      setRightBottomPanelHeight={setRightBottomPanelHeight}
     />
   );
 }

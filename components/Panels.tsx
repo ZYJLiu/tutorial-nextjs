@@ -5,7 +5,6 @@ import {
   ImperativePanelHandle,
   Panel,
   PanelGroup,
-  PanelResizeHandle,
 } from "react-resizable-panels";
 
 import ResizeHandle from "./ResizeHandle";
@@ -26,10 +25,6 @@ export default function Panels({
   setRightTopPanelHeight?: Dispatch<SetStateAction<number | string>>;
   setRightBottomPanelHeight?: Dispatch<SetStateAction<number | string>>;
 }) {
-  const onLayout = (sizes: number[]) => {
-    document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)}`;
-  };
-
   const rightTopPanelRef = useRef<ImperativePanelHandle>(null);
   const rightBottomPanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -48,7 +43,7 @@ export default function Panels({
   };
 
   return (
-    <PanelGroup direction="horizontal" onLayout={onLayout}>
+    <PanelGroup direction="horizontal">
       <Panel
         className="flex justify-center rounded-lg p-2 text-center"
         defaultSize={50}
@@ -58,7 +53,7 @@ export default function Panels({
       {/* <PanelResizeHandle className="mx-1 w-2 bg-slate-300" /> */}
       <ResizeHandle />
       <Panel>
-        <PanelGroup direction="vertical" onLayout={onLayout}>
+        <PanelGroup direction="vertical">
           <Panel
             defaultSize={60}
             ref={rightTopPanelRef}

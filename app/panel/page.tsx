@@ -12,7 +12,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@nextui-org/button";
 import CodeViewer from "@/components/CodeViewer";
 import Doc from "./doc.mdx";
-import { ImperativePanelHandle } from "react-resizable-panels";
 import Panels from "@/components/Panels";
 import generate from "@babel/generator";
 import getDefaultLayout from "@/utils/PanelDefault";
@@ -204,6 +203,7 @@ export default function TestPanel() {
                   options={{
                     minimap: { enabled: false },
                     scrollBeyondLastLine: false,
+                    quickSuggestions: false,
                     wordWrap: "on",
                   }}
                 />
