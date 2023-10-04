@@ -4,25 +4,20 @@
 
 import * as parser from "@babel/parser";
 
-import { DiffEditor, Editor } from "@monaco-editor/react";
+import { DiffEditor, Editor, useMonaco } from "@monaco-editor/react";
 import { Tab, Tabs } from "@nextui-org/tabs";
+import toast, { Toaster } from "react-hot-toast";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@nextui-org/button";
-import CodeMirror from "@uiw/react-codemirror";
 import CodeViewer from "@/components/CodeViewer";
 import Doc from "./doc.mdx";
 import { ImperativePanelHandle } from "react-resizable-panels";
 import Panels from "@/components/Panels";
-import ReactDiffViewer from "react-diff-viewer-continued";
-import { createTheme } from "@uiw/codemirror-themes";
 import generate from "@babel/generator";
 import getDefaultLayout from "@/utils/PanelDefault";
-import { javascript } from "@codemirror/lang-javascript";
-import { tags as t } from "@lezer/highlight";
 import traverse from "@babel/traverse";
 import { useLineHighlight } from "@/context/LineHighlight";
-import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 
 type Key = string | number | bigint;
 
@@ -31,6 +26,7 @@ const initialFiles = [
   {
     name: "file1",
     content: `function HelloWorld() {
+    console.log('Hello, World!');
     console.log('Hello, World!');
     console.log('Hello, World!');
   }`,
@@ -53,7 +49,7 @@ const initialFiles = [
 // Placeholder
 const solutions = {
   file1: `function HelloWorld() {
-    console.log('Solution for File 2');
+    console.log('Solution for File 1');
   }`,
   file2: `function HelloWorld() {
     console.log('Solution for File 2');
@@ -68,8 +64,12 @@ export default function TestPanel() {
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [showDiff, setShowDiff] = useState(false);
 
-  const [rightTopPanelHeight, setRightTopPanelHeight] = useState("50vh");
-  const [rightBottomPanelHeight, setRightBottomPanelHeight] = useState("25vh");
+  const [rightTopPanelHeight, setRightTopPanelHeight] = useState<
+    number | string
+  >("50vh");
+  const [rightBottomPanelHeight, setRightBottomPanelHeight] = useState<
+    number | string
+  >("25vh");
 
   const handleTabSelection = (name: Key): void => {
     const newFileIndex = files.findIndex((file) => file.name === name);
@@ -94,6 +94,21 @@ export default function TestPanel() {
 
     return generate(ast).code;
   };
+
+  const notify = (message: string, type: "success" | "error" = "success") => {
+    const styles = {
+      borderRadius: "10px",
+      background: "#333",
+      color: "#fff",
+    };
+
+    if (type === "success") {
+      toast.success(message, { style: styles });
+    } else {
+      toast.error(message, { style: styles });
+    }
+  };
+
   const compareSolution = () => {
     const currentFile = files[currentFileIndex];
     const solution = solutions[currentFile.name as keyof typeof solutions];
@@ -106,12 +121,15 @@ export default function TestPanel() {
       const normalizedContent = normalizeCode(currentFile.content);
       const normalizedSolution = normalizeCode(solution);
       if (normalizedContent === normalizedSolution) {
-        alert("The content matches the solution!");
+        notify("Correct! The content matches the solution.", "success");
       } else {
-        alert("The content does not match the solution.");
+        notify("The content does not match the solution. Try again!", "error");
       }
     } catch (e) {
-      alert("The content does not match the solution.");
+      notify(
+        "Try again! The content does not match the solution. Try again!",
+        "error",
+      );
     }
   };
 
@@ -144,11 +162,26 @@ export default function TestPanel() {
     setFiles(updatedFiles);
   }
 
-  console.log(rightBottomPanelHeight);
-  // console.log(rightTopPanelHeight);
+  // const monaco = useMonaco();
+
+  // useEffect(() => {
+  //   if (monaco) {
+  //     monaco.editor.defineTheme("my-theme", {
+  //       base: "vs-dark",
+  //       inherit: true,
+  //       rules: [],
+  //       colors: {
+  //         "editor.background": "#000000",
+  //       },
+  //     });
+
+  //     monaco.editor.setTheme("my-theme");
+  //   }
+  // }, [monaco]);
 
   return (
     <main className="h-[90vh] p-1">
+      <Toaster position="bottom-center" reverseOrder={false} />
       <Panels
         // defaultLayout={defaultLayout}
         setRightTopPanelHeight={setRightTopPanelHeight}
@@ -166,7 +199,7 @@ export default function TestPanel() {
                   height={rightTopPanelHeight}
                   defaultLanguage="javascript"
                   theme="vs-dark"
-                  defaultValue={index === currentFileIndex ? file.content : ""}
+                  value={index === currentFileIndex ? file.content : ""}
                   onChange={handleEditorChange}
                   options={{
                     minimap: { enabled: false },
@@ -179,7 +212,12 @@ export default function TestPanel() {
           </Tabs>
         }
         RightBottomPanel={
-          <>
+          <div>
+            <div className="mb-2 flex justify-center space-x-2 ">
+              <Button onClick={toggleShowDiff}>Hint</Button>
+              <Button onClick={compareSolution}>Check</Button>
+              <Button onClick={showSolution}>Answer</Button>
+            </div>
             {showDiff && (
               <DiffEditor
                 original={files[currentFileIndex].content}
@@ -201,13 +239,7 @@ export default function TestPanel() {
                 }}
               />
             )}
-
-            <div className="mt-2 flex w-full justify-center space-x-2">
-              <Button onClick={toggleShowDiff}>Hint</Button>
-              <Button onClick={compareSolution}>Check</Button>
-              <Button onClick={showSolution}>Answer</Button>
-            </div>
-          </>
+          </div>
         }
       />
     </main>

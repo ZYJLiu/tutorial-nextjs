@@ -1,5 +1,6 @@
 "use client";
 
+import { Dispatch, SetStateAction, useRef } from "react";
 import {
   ImperativePanelHandle,
   Panel,
@@ -8,7 +9,6 @@ import {
 } from "react-resizable-panels";
 
 import ResizeHandle from "./ResizeHandle";
-import { useRef } from "react";
 
 // Layout for the panels for the lesson pages
 export default function Panels({
@@ -23,8 +23,8 @@ export default function Panels({
   LeftPanel: React.ReactNode;
   RightTopPanel: React.ReactNode;
   RightBottomPanel: React.ReactNode;
-  setRightTopPanelHeight?: any;
-  setRightBottomPanelHeight?: any;
+  setRightTopPanelHeight?: Dispatch<SetStateAction<number | string>>;
+  setRightBottomPanelHeight?: Dispatch<SetStateAction<number | string>>;
 }) {
   const onLayout = (sizes: number[]) => {
     document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)}`;
@@ -32,6 +32,20 @@ export default function Panels({
 
   const rightTopPanelRef = useRef<ImperativePanelHandle>(null);
   const rightBottomPanelRef = useRef<ImperativePanelHandle>(null);
+
+  const handleRightTopPanelResize = () => {
+    const size = rightTopPanelRef.current?.getSize("pixels");
+    if (size !== undefined && setRightTopPanelHeight) {
+      setRightTopPanelHeight(size - 70);
+    }
+  };
+
+  const handleRightBottomPanelResize = () => {
+    const size = rightBottomPanelRef.current?.getSize("pixels");
+    if (size !== undefined && setRightBottomPanelHeight) {
+      setRightBottomPanelHeight(size - 75);
+    }
+  };
 
   return (
     <PanelGroup direction="horizontal" onLayout={onLayout}>
@@ -48,11 +62,7 @@ export default function Panels({
           <Panel
             defaultSize={60}
             ref={rightTopPanelRef}
-            onResize={() =>
-              setRightTopPanelHeight(
-                rightTopPanelRef.current?.getSize("pixels")! - 50,
-              )
-            }
+            onResize={handleRightTopPanelResize}
           >
             <div className="h-full w-full overflow-auto">{RightTopPanel}</div>
           </Panel>
@@ -61,11 +71,7 @@ export default function Panels({
           <Panel
             defaultSize={40}
             ref={rightBottomPanelRef}
-            onResize={() =>
-              setRightBottomPanelHeight(
-                rightBottomPanelRef.current?.getSize("pixels")! - 50,
-              )
-            }
+            onResize={handleRightBottomPanelResize}
           >
             <div className="h-full w-full overflow-auto">
               {RightBottomPanel}
