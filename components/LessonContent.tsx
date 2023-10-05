@@ -53,14 +53,15 @@ export default function LessonContent({
     const newFileIndex = files.findIndex((file) => file.name === name);
     if (newFileIndex !== -1) {
       setCurrentFileIndex(newFileIndex);
+      setShowDiff(false);
     }
   };
 
   const handleEditorChange = (value: string | undefined): void => {
     if (value === undefined) return;
-    const updatedFiles = files.slice();
+    const updatedFiles = filesContent.slice();
     updatedFiles[currentFileIndex] = {
-      ...files[currentFileIndex],
+      ...filesContent[currentFileIndex],
       content: value,
     };
     setFilesContent(updatedFiles);
@@ -73,7 +74,7 @@ export default function LessonContent({
   const showSolution = () => {
     const solution = solutions[currentFileIndex];
 
-    const updatedFiles = [...files];
+    const updatedFiles = [...filesContent];
     updatedFiles[currentFileIndex] = {
       ...filesContent[currentFileIndex],
       content: solution.content,
@@ -121,36 +122,8 @@ export default function LessonContent({
         </div>
       }
       RightBottomPanel={
-        <div className="flex h-full flex-col">
-          <div className="flex-grow">
-            <DiffEditor
-              original={
-                showDiff &&
-                solutions[currentFileIndex] &&
-                filesContent[currentFileIndex]
-                  ? filesContent[currentFileIndex].content
-                  : "// Hint"
-              }
-              modified={
-                showDiff && solutions[currentFileIndex]
-                  ? solutions[currentFileIndex].content
-                  : "// Hint"
-              }
-              height={rightBottomPanelHeight}
-              language="javascript"
-              theme="vs-dark"
-              options={{
-                renderSideBySide: false,
-                minimap: { enabled: false },
-                readOnly: true,
-                scrollbar: { verticalScrollbarSize: 0 },
-                scrollBeyondLastLine: false,
-                wordWrap: "on",
-              }}
-            />
-          </div>
-
-          <div className="mt-2 flex justify-center space-x-2 ">
+        <>
+          <div className="mb-2 flex justify-center space-x-2 ">
             <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
               Hint
             </Button>
@@ -174,7 +147,24 @@ export default function LessonContent({
               totalLessons={totalLessons[params.module]}
             />
           </div>
-        </div>
+          {showDiff && solutions[currentFileIndex] && (
+            <DiffEditor
+              original={filesContent[currentFileIndex].content}
+              modified={solutions[currentFileIndex].content}
+              height={rightBottomPanelHeight}
+              language="javascript"
+              theme="vs-dark"
+              options={{
+                renderSideBySide: false,
+                minimap: { enabled: false },
+                readOnly: true,
+                scrollbar: { verticalScrollbarSize: 0 },
+                scrollBeyondLastLine: false,
+                wordWrap: "on",
+              }}
+            />
+          )}
+        </>
       }
       setRightTopPanelHeight={setRightTopPanelHeight}
       setRightBottomPanelHeight={setRightBottomPanelHeight}
