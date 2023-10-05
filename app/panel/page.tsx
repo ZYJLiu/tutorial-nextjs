@@ -102,9 +102,9 @@ export default function TestPanel() {
     };
 
     if (type === "success") {
-      toast.success(message, { style: styles });
+      toast.success(message, { style: styles, duration: 1000 });
     } else {
-      toast.error(message, { style: styles });
+      toast.error(message, { style: styles, duration: 1000 });
     }
   };
 

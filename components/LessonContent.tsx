@@ -11,6 +11,7 @@ import Panels from "@/components/Panels";
 import SendTransaction from "./SendTransaction";
 import { compareSolution } from "@/utils/LessonContent";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 interface LessonProps {
   params: {
@@ -27,7 +28,7 @@ type Key = string | number | bigint;
 
 // Placeholder for total lessons per module
 const totalLessons: Record<string, number> = {
-  "1": 3,
+  "1": 5,
   "2": 2,
   "3": 1,
 };
@@ -89,85 +90,88 @@ export default function LessonContent({
   };
 
   return (
-    <Panels
-      LeftPanel={
-        <div className="prose w-full max-w-none dark:prose-dark">
-          <MDXRemote {...mdxDoc} components={components} />
-        </div>
-      }
-      RightTopPanel={
-        <div className="space-y-2">
-          <Tabs
-            variant={"bordered"}
-            selectedKey={files[currentFileIndex].name}
-            onSelectionChange={handleTabSelection}
-          >
-            {filesContent.map((file) => (
-              <Tab key={file.name} title={file.name} />
-            ))}
-          </Tabs>
-          <Editor
-            height={rightTopPanelHeight}
-            defaultLanguage="javascript"
-            theme="vs-dark"
-            value={filesContent ? filesContent[currentFileIndex].content : ""}
-            onChange={handleEditorChange}
-            options={{
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              quickSuggestions: false,
-              wordWrap: "on",
-            }}
-          />
-        </div>
-      }
-      RightBottomPanel={
-        <>
-          <div className="mb-2 flex justify-center space-x-2 ">
-            <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
-              Hint
-            </Button>
-            <Button
-              isDisabled={!hasSolution()}
-              onClick={() =>
-                compareSolution(
-                  filesContent[currentFileIndex].content,
-                  solutions[currentFileIndex].content,
-                )
-              }
-            >
-              Check
-            </Button>
-            <Button isDisabled={!hasSolution()} onClick={showSolution}>
-              Answer
-            </Button>
-            <PageNav
-              module={params.module}
-              lesson={Number(params.lesson)}
-              totalLessons={totalLessons[params.module]}
-            />
+    <>
+      <Panels
+        LeftPanel={
+          <div className="prose w-full max-w-none dark:prose-dark">
+            <MDXRemote {...mdxDoc} components={components} />
           </div>
-          {showDiff && solutions[currentFileIndex] && (
-            <DiffEditor
-              original={filesContent[currentFileIndex].content}
-              modified={solutions[currentFileIndex].content}
-              height={rightBottomPanelHeight}
-              language="javascript"
+        }
+        RightTopPanel={
+          <div className="space-y-2">
+            <Tabs
+              variant={"bordered"}
+              selectedKey={files[currentFileIndex].name}
+              onSelectionChange={handleTabSelection}
+            >
+              {filesContent.map((file) => (
+                <Tab key={file.name} title={file.name} />
+              ))}
+            </Tabs>
+            <Editor
+              height={rightTopPanelHeight}
+              defaultLanguage="javascript"
               theme="vs-dark"
+              value={filesContent ? filesContent[currentFileIndex].content : ""}
+              onChange={handleEditorChange}
               options={{
-                renderSideBySide: false,
                 minimap: { enabled: false },
-                readOnly: true,
-                scrollbar: { verticalScrollbarSize: 0 },
                 scrollBeyondLastLine: false,
+                quickSuggestions: false,
                 wordWrap: "on",
               }}
             />
-          )}
-        </>
-      }
-      setRightTopPanelHeight={setRightTopPanelHeight}
-      setRightBottomPanelHeight={setRightBottomPanelHeight}
-    />
+          </div>
+        }
+        RightBottomPanel={
+          <>
+            <div className="mb-2 flex justify-center space-x-2 ">
+              <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
+                Hint
+              </Button>
+              <Button
+                isDisabled={!hasSolution()}
+                onClick={() =>
+                  compareSolution(
+                    filesContent[currentFileIndex].content,
+                    solutions[currentFileIndex].content,
+                  )
+                }
+              >
+                Check
+              </Button>
+              <Button isDisabled={!hasSolution()} onClick={showSolution}>
+                Answer
+              </Button>
+              <PageNav
+                module={params.module}
+                lesson={Number(params.lesson)}
+                totalLessons={totalLessons[params.module]}
+              />
+            </div>
+            {showDiff && solutions[currentFileIndex] && (
+              <DiffEditor
+                original={filesContent[currentFileIndex].content}
+                modified={solutions[currentFileIndex].content}
+                height={rightBottomPanelHeight}
+                language="javascript"
+                theme="vs-dark"
+                options={{
+                  renderSideBySide: false,
+                  minimap: { enabled: false },
+                  readOnly: true,
+                  scrollbar: { verticalScrollbarSize: 0 },
+                  scrollBeyondLastLine: false,
+                  wordWrap: "on",
+                }}
+              />
+            )}
+          </>
+        }
+        setRightTopPanelHeight={setRightTopPanelHeight}
+        setRightBottomPanelHeight={setRightBottomPanelHeight}
+      />
+      <Toaster position="bottom-center" reverseOrder={false} />
+    </>
   );
 }

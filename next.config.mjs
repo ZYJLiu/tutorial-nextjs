@@ -15,6 +15,10 @@ const nextConfig = {
     // appDir: true,
     mdxRs: true
   },
+  webpack: (config) => {
+    config.experiments = { ...config.experiments, topLevelAwait: true };
+    return config;
+  },
   images: {
     domains: ['github.com', 'lh3.googleusercontent.com']
   },

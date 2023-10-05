@@ -5,6 +5,4 @@ import {
   clusterApiUrl,
 } from "@solana/web3.js";
 
-(async () => {
-  // Establish a connection to the Solana devnet cluster
-})();
+// Establish a connection to the Solana devnet cluster

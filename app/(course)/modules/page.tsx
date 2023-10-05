@@ -5,8 +5,8 @@ import Link from "next/link";
 export default function Modules() {
   // Links to each module page
   const modules = [
-    { href: "/1", label: "Module 1" },
-    { href: "/2", label: "Module 2" },
+    { href: "/1", label: "Client Module (1)" },
+    { href: "/2", label: "Anchor Module (2)" },
   ];
 
   return (

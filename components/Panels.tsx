@@ -45,7 +45,7 @@ export default function Panels({
   return (
     <PanelGroup direction="horizontal">
       <Panel
-        className="flex justify-center rounded-lg p-2 text-center"
+        // className="flex justify-center rounded-lg p-2 text-center"
         defaultSize={50}
         collapsible
       >
@@ -55,7 +55,7 @@ export default function Panels({
       <Panel collapsible>
         <PanelGroup direction="vertical">
           <Panel
-            defaultSize={60}
+            defaultSize={70}
             ref={rightTopPanelRef}
             onResize={handleRightTopPanelResize}
             collapsible
@@ -64,7 +64,7 @@ export default function Panels({
           </Panel>
           <ResizeHandle />
           <Panel
-            defaultSize={40}
+            defaultSize={30}
             ref={rightBottomPanelRef}
             onResize={handleRightBottomPanelResize}
             collapsible

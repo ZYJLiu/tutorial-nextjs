@@ -8,6 +8,7 @@ export const compareSolution = (
   currentFileContent: string,
   solutionFileContent: string,
 ) => {
+  console.log("test");
   try {
     if (
       normalizeCode(currentFileContent) === normalizeCode(solutionFileContent)
@@ -43,6 +44,6 @@ const notify = (message: string, type: "success" | "error" = "success") => {
     color: "#fff",
   };
   type === "success"
-    ? toast.success(message, { style: styles })
-    : toast.error(message, { style: styles });
+    ? toast.success(message, { style: styles, duration: 1500 })
+    : toast.error(message, { style: styles, duration: 1000 });
 };

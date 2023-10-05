@@ -9,7 +9,10 @@ export function generateStaticParams() {
     { module: "1", lesson: "1" },
     { module: "1", lesson: "2" },
     { module: "1", lesson: "3" },
+    { module: "1", lesson: "4" },
+    { module: "1", lesson: "5" },
     { module: "2", lesson: "1" },
+    { module: "2", lesson: "2" },
     { module: "2", lesson: "2" },
   ];
 }

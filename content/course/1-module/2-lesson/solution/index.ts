@@ -5,10 +5,8 @@ import {
   clusterApiUrl,
 } from "@solana/web3.js";
 
-(async () => {
-  // Establish a connection to the Solana devnet cluster
-  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+// Establish a connection to the Solana devnet cluster
+const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-  // Generate Keypair to act as wallet
-  const wallet_1 = new Keypair();
-})();
+// Generate a new keypair
+const wallet_1 = new Keypair();

@@ -9,3 +9,14 @@ import {
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 // Generate a new keypair
+const wallet_1 = new Keypair();
+
+// Request the airdrop
+const transactionSignature = await connection.requestAirdrop(
+  wallet_1.publicKey,
+  5 * LAMPORTS_PER_SOL,
+);
+
+// Get the most recent blockhash
+
+// Confirm the airdrop transaction
