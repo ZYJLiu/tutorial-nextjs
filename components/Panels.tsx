@@ -11,14 +11,12 @@ import ResizeHandle from "./ResizeHandle";
 
 // Layout for the panels for the lesson pages
 export default function Panels({
-  //   defaultLayout,
   LeftPanel,
   RightTopPanel,
   RightBottomPanel,
   setRightTopPanelHeight,
   setRightBottomPanelHeight,
 }: {
-  //   defaultLayout: number[];
   LeftPanel: React.ReactNode;
   RightTopPanel: React.ReactNode;
   RightBottomPanel: React.ReactNode;
@@ -43,7 +41,7 @@ export default function Panels({
   };
 
   return (
-    <PanelGroup direction="horizontal">
+    <PanelGroup direction="horizontal" autoSaveId="persistence">
       <Panel
         // className="flex justify-center rounded-lg p-2 text-center"
         defaultSize={50}

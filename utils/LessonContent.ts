@@ -8,7 +8,6 @@ export const compareSolution = (
   currentFileContent: string,
   solutionFileContent: string,
 ) => {
-  console.log("test");
   try {
     if (
       normalizeCode(currentFileContent) === normalizeCode(solutionFileContent)

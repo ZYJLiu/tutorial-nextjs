@@ -14,7 +14,6 @@ import CodeViewer from "@/components/CodeViewer";
 import Doc from "./doc.mdx";
 import Panels from "@/components/Panels";
 import generate from "@babel/generator";
-import getDefaultLayout from "@/utils/PanelDefault";
 import traverse from "@babel/traverse";
 import { useLineHighlight } from "@/context/LineHighlight";
 
@@ -182,7 +181,6 @@ export default function TestPanel() {
     <main className="h-[90vh] p-1">
       <Toaster position="bottom-center" reverseOrder={false} />
       <Panels
-        // defaultLayout={defaultLayout}
         setRightTopPanelHeight={setRightTopPanelHeight}
         setRightBottomPanelHeight={setRightBottomPanelHeight}
         LeftPanel={<Doc />}

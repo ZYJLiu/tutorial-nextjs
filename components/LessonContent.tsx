@@ -10,8 +10,8 @@ import PageNav from "@/components/PageNav";
 import Panels from "@/components/Panels";
 import SendTransaction from "./SendTransaction";
 import { compareSolution } from "@/utils/LessonContent";
-import { useState } from "react";
-import { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 interface LessonProps {
   params: {
@@ -88,6 +88,11 @@ export default function LessonContent({
     const currentFileName = files[currentFileIndex].name;
     return !!solutions.find((solution) => solution.name === currentFileName);
   };
+
+  useEffect(() => {
+    // Dismiss all active toasts
+    toast.dismiss();
+  }, [params]);
 
   return (
     <>

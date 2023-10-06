@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { serialize } from "next-mdx-remote/serialize";
 import rehypeHighlight from "rehype-highlight";
+import { cookies } from "next/headers";
 
 // placeholder
 export function generateStaticParams() {
