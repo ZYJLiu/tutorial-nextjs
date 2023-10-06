@@ -26,20 +26,12 @@ type Key = string | number | bigint;
 
 export default function LessonContent({ lessonData }: LessonContentProps) {
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
-  const currentLessonData = lessonData[currentLessonIndex];
+  const { code, solution, mdx } = lessonData[currentLessonIndex];
 
-  const [filesContent, setFilesContent] = useState<FilesContent>(
-    currentLessonData.code,
-  );
-  const [solutions, setSolutions] = useState<FilesContent>(
-    currentLessonData.solution,
-  );
-  const [mdxDoc, setMdxDoc] = useState<MDXRemoteSerializeResult>(
-    currentLessonData.mdx,
-  );
-
+  const [fileContents, setFileContents] = useState(code);
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [showDiff, setShowDiff] = useState(false);
+
   const [rightTopPanelHeight, setRightTopPanelHeight] = useState<
     number | string
   >("50vh");
@@ -50,29 +42,21 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
   const components = { CustomCard, SendTransaction };
 
   useEffect(() => {
-    setFilesContent(currentLessonData.code);
-    setSolutions(currentLessonData.solution);
-    setMdxDoc(currentLessonData.mdx);
-  }, [currentLessonIndex, currentLessonData]);
-
-  useEffect(() => {
+    setFileContents(code);
     toast.dismiss();
   }, [currentLessonIndex]);
 
   const handleTabSelection = (name: Key): void => {
-    const newFileIndex = filesContent.findIndex((file) => file.name === name);
-    if (newFileIndex !== -1) {
-      setCurrentFileIndex(newFileIndex);
-      setShowDiff(false);
-    }
+    const newIndex = fileContents.findIndex((file) => file.name === name);
+    setCurrentFileIndex(newIndex);
+    setShowDiff(false);
   };
 
-  const handleEditorChange = (value: string | undefined): void => {
-    if (value !== undefined) {
-      setFilesContent((prevFiles) => {
-        const updatedFiles = [...prevFiles];
-        updatedFiles[currentFileIndex].content = value;
-        return updatedFiles;
+  const handleEditorChange = (newValue: string | undefined): void => {
+    if (newValue) {
+      setFileContents((files) => {
+        files[currentFileIndex].content = newValue;
+        return [...files];
       });
     }
   };
@@ -81,18 +65,9 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
     setShowDiff((prevState) => !prevState);
   };
 
-  const showSolution = () => {
-    const solution = solutions[currentFileIndex].content;
-    setFilesContent((prevFiles) => {
-      const updatedFiles = [...prevFiles];
-      updatedFiles[currentFileIndex].content = solution;
-      return updatedFiles;
-    });
-  };
-
   const hasSolution = () => {
-    const currentFileName = filesContent[currentFileIndex].name;
-    return !!solutions.find((solution) => solution.name === currentFileName);
+    const currentFileName = fileContents[currentFileIndex].name;
+    return solution.some((solution) => solution.name === currentFileName);
   };
 
   const onNextHandler = () => {
@@ -112,17 +87,17 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
       <Panels
         LeftPanel={
           <div className="prose w-full max-w-none dark:prose-dark">
-            <MDXRemote {...mdxDoc} components={components} />
+            <MDXRemote {...mdx} components={components} />
           </div>
         }
         RightTopPanel={
           <div className="space-y-2">
             <Tabs
               variant={"bordered"}
-              selectedKey={filesContent[currentFileIndex].name}
+              selectedKey={fileContents[currentFileIndex].name}
               onSelectionChange={handleTabSelection}
             >
-              {filesContent.map((file) => (
+              {fileContents.map((file) => (
                 <Tab key={file.name} title={file.name} />
               ))}
             </Tabs>
@@ -130,7 +105,7 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
               height={rightTopPanelHeight}
               defaultLanguage="javascript"
               theme="vs-dark"
-              value={filesContent ? filesContent[currentFileIndex].content : ""}
+              value={fileContents[currentFileIndex].content}
               onChange={handleEditorChange}
               options={{
                 minimap: { enabled: false },
@@ -151,14 +126,19 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
                 isDisabled={!hasSolution()}
                 onClick={() =>
                   compareSolution(
-                    filesContent[currentFileIndex].content,
-                    solutions[currentFileIndex].content,
+                    fileContents[currentFileIndex].content,
+                    solution[currentFileIndex].content,
                   )
                 }
               >
                 Check
               </Button>
-              <Button isDisabled={!hasSolution()} onClick={showSolution}>
+              <Button
+                isDisabled={!hasSolution()}
+                onClick={() =>
+                  handleEditorChange(solution[currentFileIndex].content)
+                }
+              >
                 Answer
               </Button>
               <SectionNav
@@ -168,10 +148,10 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
                 onPrev={onPrevHandler}
               />
             </div>
-            {showDiff && solutions[currentFileIndex] && (
+            {showDiff && solution[currentFileIndex] && (
               <DiffEditor
-                original={filesContent[currentFileIndex].content}
-                modified={solutions[currentFileIndex].content}
+                original={fileContents[currentFileIndex].content}
+                modified={solution[currentFileIndex].content}
                 height={rightBottomPanelHeight}
                 language="javascript"
                 theme="vs-dark"
