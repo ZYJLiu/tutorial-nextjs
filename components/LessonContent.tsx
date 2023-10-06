@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@nextui-org/button";
 import CustomCard from "./CustomCard";
 import Panels from "@/components/Panels";
+import { Progress } from "@nextui-org/progress";
 import SectionNav from "@/components/SectionNav";
 import SendTransaction from "./SendTransaction";
 import { compareSolution } from "@/utils/LessonContent";
@@ -169,6 +170,10 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
         }
         setRightTopPanelHeight={setRightTopPanelHeight}
         setRightBottomPanelHeight={setRightBottomPanelHeight}
+      />
+      <Progress
+        size="sm"
+        value={(currentLessonIndex / (lessonData.length - 1)) * 100}
       />
       <Toaster position="bottom-center" reverseOrder={false} />
     </>
