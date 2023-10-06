@@ -2,6 +2,7 @@ import LessonContent from "@/components/LessonContent";
 import fs from "fs";
 import path from "path";
 import { serialize } from "next-mdx-remote/serialize";
+import rehypeHighlight from "rehype-highlight";
 
 // placeholder
 export function generateStaticParams() {
@@ -89,5 +90,8 @@ async function getFilesFromDirectory(
 async function getMdxContentByPath(params: { module: string; lesson: string }) {
   const relativePath = constructPath(params, "README.mdx");
   const fileContent = fs.readFileSync(relativePath, { encoding: "utf8" });
-  return serialize(fileContent);
+  return serialize(fileContent, {
+    // @ts-ignore
+    mdxOptions: { rehypePlugins: [rehypeHighlight] },
+  });
 }

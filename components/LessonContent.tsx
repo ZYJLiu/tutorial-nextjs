@@ -94,6 +94,10 @@ export default function LessonContent({
       <Panels
         LeftPanel={
           <div className="prose w-full max-w-none dark:prose-dark">
+            <link
+              rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css"
+            ></link>
             <MDXRemote {...mdxDoc} components={components} />
           </div>
         }
