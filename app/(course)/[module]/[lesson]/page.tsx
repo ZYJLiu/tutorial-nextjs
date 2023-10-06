@@ -1,21 +1,20 @@
 import LessonContent from "@/components/LessonContent";
 import fs from "fs";
 import path from "path";
-import { serialize } from "next-mdx-remote/serialize";
 import rehypeHighlight from "rehype-highlight";
-import { cookies } from "next/headers";
+import { serialize } from "next-mdx-remote/serialize";
 
 // placeholder
 export function generateStaticParams() {
   return [
     { module: "1", lesson: "1" },
     { module: "1", lesson: "2" },
-    { module: "1", lesson: "3" },
-    { module: "1", lesson: "4" },
-    { module: "1", lesson: "5" },
+    // { module: "1", lesson: "3" },
+    // { module: "1", lesson: "4" },
+    // { module: "1", lesson: "5" },
     { module: "2", lesson: "1" },
-    { module: "2", lesson: "2" },
-    { module: "2", lesson: "2" },
+    // { module: "2", lesson: "2" },
+    // { module: "2", lesson: "2" },
   ];
 }
 
@@ -27,25 +26,59 @@ interface LessonProps {
 }
 
 async function Lesson({ params }: LessonProps) {
-  const [filesContent, solutionFileContent, mdxContent] = await Promise.all([
-    getFilesFromDirectory(params, "code"),
-    getFilesFromDirectory(params, "solution"),
-    getMdxContentByPath(params),
-  ]);
+  const lessonData = await getLessonData(params);
 
   return (
     <main className="h-[90vh] p-1">
-      <LessonContent
-        params={params}
-        files={filesContent}
-        solutions={solutionFileContent}
-        mdxDoc={mdxContent}
-      />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css"
+      ></link>
+      <LessonContent lessonData={lessonData} />
     </main>
   );
 }
 
 export default Lesson;
+
+// This function will return an array of objects.
+// Each object will have code, solution, and mdx data for a numbered directory.
+async function getLessonData(params: { module: string; lesson: string }) {
+  const lessonPath = constructPath(params, "");
+  const numberedDirectories = await fs.promises
+    .readdir(lessonPath, { withFileTypes: true })
+    .then((entries) => {
+      return entries.filter((entry) => {
+        const isDir = entry.isDirectory();
+        const matchesRegex = /^[1-9]\d*$/.test(entry.name);
+        return isDir && matchesRegex;
+      });
+    })
+    .then((entries) => entries.map((entry) => entry.name));
+
+  const lessonDataPromises = numberedDirectories.map(async (numberedDir) => {
+    const codeFiles = await getFilesFromDirectory(
+      params,
+      `${numberedDir}/code`,
+    );
+    const solutionFiles = await getFilesFromDirectory(
+      params,
+      `${numberedDir}/solution`,
+    );
+    const mdxContent = await getMdxContentByPath(
+      params,
+      `${numberedDir}/README.mdx`,
+    );
+
+    return {
+      code: codeFiles,
+      solution: solutionFiles,
+      mdx: mdxContent,
+    };
+  });
+
+  return await Promise.all(lessonDataPromises);
+}
 
 function constructPath(
   params: { module: string; lesson: string },
@@ -59,6 +92,18 @@ function constructPath(
     `${params.lesson}-lesson`,
     subfolder,
   );
+}
+
+async function getMdxContentByPath(
+  params: { module: string; lesson: string },
+  subfolder: string,
+) {
+  const relativePath = constructPath(params, subfolder);
+  const fileContent = fs.promises.readFile(relativePath, { encoding: "utf8" });
+  return serialize(await fileContent, {
+    // @ts-ignore
+    mdxOptions: { rehypePlugins: [rehypeHighlight] },
+  });
 }
 
 async function getFilesFromDirectory(
@@ -86,13 +131,4 @@ async function getFilesFromDirectory(
     console.error(`Error reading files from ${subfolder}:`, error);
     throw error;
   }
-}
-
-async function getMdxContentByPath(params: { module: string; lesson: string }) {
-  const relativePath = constructPath(params, "README.mdx");
-  const fileContent = fs.readFileSync(relativePath, { encoding: "utf8" });
-  return serialize(fileContent, {
-    // @ts-ignore
-    mdxOptions: { rehypePlugins: [rehypeHighlight] },
-  });
 }

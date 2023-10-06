@@ -3,55 +3,64 @@
 import { DiffEditor, Editor } from "@monaco-editor/react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Tab, Tabs } from "@nextui-org/tabs";
+import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 import { Button } from "@nextui-org/button";
 import CustomCard from "./CustomCard";
-import PageNav from "@/components/PageNav";
 import Panels from "@/components/Panels";
+import SectionNav from "@/components/SectionNav";
 import SendTransaction from "./SendTransaction";
 import { compareSolution } from "@/utils/LessonContent";
-import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
-interface LessonProps {
-  params: {
-    module: string;
-    lesson: string;
-  };
-  files: FilesContent;
-  solutions: FilesContent;
-  mdxDoc: MDXRemoteSerializeResult;
+interface LessonContentProps {
+  lessonData: {
+    code: FilesContent;
+    solution: FilesContent;
+    mdx: MDXRemoteSerializeResult;
+  }[];
 }
 
 type FilesContent = { name: string; content: string }[];
 type Key = string | number | bigint;
 
-// Placeholder for total lessons per module
-const totalLessons: Record<string, number> = {
-  "1": 5,
-  "2": 2,
-  "3": 1,
-};
+export default function LessonContent({ lessonData }: LessonContentProps) {
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const currentLessonData = lessonData[currentLessonIndex];
 
-export default function LessonContent({
-  params,
-  files,
-  solutions,
-  mdxDoc,
-}: LessonProps) {
-  const [filesContent, setFilesContent] = useState<FilesContent>(files);
+  const [filesContent, setFilesContent] = useState<FilesContent>(
+    currentLessonData.code,
+  );
+  const [solutions, setSolutions] = useState<FilesContent>(
+    currentLessonData.solution,
+  );
+  const [mdxDoc, setMdxDoc] = useState<MDXRemoteSerializeResult>(
+    currentLessonData.mdx,
+  );
+
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
+  const [showDiff, setShowDiff] = useState(false);
   const [rightTopPanelHeight, setRightTopPanelHeight] = useState<
     number | string
   >("50vh");
   const [rightBottomPanelHeight, setRightBottomPanelHeight] = useState<
     number | string
   >("25vh");
-  const [showDiff, setShowDiff] = useState(false);
+
   const components = { CustomCard, SendTransaction };
 
+  useEffect(() => {
+    setFilesContent(currentLessonData.code);
+    setSolutions(currentLessonData.solution);
+    setMdxDoc(currentLessonData.mdx);
+  }, [currentLessonIndex, currentLessonData]);
+
+  useEffect(() => {
+    toast.dismiss();
+  }, [currentLessonIndex]);
+
   const handleTabSelection = (name: Key): void => {
-    const newFileIndex = files.findIndex((file) => file.name === name);
+    const newFileIndex = filesContent.findIndex((file) => file.name === name);
     if (newFileIndex !== -1) {
       setCurrentFileIndex(newFileIndex);
       setShowDiff(false);
@@ -59,13 +68,13 @@ export default function LessonContent({
   };
 
   const handleEditorChange = (value: string | undefined): void => {
-    if (value === undefined) return;
-    const updatedFiles = filesContent.slice();
-    updatedFiles[currentFileIndex] = {
-      ...filesContent[currentFileIndex],
-      content: value,
-    };
-    setFilesContent(updatedFiles);
+    if (value !== undefined) {
+      setFilesContent((prevFiles) => {
+        const updatedFiles = [...prevFiles];
+        updatedFiles[currentFileIndex].content = value;
+        return updatedFiles;
+      });
+    }
   };
 
   const toggleShowDiff = () => {
@@ -73,36 +82,36 @@ export default function LessonContent({
   };
 
   const showSolution = () => {
-    const solution = solutions[currentFileIndex];
-
-    const updatedFiles = [...filesContent];
-    updatedFiles[currentFileIndex] = {
-      ...filesContent[currentFileIndex],
-      content: solution.content,
-    };
-
-    setFilesContent(updatedFiles);
+    const solution = solutions[currentFileIndex].content;
+    setFilesContent((prevFiles) => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles[currentFileIndex].content = solution;
+      return updatedFiles;
+    });
   };
 
   const hasSolution = () => {
-    const currentFileName = files[currentFileIndex].name;
+    const currentFileName = filesContent[currentFileIndex].name;
     return !!solutions.find((solution) => solution.name === currentFileName);
   };
 
-  useEffect(() => {
-    // Dismiss all active toasts
-    toast.dismiss();
-  }, [params]);
+  const onNextHandler = () => {
+    setCurrentLessonIndex(currentLessonIndex + 1);
+    setCurrentFileIndex(0);
+    setShowDiff(false);
+  };
+
+  const onPrevHandler = () => {
+    setCurrentLessonIndex(currentLessonIndex - 1);
+    setCurrentFileIndex(0);
+    setShowDiff(false);
+  };
 
   return (
     <>
       <Panels
         LeftPanel={
           <div className="prose w-full max-w-none dark:prose-dark">
-            <link
-              rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css"
-            ></link>
             <MDXRemote {...mdxDoc} components={components} />
           </div>
         }
@@ -110,7 +119,7 @@ export default function LessonContent({
           <div className="space-y-2">
             <Tabs
               variant={"bordered"}
-              selectedKey={files[currentFileIndex].name}
+              selectedKey={filesContent[currentFileIndex].name}
               onSelectionChange={handleTabSelection}
             >
               {filesContent.map((file) => (
@@ -152,10 +161,11 @@ export default function LessonContent({
               <Button isDisabled={!hasSolution()} onClick={showSolution}>
                 Answer
               </Button>
-              <PageNav
-                module={params.module}
-                lesson={Number(params.lesson)}
-                totalLessons={totalLessons[params.module]}
+              <SectionNav
+                currentSection={currentLessonIndex + 1}
+                totalSections={lessonData.length}
+                onNext={onNextHandler}
+                onPrev={onPrevHandler}
               />
             </div>
             {showDiff && solutions[currentFileIndex] && (

@@ -18,7 +18,7 @@ interface Modules {
 
 // Placeholder for total lessons per module
 const modules: Modules = {
-  "1": ["Lesson 1"],
+  "1": ["Lesson 1", "Lesson 2"],
   "2": ["Lesson 1", "Lesson 2"],
 };
 
