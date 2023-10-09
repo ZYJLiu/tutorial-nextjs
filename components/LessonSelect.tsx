@@ -81,10 +81,14 @@ export default function LessonSelect({ module }: LessonSelectProps) {
         >
           <div className="mb-2 flex flex-col items-center justify-center">
             <div className="mb-2">{lesson.description}</div>
-            <Link href={`/${module}/${index + 1}`} key={index}>
-              {/* // disable placeholders */}
-              <Button isDisabled={index !== 0}>Start</Button>
-            </Link>
+            <Button
+              key={index}
+              href={`/${module}/${index + 1}`}
+              as={Link}
+              isDisabled={index !== 0}
+            >
+              Start
+            </Button>
           </div>
         </AccordionItem>
       ))}
