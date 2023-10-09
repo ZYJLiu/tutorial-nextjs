@@ -18,6 +18,7 @@
     "@nextui-org/accordion": "^2.0.23",
     "@nextui-org/button": "^2.0.21",
     "@nextui-org/card": "^2.0.21",
+    "@nextui-org/image": "^2.0.21",
     "@nextui-org/link": "^2.0.22",
     "@nextui-org/navbar": "^2.0.22",
     "@nextui-org/progress": "^2.0.21",

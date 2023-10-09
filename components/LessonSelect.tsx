@@ -71,16 +71,16 @@ export default function LessonSelect({ module }: LessonSelectProps) {
       variant="splitted"
       fullWidth={false}
     >
-      {lessons.map((lesson, index) => (
+      {lessons.map(({ name, subtitle, description }, index) => (
         <AccordionItem
-          className="w-[30vw]"
+          className="w-[30vw] border border-transparent hover:border-gray-400"
           key={index}
-          aria-label={lesson.name}
-          title={lesson.name}
-          subtitle={lesson.subtitle}
+          aria-label={name}
+          title={name}
+          subtitle={subtitle}
         >
           <div className="mb-2 flex flex-col items-center justify-center">
-            <div className="mb-2">{lesson.description}</div>
+            <div className="mb-2">{description}</div>
             <Button
               key={index}
               href={`/${module}/${index + 1}`}

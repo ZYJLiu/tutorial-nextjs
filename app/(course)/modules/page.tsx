@@ -1,21 +1,6 @@
-import { Button } from "@nextui-org/button";
-import Link from "next/link";
+import ModuelSelect from "@/components/ModuleSelect";
 
 // Page to display the list of modules in the course
 export default function Modules() {
-  // Links to each module page
-  const modules = [
-    { href: "/1", label: "Client Module (1)" },
-    { href: "/2", label: "Anchor Module (2)" },
-  ];
-
-  return (
-    <div className="flex h-[50vh] flex-col items-center justify-center space-y-2">
-      {modules.map((module) => (
-        <Button key={module.href} href={module.href} as={Link}>
-          {module.label}
-        </Button>
-      ))}
-    </div>
-  );
+  return <ModuelSelect />;
 }
