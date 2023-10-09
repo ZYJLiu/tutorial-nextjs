@@ -1,4 +1,4 @@
-import { nextui } from "@nextui-org/theme"
+import { nextui } from "@nextui-org/theme";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,12 +6,19 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    // "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@nextui-org/theme/dist/components/button.js",
+    "./node_modules/@nextui-org/theme/dist/components/card.js",
+    "./node_modules/@nextui-org/theme/dist/components/navbar.js",
+    "./node_modules/@nextui-org/theme/dist/components/progress.js",
+    "./node_modules/@nextui-org/theme/dist/components/spinner.js",
+    "./node_modules/@nextui-org/theme/dist/components/tabs.js",
+    "./node_modules/@nextui-org/theme/dist/components/link.js",
   ],
   theme: {
     extend: {
       maxWidth: {
-        'none': 'none',
+        none: "none",
       },
       typography(theme: any) {
         return {
@@ -50,8 +57,12 @@ module.exports = {
   },
 
   variants: {
-    extend: { typography: ["dark"] }
+    extend: { typography: ["dark"] },
   },
   darkMode: "media",
-  plugins: [nextui(), require("tailwindcss-animate"), require('@tailwindcss/typography')],
-}
+  plugins: [
+    nextui(),
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+  ],
+};
