@@ -15,6 +15,7 @@
     "@mdx-js/react": "^2.3.0",
     "@monaco-editor/react": "^4.5.2",
     "@next/mdx": "^13.5.3",
+    "@nextui-org/accordion": "^2.0.23",
     "@nextui-org/button": "^2.0.21",
     "@nextui-org/card": "^2.0.21",
     "@nextui-org/link": "^2.0.22",

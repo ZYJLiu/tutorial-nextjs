@@ -14,6 +14,7 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/components/spinner.js",
     "./node_modules/@nextui-org/theme/dist/components/tabs.js",
     "./node_modules/@nextui-org/theme/dist/components/link.js",
+    "./node_modules/@nextui-org/theme/dist/components/accordion.js",
   ],
   theme: {
     extend: {
