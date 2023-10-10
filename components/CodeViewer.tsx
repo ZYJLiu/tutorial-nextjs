@@ -26,10 +26,18 @@ export default function CodeViewer({
       wrapLines
       lineProps={(lineNumber) => {
         if (linesToHighlight.length === 0) return {};
-        const style = !linesToHighlight.includes(lineNumber)
-          ? { filter: "contrast(0.3)" }
-          : {};
-        const className = "block";
+
+        let style = {};
+        let className = "block";
+
+        // If the line is not in the list, dim the line.
+        if (!linesToHighlight.includes(lineNumber)) {
+          style = { filter: "contrast(0.3)" };
+        } else {
+          // If the line is in the list, highlight its background.
+          style = { backgroundColor: "#4444" };
+        }
+
         return { style, className };
       }}
     >

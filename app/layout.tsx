@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body suppressHydrationWarning={true}>
         <Provider>
-          <NextTopLoader color="#005BC4" />
+          <NextTopLoader color="#005BC4" showSpinner={false} />
           <Nav />
           <Suspense fallback={<Loading />}>
             <div className="flex-1 overflow-hidden">{children}</div>

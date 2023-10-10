@@ -38,6 +38,7 @@ export const Nav = () => {
       <NavbarMenuToggle
         /* @ts-ignore */
         ref={menuToggleRef}
+        className="sm:hidden"
       />
 
       <NavbarMenu>
@@ -54,7 +55,7 @@ export const Nav = () => {
         ))}
       </NavbarMenu>
 
-      <NavbarContent className="hidden gap-4 sm:flex" justify="center">
+      <NavbarContent className="hidden gap-4 sm:flex" justify="end">
         {navItems.map((item, index) => (
           <NavbarItem key={index} isActive={item.href === pathname}>
             <Link href={item.href}>{item.label}</Link>

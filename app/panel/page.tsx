@@ -1,5 +1,4 @@
 // Test panel for misc testing
-// Currently testing CodeMirror editor
 "use client";
 
 import * as parser from "@babel/parser";
