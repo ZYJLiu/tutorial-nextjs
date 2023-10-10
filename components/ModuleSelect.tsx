@@ -42,6 +42,7 @@ export default function ModuleSelect() {
           isPressable
           isHoverable
           onPress={() => router.push(module.href)}
+          key={module.href}
         >
           <CardBody className="grid grid-cols-6 items-center gap-6 md:grid-cols-12 md:gap-4">
             <div className="relative col-span-6 md:col-span-4">
