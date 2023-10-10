@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import Loading from "./loading";
 import type { Metadata } from "next";
 import { Nav } from "@/components/Navbar";
+import NextTopLoader from "nextjs-toploader";
 import { Provider } from "./provider";
 import { Suspense } from "react";
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body suppressHydrationWarning={true}>
         <Provider>
+          <NextTopLoader color="#005BC4" />
           <Nav />
           <Suspense fallback={<Loading />}>
             <div className="flex-1 overflow-hidden">{children}</div>
