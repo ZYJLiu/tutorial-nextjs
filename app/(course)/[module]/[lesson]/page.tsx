@@ -4,18 +4,19 @@ import path from "path";
 import rehypeHighlight from "rehype-highlight";
 import { serialize } from "next-mdx-remote/serialize";
 
-// placeholder
+const routes = [
+  { module: "1", lesson: "1" },
+  { module: "1", lesson: "2" },
+  { module: "1", lesson: "3" },
+  // { module: "1", lesson: "4" },
+  // { module: "1", lesson: "5" },
+  { module: "2", lesson: "1" },
+  { module: "2", lesson: "2" },
+  // { module: "2", lesson: "2" },
+];
+
 export function generateStaticParams() {
-  return [
-    { module: "1", lesson: "1" },
-    { module: "1", lesson: "2" },
-    // { module: "1", lesson: "3" },
-    // { module: "1", lesson: "4" },
-    // { module: "1", lesson: "5" },
-    // { module: "2", lesson: "1" },
-    // { module: "2", lesson: "2" },
-    // { module: "2", lesson: "2" },
-  ];
+  return routes;
 }
 
 interface LessonProps {
@@ -34,14 +35,13 @@ async function Lesson({ params }: LessonProps) {
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/github-dark.min.css"
       ></link>
-      <LessonContent lessonData={lessonData} />
+      <LessonContent routes={routes} route={params} lessonData={lessonData} />
     </main>
   );
 }
 
 export default Lesson;
 
-// This function will return an array of objects.
 // Each object will have code, solution, and mdx data for a numbered directory.
 async function getLessonData(params: { module: string; lesson: string }) {
   const lessonPath = constructPath(params, "");

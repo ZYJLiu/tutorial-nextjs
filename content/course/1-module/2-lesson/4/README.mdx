@@ -1,0 +1,21 @@
+# M1 L2
+
+Get the most recent blockhash
+
+```js
+const { blockhash, lastValidBlockHeight } =
+  await connection.getLatestBlockhash();
+```
+
+Confirm the airdrop transaction
+
+```js
+await connection.confirmTransaction(
+  {
+    blockhash,
+    lastValidBlockHeight,
+    signature: transactionSignature,
+  },
+  "confirmed",
+);
+```

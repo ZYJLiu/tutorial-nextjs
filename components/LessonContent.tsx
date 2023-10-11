@@ -11,11 +11,13 @@ import CopyToClipboard from "./CopyToClipboard";
 import CustomCard from "./CustomCard";
 import Panels from "@/components/Panels";
 import { Progress } from "@nextui-org/progress";
-import SectionNav from "@/components/SectionNav";
 import SendTransaction from "./SendTransaction";
 import { compareSolution } from "@/utils/LessonContent";
+import { useRouter } from "next/navigation";
 
 interface LessonContentProps {
+  routes: { module: string; lesson: string }[];
+  route: { module: string; lesson: string };
   lessonData: {
     code: FilesContent;
     solution: FilesContent;
@@ -26,13 +28,22 @@ interface LessonContentProps {
 type FilesContent = { name: string; content: string }[];
 type Key = string | number | bigint;
 
-export default function LessonContent({ lessonData }: LessonContentProps) {
+export default function LessonContent({
+  routes,
+  route,
+  lessonData,
+}: LessonContentProps) {
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const { code, solution, mdx } = lessonData[currentLessonIndex];
 
   const [fileContents, setFileContents] = useState(code);
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [showDiff, setShowDiff] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [isNextDisabled, setIsNextDisabled] = useState(false);
+  const [isPrevDisabled, setIsPrevDisabled] = useState(false);
+
+  const router = useRouter();
 
   const [rightTopPanelHeight, setRightTopPanelHeight] = useState<
     number | string
@@ -72,16 +83,58 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
     return solution.some((solution) => solution.name === currentFileName);
   };
 
-  const onNextHandler = () => {
-    setCurrentLessonIndex(currentLessonIndex + 1);
+  const findCurrentRouteIndex = () => {
+    return routes.findIndex(
+      (r) => r.module === route.module && r.lesson === route.lesson,
+    );
+  };
+
+  const navigateToRoute = (index: number) => {
+    const targetRoute = routes[index];
+    router.push(`/${targetRoute.module}/${targetRoute.lesson}`);
+  };
+
+  const handleLessonChange = (increment: number) => {
+    setCurrentLessonIndex((prevIndex) => prevIndex + increment);
     setCurrentFileIndex(0);
     setShowDiff(false);
+    setIsCorrect(false);
+    if (increment < 0) setIsNextDisabled(false);
+  };
+
+  const onNextHandler = () => {
+    const isLastLesson = currentLessonIndex + 1 >= lessonData.length;
+
+    if (isLastLesson) {
+      const currentRouteIndex = findCurrentRouteIndex();
+
+      const hasNextRoute =
+        currentRouteIndex >= 0 && currentRouteIndex + 1 < routes.length;
+      if (hasNextRoute) {
+        navigateToRoute(currentRouteIndex + 1);
+      } else {
+        setIsNextDisabled(true);
+      }
+    } else {
+      handleLessonChange(1);
+    }
   };
 
   const onPrevHandler = () => {
-    setCurrentLessonIndex(currentLessonIndex - 1);
-    setCurrentFileIndex(0);
-    setShowDiff(false);
+    const isFirstLesson = currentLessonIndex === 0;
+
+    if (isFirstLesson) {
+      const currentRouteIndex = findCurrentRouteIndex();
+
+      const hasPrevRoute = currentRouteIndex > 0;
+      if (hasPrevRoute) {
+        navigateToRoute(currentRouteIndex - 1);
+      } else {
+        setIsPrevDisabled(true);
+      }
+    } else {
+      handleLessonChange(-1);
+    }
   };
 
   return (
@@ -121,19 +174,21 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
         RightBottomPanel={
           <>
             <div className="mb-2 flex justify-center space-x-2 ">
-              <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
-                Hint
-              </Button>
               <Button
+                color="primary"
                 isDisabled={!hasSolution()}
                 onClick={() =>
                   compareSolution(
                     fileContents[currentFileIndex].content,
                     solution[currentFileIndex].content,
+                    setIsCorrect,
                   )
                 }
               >
                 Check
+              </Button>
+              <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
+                Hint
               </Button>
               <Button
                 isDisabled={!hasSolution()}
@@ -143,12 +198,19 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
               >
                 Answer
               </Button>
-              <SectionNav
-                currentSection={currentLessonIndex + 1}
-                totalSections={lessonData.length}
-                onNext={onNextHandler}
-                onPrev={onPrevHandler}
-              />
+              <div className="w-10"></div>
+              <div className="flex space-x-2">
+                <Button isDisabled={isPrevDisabled} onClick={onPrevHandler}>
+                  Previous
+                </Button>
+                <Button
+                  color={isCorrect ? "primary" : "default"}
+                  isDisabled={isNextDisabled}
+                  onClick={onNextHandler}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
             {showDiff && solution[currentFileIndex] && (
               <DiffEditor

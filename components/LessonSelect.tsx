@@ -33,16 +33,16 @@ const modules: Modules = {
       subtitle: "Subtitle",
       description: "Description for Lesson 3 in Module 1.",
     },
-    {
-      name: "Lesson 4",
-      subtitle: "Subtitle",
-      description: "Description for Lesson 4 in Module 1.",
-    },
-    {
-      name: "Lesson 5",
-      subtitle: "Subtitle",
-      description: "Description for Lesson 5 in Module 1.",
-    },
+    // {
+    //   name: "Lesson 4",
+    //   subtitle: "Subtitle",
+    //   description: "Description for Lesson 4 in Module 1.",
+    // },
+    // {
+    //   name: "Lesson 5",
+    //   subtitle: "Subtitle",
+    //   description: "Description for Lesson 5 in Module 1.",
+    // },
   ],
   "2": [
     {
@@ -85,7 +85,7 @@ export default function LessonSelect({ module }: LessonSelectProps) {
               key={index}
               href={`/${module}/${index + 1}`}
               as={Link}
-              isDisabled={index !== 0}
+              // isDisabled={index !== 0}
             >
               Start
             </Button>

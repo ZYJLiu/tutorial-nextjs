@@ -7,16 +7,20 @@ import traverse from "@babel/traverse";
 export const compareSolution = (
   currentFileContent: string,
   solutionFileContent: string,
+  setIsCorrect: (isCorrect: boolean) => void,
 ) => {
   try {
     if (
       normalizeCode(currentFileContent) === normalizeCode(solutionFileContent)
     ) {
+      setIsCorrect(true);
       notify("Correct! The content matches the solution.");
     } else {
+      setIsCorrect(false);
       notify("The content does not match the solution. Try again!", "error");
     }
   } catch (e) {
+    setIsCorrect(false);
     notify("An error occurred while comparing the solution.", "error");
   }
 };
