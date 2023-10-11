@@ -12,6 +12,7 @@ import {
 
 import Image from "next/image";
 import Link from "next/link";
+import SolanaFoundationLogo from "../public/solanaFoundationLogo.svg";
 import SolanaLogo from "../public/solanaLogo.svg";
 import WalletMultiButton from "./WalletMultiButton";
 import { usePathname } from "next/navigation";
@@ -60,7 +61,7 @@ export const Nav = () => {
 
       <NavbarBrand>
         <Link href="/">
-          <Image src={SolanaLogo} alt="Solana Logo" width={100} />
+          <Image src={SolanaFoundationLogo} alt="Solana Logo" width={130} />
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="end">
