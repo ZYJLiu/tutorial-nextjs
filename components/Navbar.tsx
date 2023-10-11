@@ -69,9 +69,9 @@ export const Nav = () => {
             <Link href={item.href}>{item.label}</Link>
           </NavbarItem>
         ))}
-        <NavbarItem>
+        {/* <NavbarItem>
           <WalletMultiButton />
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
     </Navbar>
   );
