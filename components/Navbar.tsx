@@ -2,6 +2,7 @@
 
 import {
   Navbar,
+  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
@@ -9,7 +10,9 @@ import {
   NavbarMenuToggle,
 } from "@nextui-org/navbar";
 
+import Image from "next/image";
 import Link from "next/link";
+import SolanaLogo from "../public/solanaLogo.svg";
 import WalletMultiButton from "./WalletMultiButton";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
@@ -17,9 +20,9 @@ import { useRef } from "react";
 // Hardcoded navigation items
 // Panel pages are for testing purposes
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Panel", href: "/panel" },
-  { label: "Panel2", href: "/panel2" },
+  { label: "Course", href: "/modules" },
+  { label: "Test Panel", href: "/panel" },
+  { label: "Test Panel", href: "/panel2" },
 ];
 
 // Navbar component
@@ -55,6 +58,11 @@ export const Nav = () => {
         ))}
       </NavbarMenu>
 
+      <NavbarBrand>
+        <Link href="/">
+          <Image src={SolanaLogo} alt="Solana Logo" width={100} />
+        </Link>
+      </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="end">
         {navItems.map((item, index) => (
           <NavbarItem key={index} isActive={item.href === pathname}>

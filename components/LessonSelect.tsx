@@ -73,7 +73,7 @@ export default function LessonSelect({ module }: LessonSelectProps) {
     >
       {lessons.map(({ name, subtitle, description }, index) => (
         <AccordionItem
-          className="w-[30vw] border border-transparent hover:border-gray-400"
+          className="w-full border border-transparent p-2 hover:border-gray-400 sm:w-3/4 md:w-3/4 md:p-4 lg:w-1/3"
           key={index}
           aria-label={name}
           title={name}
