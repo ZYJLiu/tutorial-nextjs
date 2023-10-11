@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 import { Button } from "@nextui-org/button";
+import CopyToClipboard from "./CopyToClipboard";
 import CustomCard from "./CustomCard";
 import Panels from "@/components/Panels";
 import { Progress } from "@nextui-org/progress";
@@ -40,7 +41,7 @@ export default function LessonContent({ lessonData }: LessonContentProps) {
     number | string
   >("25vh");
 
-  const components = { CustomCard, SendTransaction };
+  const components = { CustomCard, SendTransaction, pre: CopyToClipboard };
 
   useEffect(() => {
     setFileContents(code);

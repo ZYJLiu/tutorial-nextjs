@@ -61,7 +61,7 @@ export const Nav = () => {
 
       <NavbarBrand>
         <Link href="/">
-          <Image src={SolanaFoundationLogo} alt="Solana Logo" width={130} />
+          <Image src={SolanaLogo} alt="Solana Logo" width={100} />
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="end">

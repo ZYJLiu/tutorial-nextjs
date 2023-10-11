@@ -1,5 +1,6 @@
-import type { MDXComponents } from "mdx/types";
+import CopyToClipboard from "./components/CopyToClipboard";
 import CustomCard from "./components/CustomCard";
+import type { MDXComponents } from "mdx/types";
 import SendTransaction from "./components/SendTransaction";
 
 // This file allows you to provide custom React components
@@ -16,6 +17,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ...components,
     CustomCard,
     SendTransaction,
+    CopyToClipboard,
   };
 }
 
