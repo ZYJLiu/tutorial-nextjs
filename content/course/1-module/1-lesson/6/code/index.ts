@@ -30,3 +30,5 @@ await connection.confirmTransaction(
   },
   "confirmed",
 );
+
+// Retrieve and log the new balance of each wallet after the transfer

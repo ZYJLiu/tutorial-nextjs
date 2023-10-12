@@ -6,6 +6,3 @@ import {
 } from "@solana/web3.js";
 
 // Establish a connection to the Solana devnet cluster
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-
-// Generate a new keypair

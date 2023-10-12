@@ -30,3 +30,7 @@ await connection.confirmTransaction(
   },
   "confirmed",
 );
+
+// Retrieve and log the new balance of each wallet after the transfer
+const postBalance = await connection.getBalance(wallet_1.publicKey);
+console.log("wallet_1 balance:", postBalance / LAMPORTS_PER_SOL);

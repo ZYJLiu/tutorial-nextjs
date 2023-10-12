@@ -37,7 +37,7 @@ module.exports = {
                 borderLeftColor: theme("colors.gray.800"),
               },
               h1: { color: theme("colors.gray.100") },
-              h2: { color: theme("colors.gray.100") },
+              h2: { color: theme("colors.gray.100"), marginTop: "0" },
               h3: { color: theme("colors.gray.100") },
               h4: { color: theme("colors.gray.100") },
               code: { color: theme("colors.gray.100") },

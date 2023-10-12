@@ -18,17 +18,5 @@ const transactionSignature = await connection.requestAirdrop(
 );
 
 // Get the most recent blockhash
-const { blockhash, lastValidBlockHeight } =
-  await connection.getLatestBlockhash();
 
 // Confirm the airdrop transaction
-await connection.confirmTransaction(
-  {
-    blockhash,
-    lastValidBlockHeight,
-    signature: transactionSignature,
-  },
-  "confirmed",
-);
-
-// Retrieve and log the new balance of each wallet after the transfer
