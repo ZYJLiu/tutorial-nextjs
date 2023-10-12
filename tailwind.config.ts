@@ -24,7 +24,7 @@ module.exports = {
       },
       typography(theme: any) {
         return {
-          dark: {
+          DEFAULT: {
             css: {
               color: theme("colors.gray.300"),
               '[class~="lead"]': { color: theme("colors.gray.400") },
@@ -59,9 +59,9 @@ module.exports = {
   },
 
   variants: {
-    extend: { typography: ["dark"] },
+    extend: {},
   },
-  darkMode: "media",
+  darkMode: "false",
   plugins: [
     nextui(),
     require("tailwindcss-animate"),
