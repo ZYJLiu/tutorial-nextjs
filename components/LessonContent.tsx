@@ -34,9 +34,12 @@ export default function LessonContent({
   lessonData,
 }: LessonContentProps) {
   const getInitialLessonIndex = () => {
-    const lessonKey = `lessonIndex_${route.module}_${route.lesson}`;
-    const storedIndex = localStorage.getItem(lessonKey);
-    return storedIndex ? Number(storedIndex) : 0;
+    if (typeof window !== "undefined") {
+      const lessonKey = `lessonIndex_${route.module}_${route.lesson}`;
+      const storedIndex = sessionStorage.getItem(lessonKey);
+      return storedIndex ? Number(storedIndex) : 0;
+    }
+    return 0;
   };
 
   const [currentLessonIndex, setCurrentLessonIndex] = useState(
@@ -51,7 +54,6 @@ export default function LessonContent({
   const [isCorrect, setIsCorrect] = useState(false);
   const [isNextDisabled, setIsNextDisabled] = useState(false);
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
-  const [isPageRefreshed, setIsPageRefreshed] = useState(false);
 
   const router = useRouter();
 
@@ -107,7 +109,7 @@ export default function LessonContent({
   const handleLessonChange = (increment: number) => {
     const newIndex = currentLessonIndex + increment;
     const lessonKey = `lessonIndex_${route.module}_${route.lesson}`;
-    localStorage.setItem(lessonKey, newIndex.toString());
+    sessionStorage.setItem(lessonKey, newIndex.toString());
 
     setCurrentLessonIndex((prevIndex) => prevIndex + increment);
     setCurrentFileIndex(0);
