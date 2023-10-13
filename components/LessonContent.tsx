@@ -33,7 +33,16 @@ export default function LessonContent({
   route,
   lessonData,
 }: LessonContentProps) {
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const getInitialLessonIndex = () => {
+    const lessonKey = `lessonIndex_${route.module}_${route.lesson}`;
+    const storedIndex = localStorage.getItem(lessonKey);
+    return storedIndex ? Number(storedIndex) : 0;
+  };
+
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(
+    getInitialLessonIndex,
+  );
+
   const { code, solution, mdx } = lessonData[currentLessonIndex];
 
   const [fileContents, setFileContents] = useState(code);
@@ -42,6 +51,7 @@ export default function LessonContent({
   const [isCorrect, setIsCorrect] = useState(false);
   const [isNextDisabled, setIsNextDisabled] = useState(false);
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
+  const [isPageRefreshed, setIsPageRefreshed] = useState(false);
 
   const router = useRouter();
 
@@ -95,6 +105,10 @@ export default function LessonContent({
   };
 
   const handleLessonChange = (increment: number) => {
+    const newIndex = currentLessonIndex + increment;
+    const lessonKey = `lessonIndex_${route.module}_${route.lesson}`;
+    localStorage.setItem(lessonKey, newIndex.toString());
+
     setCurrentLessonIndex((prevIndex) => prevIndex + increment);
     setCurrentFileIndex(0);
     setShowDiff(false);
@@ -141,7 +155,7 @@ export default function LessonContent({
     <>
       <Panels
         LeftPanel={
-          <div className="prose w-full max-w-none dark:prose-dark">
+          <div className="dark:prose-dark prose w-full max-w-none">
             <MDXRemote {...mdx} components={components} />
           </div>
         }
