@@ -20,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body suppressHydrationWarning={true}>
+        <base target="_blank"></base>
         <Provider>
           <NextTopLoader color="#005BC4" showSpinner={false} />
           <Nav />

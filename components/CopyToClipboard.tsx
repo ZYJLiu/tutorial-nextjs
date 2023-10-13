@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { copyToClipboard } from "@/utils/copyToClipboard";
+import { copyToClipboard } from "@/utils/CopyToClipboard";
 
 type Props = {
   children?: React.ReactNode;

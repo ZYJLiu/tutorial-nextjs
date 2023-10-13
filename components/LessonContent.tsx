@@ -119,6 +119,7 @@ export default function LessonContent({
   };
 
   const onNextHandler = () => {
+    setIsPrevDisabled(false);
     const isLastLesson = currentLessonIndex + 1 >= lessonData.length;
 
     if (isLastLesson) {

@@ -5,19 +5,22 @@
 Next, we need to generate a keypair to represent a wallet.
 We can generate keypairs using the `Keypair` class from the `@solana/web3.js` library.
 
-This generates a keypair on the Ed25519 curve, giving us a public key and a secret key.
+This generates a keypair on the Ed25519 curve, giving us a `publicKey` and a `secretKey`.
 
-```js
-new Keypair();
+```ts
+const keypair = new Keypair();
+
+console.log(keypair.publicKey.toBase58());
+console.log(keypair.secretKey);
 ```
 
-The public key is 32 bytes and commonly base58 encoded:
+The `publicKey` is 32 bytes and commonly base58 encoded:
 
 ```text
-PublicKey: FYHeTDzrfRy4jpShuFvC5FH1mo7rApEUzPWC2uZBBdLJ
+FYHeTDzrfRy4jpShuFvC5FH1mo7rApEUzPWC2uZBBdLJ;
 ```
 
-The secret key is 64 bytes, where last 32 bytes are the public key:
+The `secretKey` is 64 bytes, where last 32 bytes are the public key:
 
 ```text
 Uint8Array(64) [
@@ -30,7 +33,7 @@ Uint8Array(64) [
 ]
 ```
 
-On Solana, the public key is often used as the address of an on-chain account, while the secret key is used for signing.
+On Solana, a public key is often used as the address of an on-chain account and the corresponding secret key is used for signing.
 
 However, note that generating a keypair does not automatically create an account on-chain.
 We'll cover how to create accounts programmatically in a later lesson.
@@ -39,6 +42,6 @@ We'll cover how to create accounts programmatically in a later lesson.
 
 Update the editor to generate a keypair and store it in a variable called `wallet_1`.
 
-```js
+```ts
 const wallet_1 = new Keypair();
 ```

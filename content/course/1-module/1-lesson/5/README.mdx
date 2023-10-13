@@ -2,16 +2,25 @@
 
 ## Step 4: Confirm the Airdrop Transaction
 
-Get the most recent blockhash
+In this step, we'll confirm the airdrop.
+This is to ensure that the transaction has been confirmed by the network before we fetch the account balance in the next step.
 
-```js
+The `getLatestBlockhash` method is first used to get a recent `blockhash` and `lastValidBlockHeight`.
+
+The `confirmTransaction` method is then used to confirm a transaction.
+
+## Exercise
+
+Update the editor to get the most recent blockhash.
+
+```ts
 const { blockhash, lastValidBlockHeight } =
   await connection.getLatestBlockhash();
 ```
 
-Confirm the airdrop transaction
+Then confirm the airdrop transaction using the transactionSignature.
 
-```js
+```ts
 await connection.confirmTransaction(
   {
     blockhash,

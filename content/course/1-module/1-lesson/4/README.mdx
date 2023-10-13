@@ -2,9 +2,34 @@
 
 ## Step 3: Request an Airdrop
 
-Request the airdrop
+SOL is the native token of the Solana network and is used to pay transaction fees, create on-chain accounts, and deploy programs.
+You can think of SOL as API credits required to use the Solana network.
 
-```js
+We use the `requestAirdrop` method on the connection to request an airdrop.
+This method takes two arguments:
+
+- The public key of the account to receive the airdrop
+- The amount of SOL to request in lamports
+
+```ts
+requestAirdrop(to: PublicKey, lamports: number): Promise<TransactionSignature>;
+```
+
+Lamports are the smallest unit of SOL, where 1 SOL = 1,000,000,000 lamports.
+
+Under the hood, a devnet airdrop is simply a transfer of SOL from the faucet to your wallet.
+On devnet, you can request an airdrop of 5 SOL per request, but multiple requests may result in rate limiting.
+
+When SOL is transferred to a newly generated keypair, a Solana account owned by the System Program is automatically created using the public key of the keypair.
+The System Program is one of Solana's [Native Programs](https://docs.solana.com/developing/runtime-facilities/programs).
+
+On Solana, what we refer to as "wallets" are simply accounts owned by the System Program.
+
+## Exercise
+
+Update the editor to request an airdrop of 5 SOL for `wallet_1`.
+
+```ts
 const transactionSignature = await connection.requestAirdrop(
   wallet_1.publicKey,
   5 * LAMPORTS_PER_SOL,

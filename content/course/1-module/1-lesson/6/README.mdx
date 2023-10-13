@@ -2,9 +2,24 @@
 
 ## Step 5: Get the Balance of the Account
 
-Retrieve and log the new balance of each wallet after the transfer
+Lastly, we'll fetch the balance of `wallet_1` after the airdrop.
 
-```js
+We can get the lamport balance of an account using the `getBalance` method.
+This method takes two argument:
+
+- The public key of the account to fetch the balance for
+- An optional commitment level for the request
+
+```ts
+getBalance(publicKey: PublicKey, commitmentOrConfig?: Commitment | GetBalanceConfig): Promise<number>;
+```
+
+## Exercise
+
+Update the editor to get the balance of `wallet_1` after the transfer.
+Then log the balance, dividing by `LAMPORTS_PER_SOL` to convert to units of SOL.
+
+```ts
 const postBalance = await connection.getBalance(wallet_1.publicKey);
 console.log("wallet_1 balance:", postBalance / LAMPORTS_PER_SOL);
 ```
