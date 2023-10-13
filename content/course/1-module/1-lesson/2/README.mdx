@@ -1,7 +1,25 @@
-# M1 L1
+# Airdrop SOL
 
-Establish a connection to the Solana devnet cluster
+In this lesson, we'll walk through how to airdrop devnet SOL to fund a new wallet using the `@solana/web3.js` library.
+
+## Step 1: Establish a Connection
+
+In order to interact with the Solana blockchain, we'll first need to establish a connection to a network.
+
+Solana has 3 different networks:
+
+- **Mainnet-beta**: The live production Solana network
+- **Testnet**: A network reserved for validator testing
+- **Devnet**: A network that serves as a playground for developers
+
+Alternatively, you can also test locally by running the `solana-test-validator` command from the Solana CLI to start a local validator.
+
+In this course, we'll be using the Devnet in the examples.
+
+## Exercise
+
+Update the editor to establish a connection to Devnet by referencing the code snippet below:
 
 ```js
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+const connection = new Connection(clusterApiUrl("devnet"));
 ```
