@@ -40,6 +40,19 @@ export default function LessonContent({
     return 0;
   };
 
+  const getLanguageFromFilename = (filename: string) => {
+    const extension = filename.split(".").pop();
+
+    switch (extension) {
+      case "ts":
+        return "typescript";
+      case "rs":
+        return "rust";
+      default:
+        return "plaintext";
+    }
+  };
+
   const [currentLessonIndex, setCurrentLessonIndex] = useState(
     getInitialLessonIndex,
   );
@@ -161,21 +174,6 @@ export default function LessonContent({
     }
   };
 
-  const getLanguageFromFilename = (filename: string) => {
-    const extension = filename.split(".").pop();
-
-    switch (extension) {
-      case "js":
-        return "javascript";
-      case "ts":
-        return "typescript";
-      case "rs":
-        return "rust";
-      default:
-        return "plaintext";
-    }
-  };
-
   return (
     <>
       <Panels
@@ -197,7 +195,6 @@ export default function LessonContent({
             </Tabs>
             <Editor
               height={rightTopPanelHeight}
-              // defaultLanguage="javascript"
               language={getLanguageFromFilename(
                 fileContents[currentFileIndex].name,
               )}
@@ -224,6 +221,9 @@ export default function LessonContent({
                     fileContents[currentFileIndex].content,
                     solution[currentFileIndex].content,
                     setIsCorrect,
+                    getLanguageFromFilename(
+                      fileContents[currentFileIndex].name,
+                    ),
                   )
                 }
               >

@@ -8,14 +8,13 @@ export const compareSolution = (
   currentFileContent: string,
   solutionFileContent: string,
   setIsCorrect: (isCorrect: boolean) => void,
+  language: string,
 ) => {
   try {
-    if (
-      // currentFileContent === solutionFileContent
-      normalizeString(currentFileContent) ===
-      normalizeString(solutionFileContent)
-      // normalizeCode(currentFileContent) === normalizeCode(solutionFileContent)
-    ) {
+    const current = normalizeContent(currentFileContent, language);
+    const solution = normalizeContent(solutionFileContent, language);
+
+    if (current === solution) {
       setIsCorrect(true);
       notify("Correct! The content matches the solution.");
     } else {
@@ -28,28 +27,36 @@ export const compareSolution = (
   }
 };
 
+const normalizeContent = (content: string, language: string) => {
+  return language === "typescript"
+    ? normalizeCode(content)
+    : normalizeString(content);
+};
+
+// For rust file, haven't found Rust lang parser in JS to use
 const normalizeString = (str: string): string => {
   const noComments = str.replace(/\/\/.*|\/\*[^]*?\*\//gm, "");
 
   // Convert all white spaces (space, tabs, new lines) to a single space
-  const normalized = noComments.replace(/\s+/g, " ");
+  const normalized = noComments.replace(/\s+/g, " ").trim();
   return normalized;
 };
 
-// const normalizeCode = (code: string) => {
-//   const ast = parser.parse(code, {
-//     sourceType: "module",
-//     plugins: ["typescript"],
-//   });
-//   traverse(ast, {
-//     enter(path) {
-//       path.node.leadingComments = [];
-//       path.node.innerComments = [];
-//       path.node.trailingComments = [];
-//     },
-//   });
-//   return generate(ast).code;
-// };
+// For TS
+const normalizeCode = (code: string) => {
+  const ast = parser.parse(code, {
+    sourceType: "module",
+    plugins: ["typescript"],
+  });
+  traverse(ast, {
+    enter(path) {
+      path.node.leadingComments = [];
+      path.node.innerComments = [];
+      path.node.trailingComments = [];
+    },
+  });
+  return generate(ast).code;
+};
 
 const notify = (message: string, type: "success" | "error" = "success") => {
   const styles = {
