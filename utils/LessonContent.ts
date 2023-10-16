@@ -11,7 +11,9 @@ export const compareSolution = (
 ) => {
   try {
     if (
-      normalizeCode(currentFileContent) === normalizeCode(solutionFileContent)
+      normalizeString(currentFileContent) ===
+      normalizeString(solutionFileContent)
+      // normalizeCode(currentFileContent) === normalizeCode(solutionFileContent)
     ) {
       setIsCorrect(true);
       notify("Correct! The content matches the solution.");
@@ -25,20 +27,29 @@ export const compareSolution = (
   }
 };
 
-const normalizeCode = (code: string) => {
-  const ast = parser.parse(code, {
-    sourceType: "module",
-    plugins: ["typescript"],
-  });
-  traverse(ast, {
-    enter(path) {
-      path.node.leadingComments = [];
-      path.node.innerComments = [];
-      path.node.trailingComments = [];
-    },
-  });
-  return generate(ast).code;
+const normalizeString = (str: string): string => {
+  const noComments = str.replace(/\/\/.*|\/\*[^]*?\*\//gm, "");
+
+  // Convert all white spaces (space, tabs, new lines) to a single space
+  const normalized = noComments.replace(/\s+/g, " ").trim().toLowerCase();
+
+  return normalized;
 };
+
+// const normalizeCode = (code: string) => {
+//   const ast = parser.parse(code, {
+//     sourceType: "module",
+//     plugins: ["typescript"],
+//   });
+//   traverse(ast, {
+//     enter(path) {
+//       path.node.leadingComments = [];
+//       path.node.innerComments = [];
+//       path.node.trailingComments = [];
+//     },
+//   });
+//   return generate(ast).code;
+// };
 
 const notify = (message: string, type: "success" | "error" = "success") => {
   const styles = {

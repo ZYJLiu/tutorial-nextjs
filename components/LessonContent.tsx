@@ -154,6 +154,21 @@ export default function LessonContent({
     }
   };
 
+  const getLanguageFromFilename = (filename: string) => {
+    const extension = filename.split(".").pop();
+
+    switch (extension) {
+      case "js":
+        return "javascript";
+      case "ts":
+        return "javascript"; // use js otherwise warnings in editor
+      case "rs":
+        return "rust";
+      default:
+        return "plaintext";
+    }
+  };
+
   return (
     <>
       <Panels
@@ -175,7 +190,10 @@ export default function LessonContent({
             </Tabs>
             <Editor
               height={rightTopPanelHeight}
-              defaultLanguage="javascript"
+              // defaultLanguage="javascript"
+              language={getLanguageFromFilename(
+                fileContents[currentFileIndex].name,
+              )}
               theme="vs-dark"
               value={fileContents[currentFileIndex].content}
               onChange={handleEditorChange}
@@ -234,7 +252,9 @@ export default function LessonContent({
                 original={fileContents[currentFileIndex].content}
                 modified={solution[currentFileIndex].content}
                 height={rightBottomPanelHeight}
-                language="javascript"
+                language={getLanguageFromFilename(
+                  fileContents[currentFileIndex].name,
+                )}
                 theme="vs-dark"
                 options={{
                   renderSideBySide: false,
