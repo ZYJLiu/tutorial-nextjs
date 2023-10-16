@@ -112,6 +112,17 @@ async function getFilesFromDirectory(
 ) {
   const directoryPath = constructPath(params, subfolder);
 
+  // Check if the directory exists
+  const directoryExists = await fs.promises
+    .access(directoryPath, fs.constants.F_OK)
+    .then(() => true)
+    .catch(() => false);
+
+  if (!directoryExists) {
+    console.warn(`Directory ${directoryPath} does not exist.`);
+    return [];
+  }
+
   try {
     const fileNames = await fs.promises.readdir(directoryPath);
 
