@@ -14,7 +14,6 @@ import Image from "next/image";
 import Link from "next/link";
 import SolanaFoundationLogo from "../public/solanaFoundationLogo.svg";
 import SolanaLogo from "../public/solanaLogo.svg";
-import WalletMultiButton from "./WalletMultiButton";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
@@ -23,7 +22,6 @@ import { useRef } from "react";
 const navItems = [
   { label: "Course", href: "/modules" },
   { label: "Test Panel", href: "/panel" },
-  { label: "Test Panel", href: "/panel2" },
 ];
 
 // Navbar component
@@ -70,9 +68,6 @@ export const Nav = () => {
             <Link href={item.href}>{item.label}</Link>
           </NavbarItem>
         ))}
-        {/* <NavbarItem>
-          <WalletMultiButton />
-        </NavbarItem> */}
       </NavbarContent>
     </Navbar>
   );

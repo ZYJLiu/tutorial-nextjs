@@ -8,10 +8,8 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@nextui-org/button";
 import CopyToClipboard from "./CopyToClipboard";
-import CustomCard from "./CustomCard";
 import Panels from "@/components/Panels";
 import { Progress } from "@nextui-org/progress";
-import SendTransaction from "./SendTransaction";
 import { compareSolution } from "@/utils/LessonContent";
 import { useRouter } from "next/navigation";
 
@@ -64,7 +62,7 @@ export default function LessonContent({
     number | string
   >("25vh");
 
-  const components = { CustomCard, SendTransaction, pre: CopyToClipboard };
+  const components = { pre: CopyToClipboard };
 
   useEffect(() => {
     setFileContents(code);

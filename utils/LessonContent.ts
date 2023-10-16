@@ -11,6 +11,7 @@ export const compareSolution = (
 ) => {
   try {
     if (
+      // currentFileContent === solutionFileContent
       normalizeString(currentFileContent) ===
       normalizeString(solutionFileContent)
       // normalizeCode(currentFileContent) === normalizeCode(solutionFileContent)
@@ -31,8 +32,7 @@ const normalizeString = (str: string): string => {
   const noComments = str.replace(/\/\/.*|\/\*[^]*?\*\//gm, "");
 
   // Convert all white spaces (space, tabs, new lines) to a single space
-  const normalized = noComments.replace(/\s+/g, " ").trim().toLowerCase();
-
+  const normalized = noComments.replace(/\s+/g, " ");
   return normalized;
 };
 
