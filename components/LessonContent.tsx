@@ -1,6 +1,6 @@
 "use client";
 
-import { DiffEditor, Editor } from "@monaco-editor/react";
+import { DiffEditor, Editor, useMonaco } from "@monaco-editor/react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import toast, { Toaster } from "react-hot-toast";
@@ -54,6 +54,7 @@ export default function LessonContent({
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
 
   const router = useRouter();
+  const monaco = useMonaco();
 
   const [rightTopPanelHeight, setRightTopPanelHeight] = useState<
     number | string
@@ -63,6 +64,14 @@ export default function LessonContent({
   >("25vh");
 
   const components = { pre: CopyToClipboard };
+
+  useEffect(() => {
+    if (monaco) {
+      monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+      });
+    }
+  }, [monaco]);
 
   useEffect(() => {
     setFileContents(code);
@@ -159,7 +168,7 @@ export default function LessonContent({
       case "js":
         return "javascript";
       case "ts":
-        return "javascript"; // use js otherwise warnings in editor
+        return "typescript";
       case "rs":
         return "rust";
       default:

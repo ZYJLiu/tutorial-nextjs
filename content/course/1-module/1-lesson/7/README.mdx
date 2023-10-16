@@ -1,0 +1,57 @@
+# Airdrop SOL
+
+## Try It Yourself
+
+Open a terminal and run the following command to get the starter code:
+
+```terminal
+npx solana-starter
+```
+
+Open the `solana-starter` folder you should see an `index.ts` file with the following code:
+
+```ts
+import { Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js";
+
+import { getOrCreateKeypair } from "./utils";
+
+// Establish a connection to the Solana devnet cluster
+const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+
+// Use existing keypairs or generate new ones if they don't exist
+const wallet_1 = getOrCreateKeypair("wallet_1");
+console.log("wallet_1 address:", wallet_1.publicKey.toBase58());
+
+// Fetch the lamport balance for the specified public key
+const balance = await connection.getBalance(wallet_1.publicKey);
+console.log("wallet_1 balance:", balance / LAMPORTS_PER_SOL);
+```
+
+The `utils` file includes a `getOrCreateKeypair` helper function.
+This function will either get an existing keypair from a `.env` file or generate a new one if it doesn't exist.
+
+To run the starter script, run `npm start` in the terminal.
+You should see a `.env` file that contains the newly generated keypair similar to the following:
+
+```env
+wallet_1=[230,171,250,208,176,73,215,142,99,194,64,202,73,203,76,129,215,87,243,249,226,11,222,196,209,231,193,9,189,139,26,123,69,101,253,47,158,171,21,186,23,125,27,195,180,175,221,181,213,133,246,96,7,201,250,200,212,113,90,103,137,122,151,20]
+```
+
+Note that these are burner keypairs used for demonstration purposes only.
+Do not reuse them on mainnet.
+
+## Exercise
+
+Copy the code from the editor to the right into your local `index.ts` file.
+
+Then run `npm start` in the terminal to execute airdrop script.
+
+You should see an output similar to the following:
+
+```terminal
+wallet_1 prebalance: 0
+Transaction Signature: https://explorer.solana.com/tx/61kJ28YvQLaiveQYS2q6JQD1dZWSBeeQsAokfEyT2tCwrxoBDiTZkpeojN6kKaZUtATK9AY9EECQbUC4AJ8QGKGw?cluster=devnet
+wallet_1 postbalance: 2
+```
+
+In the following sections, we will use this starter code as a base to build on.
