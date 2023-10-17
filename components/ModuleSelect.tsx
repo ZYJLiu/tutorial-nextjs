@@ -69,7 +69,7 @@ const modulesData: Module[] = [
     description:
       "Learn how to build a frontend to interact with your Solana program.",
     image: "/icons/SagaPhone.png",
-    lessons: [], // assuming no lessons for this module
+    lessons: [],
   },
 ];
 
@@ -78,7 +78,7 @@ export default function ModuleSelect() {
     <div className="flex w-full flex-col items-center justify-center space-y-2 px-10">
       {modulesData.map((module) => (
         <Card
-          className="sm:w-3/4 md:w-3/4 md:p-4 lg:w-1/2"
+          className="sm:w-3/4 md:w-3/4 md:p-4 lg:w-2/5"
           isHoverable
           key={module.label}
         >

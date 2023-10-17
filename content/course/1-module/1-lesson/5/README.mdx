@@ -5,6 +5,12 @@
 In this step, we'll confirm the airdrop.
 This is to ensure that the transaction has been confirmed by the network before we fetch the account balance in the next step.
 
+Solana has 3 different transaction commitment levels:
+
+- **Processed**: The transaction has been processed by the leader and included in a block
+- **Confirmed**: The transaction has been included in a block that has been voted on by 66% of the stake weight of the cluster
+- **Finalized**: 31 confirmed blocks have been built on top of the block containing the transaction
+
 The `getLatestBlockhash` method is first used to get a recent `blockhash` and `lastValidBlockHeight`.
 
 The `confirmTransaction` method is then used to confirm a transaction.
@@ -18,7 +24,7 @@ const { blockhash, lastValidBlockHeight } =
   await connection.getLatestBlockhash();
 ```
 
-Then confirm the airdrop transaction using the transactionSignature.
+Then confirm the airdrop transaction using the transactionSignature with a commitment level of "confirmed".
 
 ```ts
 await connection.confirmTransaction(
