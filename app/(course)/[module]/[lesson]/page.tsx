@@ -119,7 +119,7 @@ async function getFilesFromDirectory(
     .catch(() => false);
 
   if (!directoryExists) {
-    console.warn(`Directory ${directoryPath} does not exist.`);
+    // console.warn(`Directory ${directoryPath} does not exist.`);
     return [];
   }
 

@@ -1,7 +1,17 @@
-# M1 L2
+# Transfer SOL
 
-Generate a new keypair
+## Step 1: Create Instruction
+
+Placeholder
+
+## Exercise
+
+Create instruction to transfer SOL.
 
 ```js
-const wallet_1 = new Keypair();
+const transferInstruction = SystemProgram.transfer({
+  fromPubkey: wallet_1.publicKey,
+  toPubkey: wallet_2.publicKey,
+  lamports: transferAmount * LAMPORTS_PER_SOL,
+});
 ```

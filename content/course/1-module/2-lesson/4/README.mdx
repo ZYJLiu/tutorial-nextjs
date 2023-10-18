@@ -1,21 +1,17 @@
-# M1 L2
+# Transfer SOL
 
-Get the most recent blockhash
+## Step 3: Send Transaction
+
+Placeholder
+
+## Exercise
+
+Send the transaction
 
 ```js
-const { blockhash, lastValidBlockHeight } =
-  await connection.getLatestBlockhash();
-```
-
-Confirm the airdrop transaction
-
-```js
-await connection.confirmTransaction(
-  {
-    blockhash,
-    lastValidBlockHeight,
-    signature: transactionSignature,
-  },
-  "confirmed",
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [wallet_1],
 );
 ```

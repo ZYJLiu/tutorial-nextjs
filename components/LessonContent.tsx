@@ -6,7 +6,7 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 
-import { Button } from "@nextui-org/button";
+import { Button, ButtonGroup } from "@nextui-org/button";
 import CopyToClipboard from "./CopyToClipboard";
 import Panels from "@/components/Panels";
 import { Progress } from "@nextui-org/progress";
@@ -178,7 +178,7 @@ export default function LessonContent({
     <>
       <Panels
         LeftPanel={
-          <div className="dark:prose-dark prose w-full max-w-none">
+          <div className="dark:prose-dark prose relative w-full max-w-none">
             <MDXRemote {...mdx} components={components} />
           </div>
         }
@@ -212,36 +212,34 @@ export default function LessonContent({
         }
         RightBottomPanel={
           <>
-            <div className="mb-2 flex justify-center space-x-2 ">
-              <Button
-                color="primary"
-                isDisabled={!hasSolution()}
-                onClick={() =>
-                  compareSolution(
-                    fileContents[currentFileIndex].content,
-                    solution[currentFileIndex].content,
-                    setIsCorrect,
-                    getLanguageFromFilename(
-                      fileContents[currentFileIndex].name,
-                    ),
-                  )
-                }
-              >
-                Check
-              </Button>
-              <Button isDisabled={!hasSolution()} onClick={toggleShowDiff}>
-                Hint
-              </Button>
-              <Button
-                isDisabled={!hasSolution()}
-                onClick={() =>
-                  handleEditorChange(solution[currentFileIndex].content)
-                }
-              >
-                Answer
-              </Button>
+            <div className="mb-2 flex justify-center space-x-1">
+              <ButtonGroup isDisabled={!hasSolution()} size="sm">
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    compareSolution(
+                      fileContents[currentFileIndex].content,
+                      solution[currentFileIndex].content,
+                      setIsCorrect,
+                      getLanguageFromFilename(
+                        fileContents[currentFileIndex].name,
+                      ),
+                    )
+                  }
+                >
+                  Check
+                </Button>
+                <Button onClick={toggleShowDiff}>Hint</Button>
+                <Button
+                  onClick={() =>
+                    handleEditorChange(solution[currentFileIndex].content)
+                  }
+                >
+                  Answer
+                </Button>
+              </ButtonGroup>
               <div className="w-10"></div>
-              <div className="flex space-x-2">
+              <ButtonGroup size="sm">
                 <Button isDisabled={isPrevDisabled} onClick={onPrevHandler}>
                   Previous
                 </Button>
@@ -252,7 +250,7 @@ export default function LessonContent({
                 >
                   Next
                 </Button>
-              </div>
+              </ButtonGroup>
             </div>
             {showDiff && solution[currentFileIndex] && (
               <DiffEditor

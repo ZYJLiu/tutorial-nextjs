@@ -1,7 +1,51 @@
-# M1 L2
+# Transfer SOL
 
-Establish a connection to the Solana devnet cluster
+In this lesson, we'll learn to build a transaction to transfer SOL from one wallet to another.
 
-```js
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-```
+Before we get started, let's go over the concepts of transactions and instructions on Solana.
+
+## Transactions Overview
+
+To invoke programs from the client, we build and send transactions to be processed by the network.
+
+Let’s expand on the details that make up a transaction:
+
+![](/course/2-transaction.png)
+
+1. **Message:** At its core, a transaction has a message. This message includes:
+   - **Instructions**: An array of instructions to be executed.
+   - **Recent Blockhash**: Acts as a timestamp for the transaction.
+   - **Feepayer**: Specifies the transaction fee payer.
+2. **Signers:** An array of signers included on the transaction.
+
+By default, the first signer on the transaction is set as the fee payer unless otherwise specified.
+
+For simplicity, a transaction can be thought of a request to process one or multiple instructions.
+
+![](/course/1-transaction.png)
+
+Instructions in a transaction are processed sequentially, in the order they are added to a transaction.
+The network ensures that transactions are processed such that all instructions either complete successfully or, if one fails, the entire transaction is rejected.
+
+## Instructions Overview
+
+Next, let’s expand on the details that make up a instruction. Each instruction must specify 3 pieces of information:
+
+- **Program address**: Specifies the program being invoked
+- **Accounts**: Lists every account required by the instruction, including other programs
+- **Instruction Data**: Specifies the instruction within the program to invoke, plus any additional data required by the instruction
+
+![](/course/3-transaction.png)
+
+For every account required by an instruction, the following information must be specified:
+
+- **Account address**: The on-chain address of an account.
+- **is_signer**: Specify if the account is required as a signer on the transaction.
+- **is_writable**: Specify if the account data will be modified.
+
+This information is referred to as the `AccountMeta`.
+
+![](/course/4-transaction.png)
+
+By clearly identifying the accounts needed for an instruction and specifying whether each account is writable, transaction processing can be parallelized.
+This means that if two transactions do not include any accounts which write to the same state, then the transactions can be executed at the same time.
