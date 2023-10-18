@@ -2,11 +2,33 @@
 
 ## Step 1: Create Instruction
 
-Placeholder
+First, we need to create an instruction to transfer SOL from one account to another.
+
+We can do this using the `SystemProgram.transfer` method.
+Under the hood, this method creates an instruction to invoke the `transfer` instruction on the `SystemProgram` program.
+
+```ts
+static transfer(params: TransferParams | TransferWithSeedParams): TransactionInstruction;
+```
+
+This method takes in a `TransferParams` object with the following properties:
+
+```ts
+type TransferParams = {
+  /** Account that will transfer lamports */
+  fromPubkey: PublicKey;
+  /** Account that will receive transferred lamports */
+  toPubkey: PublicKey;
+  /** Amount of lamports to transfer */
+  lamports: number | bigint;
+};
+```
+
+Note that the `fromPubkey` is required as a signer on the transaction since we are transferring SOL from this account.
 
 ## Exercise
 
-Create instruction to transfer SOL.
+Update the editor to create a transfer instruction from `wallet_1` to `wallet_2` for the `transferAmount`.
 
 ```js
 const transferInstruction = SystemProgram.transfer({

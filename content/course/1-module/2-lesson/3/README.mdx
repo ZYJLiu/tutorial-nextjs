@@ -2,11 +2,28 @@
 
 ## Step 2: Create Transaction
 
-Placeholder
+Once we have our instruction, we can create a new transaction using the `Transaction` class.
+
+```js
+const transaction = new Transaction();
+```
+
+We can then add instructions to the transaction using the `add` method.
+
+```js
+transaction.add(instruction);
+```
+
+We can also create a transaction with multiple instructions by passing them as arguments to the `add` method.
+Note that instructions on a transaction are executed in the order they are added to the transaction.
+
+```js
+const transaction = new Transaction().add(instruction_1, instruction_2);
+```
 
 ## Exercise
 
-Create new Transaction and add transfer instruction to it.
+Update the editor to create a transaction with the transfer instruction.
 
 ```js
 const transaction = new Transaction().add(transferInstruction);

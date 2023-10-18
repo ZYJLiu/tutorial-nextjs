@@ -12,6 +12,7 @@ import Panels from "@/components/Panels";
 import { Progress } from "@nextui-org/progress";
 import { compareSolution } from "@/utils/LessonContent";
 import { useRouter } from "next/navigation";
+import StyledImage from "./StyledImage";
 
 interface LessonContentProps {
   routes: { module: string; lesson: string }[];
@@ -76,7 +77,7 @@ export default function LessonContent({
     number | string
   >("25vh");
 
-  const components = { pre: CopyToClipboard };
+  const components = { pre: CopyToClipboard, img: StyledImage };
 
   useEffect(() => {
     if (monaco) {

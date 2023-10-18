@@ -2,11 +2,25 @@
 
 ## Step 3: Send Transaction
 
-Placeholder
+Once we have our transaction, we'll need to sign and send it to the network.
+
+We'll use the `sendAndConfirmTransaction` function, which will sign, send, and confirm a transaction.
+
+```js
+export function sendAndConfirmTransaction(connection: Connection, transaction: Transaction, signers: Array<Signer>, options?: ConfirmOptions & Readonly<{
+    abortSignal?: AbortSignal;
+}>): Promise<TransactionSignature>;
+```
+
+The `sendAndConfirmTransaction` function takes the following required parameters:
+
+- `connection`: The connection to the network.
+- `transaction`: The transaction to send.
+- `signers`: The keypairs to sign the transaction.
 
 ## Exercise
 
-Send the transaction
+Update the editor to send the transaction to the network, including `wallet_1` as a signer.
 
 ```js
 const transactionSignature = await sendAndConfirmTransaction(

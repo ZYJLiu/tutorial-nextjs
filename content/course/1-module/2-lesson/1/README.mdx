@@ -49,3 +49,8 @@ This information is referred to as the `AccountMeta`.
 
 By clearly identifying the accounts needed for an instruction and specifying whether each account is writable, transaction processing can be parallelized.
 This means that if two transactions do not include any accounts which write to the same state, then the transactions can be executed at the same time.
+
+Note that the details for building specific program instructions are often abstracted away by client libraries.
+However, it is helpful to understand the underlying structure of transactions and instructions.
+
+In the following sections, we'll learn to build a transaction to transfer SOL using the `@solana/web3.js` library.
