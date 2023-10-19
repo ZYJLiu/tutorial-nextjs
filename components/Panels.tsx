@@ -42,7 +42,7 @@ export default function Panels({
 
   return (
     <PanelGroup direction="horizontal" autoSaveId="persistence">
-      <Panel className="flex " defaultSize={50} collapsible>
+      <Panel className="flex" defaultSize={50} collapsible>
         <div className="mb-2 w-full overflow-auto px-5">{LeftPanel}</div>
       </Panel>
       <ResizeHandle />
