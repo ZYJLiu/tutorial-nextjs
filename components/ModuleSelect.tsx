@@ -74,7 +74,9 @@ const modulesData: Module[] = [
 ];
 
 export default function ModuleSelect() {
-  sessionStorage.clear();
+  if (typeof window !== "undefined") {
+    sessionStorage.clear();
+  }
 
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-2 px-10">
