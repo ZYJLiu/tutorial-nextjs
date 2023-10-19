@@ -14,12 +14,13 @@ We can then add instructions to the transaction using the `add` method.
 transaction.add(instruction);
 ```
 
-We can also create a transaction with multiple instructions by passing them as arguments to the `add` method.
-Note that instructions on a transaction are executed in the order they are added to the transaction.
+We can also create a transaction and add multiple instructions at once.
 
 ```js
 const transaction = new Transaction().add(instruction_1, instruction_2);
 ```
+
+Note that instructions on a transaction are executed in the order they are added to the transaction.
 
 ## Exercise
 

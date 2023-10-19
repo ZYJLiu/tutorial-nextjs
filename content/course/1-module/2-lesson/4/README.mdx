@@ -2,9 +2,9 @@
 
 ## Step 3: Send Transaction
 
-Once we have our transaction, we'll need to sign and send it to the network.
+Once we have our transaction, we need to sign and send it to the network.
 
-We'll use the `sendAndConfirmTransaction` function, which will sign, send, and confirm a transaction.
+In this example, we'll use the `sendAndConfirmTransaction` function to sign, send, and confirm a transaction.
 
 ```js
 export function sendAndConfirmTransaction(connection: Connection, transaction: Transaction, signers: Array<Signer>, options?: ConfirmOptions & Readonly<{

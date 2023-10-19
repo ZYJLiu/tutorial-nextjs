@@ -5,7 +5,7 @@
 First, we need to create an instruction to transfer SOL from one account to another.
 
 We can do this using the `SystemProgram.transfer` method.
-Under the hood, this method creates an instruction to invoke the `transfer` instruction on the `SystemProgram` program.
+Under the hood, this method creates an instruction to invoke the `transfer` instruction on the Systen Program.
 
 ```ts
 static transfer(params: TransferParams | TransferWithSeedParams): TransactionInstruction;

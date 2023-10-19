@@ -60,14 +60,18 @@ export const Nav = () => {
       <NavbarBrand>
         <Link
           href="/"
-          className="rounded-md border border-transparent p-2 hover:border-gray-400"
+          className="rounded-md border border-transparent p-2 transition duration-300 hover:border-gray-400"
         >
           <Image src={SolanaLogo} alt="Solana Logo" width={100} />
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="end">
         {navItems.map((item, index) => (
-          <NavbarItem key={index} isActive={item.href === pathname}>
+          <NavbarItem
+            key={index}
+            isActive={item.href === pathname}
+            className="border-b border-transparent transition duration-300 hover:border-b hover:border-gray-400"
+          >
             <Link href={item.href}>{item.label}</Link>
           </NavbarItem>
         ))}

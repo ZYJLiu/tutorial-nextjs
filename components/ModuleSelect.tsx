@@ -34,13 +34,33 @@ const modulesData: Module[] = [
       },
       {
         name: "Lesson 2",
-        subtitle: "Subtitle",
+        subtitle: "Transfer SOL",
         description: "Description for Lesson 2...",
       },
       {
         name: "Lesson 3",
-        subtitle: "Subtitle",
+        subtitle: "Create Mint Account",
         description: "Description for Lesson 3...",
+      },
+      {
+        name: "Lesson 4",
+        subtitle: "Create Token Account",
+        description: "Description for Lesson 4...",
+      },
+      {
+        name: "Lesson 5",
+        subtitle: "Create Associated Token Account",
+        description: "Description for Lesson 5...",
+      },
+      {
+        name: "Lesson 6",
+        subtitle: "Mint Tokens",
+        description: "Description for Lesson 6...",
+      },
+      {
+        name: "Lesson 7",
+        subtitle: "Create Metadata Account",
+        description: "Description for Lesson 7...",
       },
     ],
   },
@@ -79,50 +99,50 @@ export default function ModuleSelect() {
   }
 
   return (
-    <div className="flex w-full flex-col items-center justify-center space-y-2 px-10">
+    <div className="flex w-full flex-col items-center justify-center space-y-2 px-2">
       {modulesData.map((module) => (
         <Card
           className="sm:w-3/4 md:w-3/4 md:p-4 lg:w-2/5"
           isHoverable
           key={module.label}
         >
-          <CardBody className="grid grid-cols-6 items-center gap-6 md:grid-cols-12 md:gap-4">
-            <div className="relative col-span-6 justify-self-center md:col-span-4">
-              <img
-                src={module.image}
-                alt={module.label}
-                className="h-auto w-full max-w-[200px]"
-              />
-            </div>
-            <div className="col-span-6 flex flex-col md:col-span-8">
-              <span className="mb-2 text-lg font-semibold">{module.label}</span>
-              <span>{module.description}</span>
-            </div>
-            <Accordion
-              className="col-span-6 md:col-span-12"
-              variant="splitted"
-              fullWidth
-            >
-              {module.lessons.map((lesson, index) => (
-                <AccordionItem
-                  key={index}
-                  aria-label={lesson.name}
-                  title={lesson.name}
-                  subtitle={lesson.subtitle}
-                  className="border border-transparent p-2 hover:border-gray-400"
+          <CardBody>
+            <Accordion className="bg-transparent" hideIndicator={true}>
+              <AccordionItem
+                startContent={
+                  <img src={module.image} className="w-[10vw] min-w-[75px]" />
+                }
+                aria-label={module.label}
+                title={module.label}
+                subtitle={module.description}
+              >
+                <Accordion
+                  className="col-span-6 md:col-span-12"
+                  variant="splitted"
+                  fullWidth
                 >
-                  <div className="mb-2 flex flex-col items-center justify-center">
-                    <div className="mb-2">{lesson.description}</div>
-                    <Button
+                  {module.lessons.map((lesson, index) => (
+                    <AccordionItem
                       key={index}
-                      href={`/${module.number}/${index + 1}`}
-                      as={Link}
+                      aria-label={lesson.name}
+                      title={lesson.name}
+                      subtitle={lesson.subtitle}
+                      className="border border-transparent p-2 hover:border-gray-400"
                     >
-                      Start
-                    </Button>
-                  </div>
-                </AccordionItem>
-              ))}
+                      <div className="mb-2 flex flex-col items-center justify-center">
+                        <div className="mb-2">{lesson.description}</div>
+                        <Button
+                          key={index}
+                          href={`/${module.number}/${index + 1}`}
+                          as={Link}
+                        >
+                          Start
+                        </Button>
+                      </div>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </AccordionItem>
             </Accordion>
           </CardBody>
         </Card>

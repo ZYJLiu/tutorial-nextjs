@@ -7,8 +7,3 @@ import {
 
 // Establish a connection to the Solana devnet cluster
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-
-// Generate a new keypair
-const wallet_1 = new Keypair();
-
-// Request the airdrop

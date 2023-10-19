@@ -4,7 +4,7 @@
 
 Lastly, we'll fetch the balance of `wallet_1` after the airdrop.
 
-We can get the lamport balance of an account using the `getBalance` method.
+We can get the lamport balance of an account using the `getBalance` method on the connection.
 This method takes two argument:
 
 - The public key of the account to fetch the balance for
@@ -16,7 +16,7 @@ getBalance(publicKey: PublicKey, commitmentOrConfig?: Commitment | GetBalanceCon
 
 ## Exercise
 
-Update the editor to get the balance of `wallet_1` after the transfer.
+Update the editor to get the balance of `wallet_1` after the airdrop request.
 Then log the balance, dividing by `LAMPORTS_PER_SOL` to convert to units of SOL.
 
 ```ts

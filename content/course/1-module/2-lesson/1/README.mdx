@@ -6,17 +6,15 @@ Before we get started, let's go over the concepts of transactions and instructio
 
 ## Transactions Overview
 
-To invoke programs from the client, we build and send transactions to be processed by the network.
-
-Let’s expand on the details that make up a transaction:
-
-![](/course/1-transaction.png)
+First, let’s expand on the details that make up a transaction:
 
 1. **Message:** At its core, a transaction has a message. This message includes:
    - **Instructions**: An array of instructions to be executed.
    - **Recent Blockhash**: Acts as a timestamp for the transaction.
    - **Feepayer**: Specifies the transaction fee payer.
 2. **Signers:** An array of signers included on the transaction.
+
+![](/course/1-transaction.png)
 
 By default, the first signer on the transaction is set as the fee payer unless otherwise specified.
 
@@ -29,7 +27,9 @@ The network ensures that transactions are processed such that all instructions e
 
 ## Instructions Overview
 
-Next, let’s expand on the details that make up a instruction. Each instruction must specify 3 pieces of information:
+Next, let’s expand on the details that make up an instruction.
+
+Each instruction must specify 3 pieces of information:
 
 - **Program address**: Specifies the program being invoked
 - **Accounts**: Lists every account required by the instruction, including other programs

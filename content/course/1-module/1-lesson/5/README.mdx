@@ -24,7 +24,7 @@ const { blockhash, lastValidBlockHeight } =
   await connection.getLatestBlockhash();
 ```
 
-Then confirm the airdrop transaction using the transactionSignature with a commitment level of "confirmed".
+Then confirm the airdrop transaction using the `transactionSignature`, with a commitment level of "confirmed".
 
 ```ts
 await connection.confirmTransaction(
