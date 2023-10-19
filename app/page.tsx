@@ -11,7 +11,7 @@ export default function Home() {
           autoPlay
           muted
           loop
-        ></video>
+        />
       </div>
       <Button href="/1/1" color="primary" size="lg" as={Link}>
         Start Course

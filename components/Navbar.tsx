@@ -21,7 +21,7 @@ import { useRef } from "react";
 // Panel pages are for testing purposes
 const navItems = [
   { label: "Course", href: "/modules" },
-  { label: "Test Panel", href: "/panel" },
+  // { label: "Test Panel", href: "/panel" },
 ];
 
 // Navbar component
@@ -58,7 +58,10 @@ export const Nav = () => {
       </NavbarMenu>
 
       <NavbarBrand>
-        <Link href="/">
+        <Link
+          href="/"
+          className="rounded-md border border-transparent p-2 hover:border-gray-400"
+        >
           <Image src={SolanaLogo} alt="Solana Logo" width={100} />
         </Link>
       </NavbarBrand>

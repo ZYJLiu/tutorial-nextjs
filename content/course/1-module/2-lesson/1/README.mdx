@@ -10,7 +10,7 @@ To invoke programs from the client, we build and send transactions to be process
 
 Let’s expand on the details that make up a transaction:
 
-![](/course/2-transaction.png)
+![](/course/1-transaction.png)
 
 1. **Message:** At its core, a transaction has a message. This message includes:
    - **Instructions**: An array of instructions to be executed.
@@ -22,7 +22,7 @@ By default, the first signer on the transaction is set as the fee payer unless o
 
 For simplicity, a transaction can be thought of a request to process one or multiple instructions.
 
-![](/course/1-transaction.png)
+![](/course/2-transaction.png)
 
 Instructions in a transaction are processed sequentially, in the order they are added to a transaction.
 The network ensures that transactions are processed such that all instructions either complete successfully or, if one fails, the entire transaction is rejected.

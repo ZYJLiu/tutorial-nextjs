@@ -16,6 +16,7 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/components/accordion.js",
     "./node_modules/@nextui-org/theme/dist/components/image.js",
     "./node_modules/@nextui-org/theme/dist/components/pagination.js",
+    "./node_modules/@nextui-org/theme/dist/components/popover.js",
   ],
   theme: {
     extend: {

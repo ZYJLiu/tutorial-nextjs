@@ -7,6 +7,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 import { Button, ButtonGroup } from "@nextui-org/button";
+import { Pagination } from "@nextui-org/pagination";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 import CopyToClipboard from "./CopyToClipboard";
 import Panels from "@/components/Panels";
 import { Progress } from "@nextui-org/progress";
@@ -32,15 +34,17 @@ export default function LessonContent({
   route,
   lessonData,
 }: LessonContentProps) {
+  // Check if there is a stored lesson section index in sessionStorage
   const getInitialLessonIndex = () => {
     if (typeof window !== "undefined") {
-      const lessonKey = `lessonIndex_${route.module}_${route.lesson}`;
+      const lessonKey = `${route.module}-${route.lesson}`;
       const storedIndex = sessionStorage.getItem(lessonKey);
       return storedIndex ? Number(storedIndex) : 0;
     }
     return 0;
   };
 
+  // Get the language from the file name for syntax highlighting
   const getLanguageFromFilename = (filename: string) => {
     const extension = filename.split(".").pop();
 
@@ -81,6 +85,7 @@ export default function LessonContent({
 
   useEffect(() => {
     if (monaco) {
+      // Disable errors from showing up in the editor
       monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
         noSemanticValidation: true,
       });
@@ -127,52 +132,63 @@ export default function LessonContent({
     router.push(`/${targetRoute.module}/${targetRoute.lesson}`);
   };
 
-  const handleLessonChange = (increment: number) => {
-    const newIndex = currentLessonIndex + increment;
-    const lessonKey = `lessonIndex_${route.module}_${route.lesson}`;
-    sessionStorage.setItem(lessonKey, newIndex.toString());
+  const setLessonSession = (index: number) => {
+    const lessonKey = `${route.module}-${route.lesson}`;
+    sessionStorage.setItem(lessonKey, index.toString());
+  };
 
-    setCurrentLessonIndex((prevIndex) => prevIndex + increment);
+  const resetLessonState = (index: number) => {
+    setCurrentLessonIndex(index);
     setCurrentFileIndex(0);
     setShowDiff(false);
     setIsCorrect(false);
+  };
+
+  const handleNavigation = (increment: number) => {
+    const newIndex = currentLessonIndex + increment;
+    setLessonSession(newIndex);
+    resetLessonState(newIndex);
     if (increment < 0) setIsNextDisabled(false);
+  };
+
+  const navigateToNextLesson = () => {
+    const currentRouteIndex = findCurrentRouteIndex();
+    const hasNextRoute =
+      currentRouteIndex >= 0 && currentRouteIndex + 1 < routes.length;
+
+    if (hasNextRoute) {
+      navigateToRoute(currentRouteIndex + 1);
+    } else {
+      setIsNextDisabled(true);
+    }
+  };
+
+  const navigateToPrevLesson = () => {
+    const currentRouteIndex = findCurrentRouteIndex();
+    const hasPrevRoute = currentRouteIndex > 0;
+
+    if (hasPrevRoute) {
+      navigateToRoute(currentRouteIndex - 1);
+    } else {
+      setIsPrevDisabled(true);
+    }
   };
 
   const onNextHandler = () => {
     setIsPrevDisabled(false);
     const isLastLesson = currentLessonIndex + 1 >= lessonData.length;
-
-    if (isLastLesson) {
-      const currentRouteIndex = findCurrentRouteIndex();
-
-      const hasNextRoute =
-        currentRouteIndex >= 0 && currentRouteIndex + 1 < routes.length;
-      if (hasNextRoute) {
-        navigateToRoute(currentRouteIndex + 1);
-      } else {
-        setIsNextDisabled(true);
-      }
-    } else {
-      handleLessonChange(1);
-    }
+    isLastLesson ? navigateToNextLesson() : handleNavigation(1);
   };
 
   const onPrevHandler = () => {
     const isFirstLesson = currentLessonIndex === 0;
+    isFirstLesson ? navigateToPrevLesson() : handleNavigation(-1);
+  };
 
-    if (isFirstLesson) {
-      const currentRouteIndex = findCurrentRouteIndex();
-
-      const hasPrevRoute = currentRouteIndex > 0;
-      if (hasPrevRoute) {
-        navigateToRoute(currentRouteIndex - 1);
-      } else {
-        setIsPrevDisabled(true);
-      }
-    } else {
-      handleLessonChange(-1);
-    }
+  const handleNavChange = (section: number) => {
+    const newIndex = section - 1;
+    setLessonSession(newIndex);
+    resetLessonState(newIndex);
   };
 
   return (
@@ -244,6 +260,22 @@ export default function LessonContent({
                 <Button isDisabled={isPrevDisabled} onClick={onPrevHandler}>
                   Previous
                 </Button>
+                <Popover placement="bottom" className="bg-transparent p-0">
+                  <PopoverTrigger>
+                    <Button>Nav</Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <Pagination
+                      isCompact
+                      // showControls
+                      // disableAnimation
+                      total={lessonData.length}
+                      page={currentLessonIndex + 1}
+                      size="sm"
+                      onChange={handleNavChange}
+                    />
+                  </PopoverContent>
+                </Popover>
                 <Button
                   color={isCorrect ? "primary" : "default"}
                   isDisabled={isNextDisabled}
