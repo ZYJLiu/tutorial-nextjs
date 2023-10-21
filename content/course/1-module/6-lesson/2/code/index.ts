@@ -1,5 +1,14 @@
-import { Connection, clusterApiUrl } from "@solana/web3.js";
-import { createAccount, createMint, mintTo } from "@solana/spl-token";
+import {
+  createAccount,
+  createMint,
+  createMintToInstruction,
+} from "@solana/spl-token";
+import {
+  Connection,
+  Transaction,
+  clusterApiUrl,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { getOrCreateKeypair } from "./utils";
 
 // Use existing keypairs or generate new ones if they don't exist
@@ -23,13 +32,21 @@ const associatedTokenAccount = await createAccount(
   wallet_1.publicKey, // token account owner
 );
 
-const transactionSignature = await mintTo(
-  connection,
-  wallet_1, // payer
+const instruction = createMintToInstruction(
   mint, // mint address
   associatedTokenAccount, // destination
   wallet_1.publicKey, // mint authority
   100, // amount
+);
+
+const transaction = new Transaction().add(instruction);
+
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [
+    wallet_1, // payer
+  ],
 );
 
 console.log(

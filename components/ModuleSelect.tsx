@@ -59,7 +59,7 @@ const modulesData: Module[] = [
       },
       {
         name: "Lesson 7",
-        subtitle: "Create Metadata Account",
+        subtitle: "Transfer Tokens",
         description: "Description for Lesson 7...",
       },
     ],
