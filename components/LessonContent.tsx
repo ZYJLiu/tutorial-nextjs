@@ -94,24 +94,22 @@ export default function LessonContent({
     }
   };
 
+  // Toggle show/hide diff editor
   const toggleShowDiff = () => {
     setShowDiff((prevState) => !prevState);
   };
 
+  // Check if there is a solution for the current file
   const hasSolution = () => {
     const currentFileName = fileContents[currentFileIndex].name;
     return solution.some((solution) => solution.name === currentFileName);
   };
 
+  // Find the index of the current route, to determine if there is a next/prev route
   const findCurrentRouteIndex = () => {
     return routes.findIndex(
       (r) => r.module === route.module && r.lesson === route.lesson,
     );
-  };
-
-  const navigateToRoute = (index: number) => {
-    const targetRoute = routes[index];
-    router.push(`/${targetRoute.module}/${targetRoute.lesson}`);
   };
 
   const resetLessonState = (index: number) => {
@@ -164,6 +162,12 @@ export default function LessonContent({
     } else {
       setIsPrevDisabled(true);
     }
+  };
+
+  // Navigate to a new lesson page
+  const navigateToRoute = (index: number) => {
+    const targetRoute = routes[index];
+    router.push(`/${targetRoute.module}/${targetRoute.lesson}`);
   };
 
   // Navigate to a specific lesson section using the nav popover
