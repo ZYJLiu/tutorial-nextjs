@@ -119,8 +119,8 @@ export default function ModuleSelect() {
                     src={module.image}
                     alt=""
                     className="w-[10vw] min-w-[75px]"
-                    width={100}
-                    height={100}
+                    width={300}
+                    height={300}
                   />
                 }
                 aria-label={module.label}
