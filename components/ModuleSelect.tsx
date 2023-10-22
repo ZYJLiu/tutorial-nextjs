@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Card, CardBody } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Lesson {
   name: string;
@@ -19,7 +21,7 @@ interface Module {
   lessons: Lesson[];
 }
 
-const modulesData: Module[] = [
+const modules: Module[] = [
   {
     number: "1",
     label: "Client Module",
@@ -94,33 +96,38 @@ const modulesData: Module[] = [
 ];
 
 export default function ModuleSelect() {
-  if (typeof window !== "undefined") {
-    sessionStorage.clear();
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.clear();
+    }
+  }, []);
 
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-2 px-2">
-      {modulesData.map((module) => (
+      {modules.map((module) => (
         <Card
           className="sm:w-3/4 md:w-3/4 md:p-4 lg:w-2/5"
           isHoverable
           key={module.label}
         >
           <CardBody>
-            <Accordion className="bg-transparent" hideIndicator={true}>
+            <Accordion hideIndicator={true}>
               <AccordionItem
+                className="relative"
                 startContent={
-                  <img src={module.image} className="w-[10vw] min-w-[75px]" />
+                  <Image
+                    src={module.image}
+                    alt=""
+                    className="w-[10vw] min-w-[75px]"
+                    width={100}
+                    height={100}
+                  />
                 }
                 aria-label={module.label}
                 title={module.label}
                 subtitle={module.description}
               >
-                <Accordion
-                  className="col-span-6 md:col-span-12"
-                  variant="splitted"
-                  fullWidth
-                >
+                <Accordion variant="splitted">
                   {module.lessons.map((lesson, index) => (
                     <AccordionItem
                       key={index}
