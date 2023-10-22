@@ -4,6 +4,23 @@ import generate from "@babel/generator";
 import toast from "react-hot-toast";
 import traverse from "@babel/traverse";
 
+// Get the language from the file name for syntax highlighting
+export const getLanguageFromFilename = (filename: string) => {
+  const extension = filename.split(".").pop();
+
+  switch (extension) {
+    case "ts":
+      return "typescript";
+    case "js":
+      return "javascript";
+    case "rs":
+      return "rust";
+    default:
+      return "plaintext";
+  }
+};
+
+// Compare the current editor content with the solution file content
 export const compareSolution = (
   currentFileContent: string,
   solutionFileContent: string,

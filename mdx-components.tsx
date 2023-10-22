@@ -1,4 +1,3 @@
-import CopyToClipboard from "./components/CopyToClipboard";
 import type { MDXComponents } from "mdx/types";
 
 // This file allows you to provide custom React components
@@ -10,6 +9,5 @@ import type { MDXComponents } from "mdx/types";
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
-    CopyToClipboard,
   };
 }

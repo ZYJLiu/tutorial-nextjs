@@ -14,7 +14,6 @@ const routes = [
   { module: "1", lesson: "7" },
   { module: "2", lesson: "1" },
   { module: "2", lesson: "2" },
-  // { module: "2", lesson: "2" },
 ];
 
 export function generateStaticParams() {
