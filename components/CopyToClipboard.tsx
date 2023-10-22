@@ -12,7 +12,7 @@ export default function Pre({ children, ...props }: Props) {
 
   useEffect(() => {
     if (copied) {
-      const timer = setTimeout(() => setCopied(false), 400);
+      const timer = setTimeout(() => setCopied(false), 300);
       return () => clearTimeout(timer);
     }
   }, [copied]);
@@ -28,14 +28,6 @@ export default function Pre({ children, ...props }: Props) {
     <div className="group relative">
       <pre {...props} ref={preRef} className="focus:outline-none">
         <div className="absolute right-4 top-3 m-2 flex items-center space-x-2">
-          {/* <span
-            className={`hidden text-xs text-green-400 fade-in ${
-              copied ? "group-hover:flex" : ""
-            }`}
-          >
-            Copied!
-          </span> */}
-
           <button
             type="button"
             aria-label="Copy to Clipboard"

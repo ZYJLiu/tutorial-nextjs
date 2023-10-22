@@ -1,25 +1,6 @@
-export const copyToClipboard = (text: string): Promise<void> =>
-  new Promise((resolve, reject) => {
-    if (navigator?.clipboard) {
-      const cb = navigator.clipboard;
-
-      cb.writeText(text).then(resolve).catch(reject);
-    } else {
-      try {
-        const body = document.querySelector("body");
-
-        const textarea = document.createElement("textarea");
-        body?.appendChild(textarea);
-
-        textarea.value = text;
-        textarea.select();
-        document.execCommand("copy");
-
-        body?.removeChild(textarea);
-
-        resolve();
-      } catch (e) {
-        reject(e);
-      }
-    }
-  });
+export const copyToClipboard = (text: string): Promise<void> => {
+  if (navigator?.clipboard) {
+    return navigator.clipboard.writeText(text);
+  }
+  return Promise.reject(new Error("Clipboard API not supported"));
+};
