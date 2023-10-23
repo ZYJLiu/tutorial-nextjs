@@ -4,8 +4,6 @@ import { useState } from "react";
 export function useLocalStorage(route: { module: string; lesson: string }) {
   const key = `${route.module}-${route.lesson}`;
 
-  console.log(key);
-
   const getStoredValue = () => {
     if (typeof window !== "undefined") {
       const storedValue = localStorage.getItem(key);

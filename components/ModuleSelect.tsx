@@ -97,6 +97,13 @@ const modules: Module[] = [
   },
 ];
 
+const localStorageKeys = modules.flatMap((module, moduleIndex) =>
+  module.lessons.map((_, lessonIndex) => ({
+    module: (moduleIndex + 1).toString(),
+    lesson: (lessonIndex + 1).toString(),
+  })),
+);
+
 export default function ModuleSelect() {
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -104,15 +111,21 @@ export default function ModuleSelect() {
     }
   }, []);
 
-  const progressValues = modules.map((module, moduleIndex) =>
-    module.lessons.map((_, lessonIndex) => {
-      const [progressValue] = useLocalStorage({
-        module: (moduleIndex + 1).toString(),
-        lesson: (lessonIndex + 1).toString(),
-      });
-      return progressValue;
-    }),
-  );
+  const progressValues = localStorageKeys.map((key) => {
+    const [progressValue] = useLocalStorage(key);
+    return progressValue;
+  });
+
+  const getProgressValue = (moduleIndex: number, lessonIndex: number) => {
+    const key = {
+      module: (moduleIndex + 1).toString(),
+      lesson: (lessonIndex + 1).toString(),
+    };
+    const index = localStorageKeys.findIndex(
+      (k) => k.module === key.module && k.lesson === key.lesson,
+    );
+    return progressValues[index] || 0;
+  };
 
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-2 px-2">
@@ -149,7 +162,7 @@ export default function ModuleSelect() {
                         <Progress
                           label={lesson.subtitle}
                           size="sm"
-                          value={progressValues[moduleIndex][lessonIndex]}
+                          value={getProgressValue(moduleIndex, lessonIndex)}
                           showValueLabel={true}
                         />
                       }
