@@ -23,17 +23,3 @@ export function useSessionStorage(route: { module: string; lesson: string }) {
 
   return [value, setStoredValue];
 }
-
-// // Check if there is a stored lesson section index in sessionStorage
-// const getInitialLessonIndex = () => {
-//   if (typeof window !== "undefined") {
-//     const lessonKey = `${route.module}-${route.lesson}`;
-//     const storedIndex = sessionStorage.getItem(lessonKey);
-//     return storedIndex ? Number(storedIndex) : 0;
-//   }
-//   return 0;
-// };
-
-// const [currentLessonIndex, setCurrentLessonIndex] = useState(
-//   getInitialLessonIndex,
-// );

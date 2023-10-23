@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Card, CardBody } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
+import { Progress } from "@nextui-org/progress";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -133,7 +134,14 @@ export default function ModuleSelect() {
                       key={index}
                       aria-label={lesson.name}
                       title={lesson.name}
-                      subtitle={lesson.subtitle}
+                      subtitle={
+                        <Progress
+                          label={lesson.subtitle}
+                          size="sm"
+                          value={0}
+                          showValueLabel={true}
+                        />
+                      }
                       className="border border-transparent p-2 hover:border-gray-400"
                     >
                       <div className="mb-2 flex flex-col items-center justify-center">

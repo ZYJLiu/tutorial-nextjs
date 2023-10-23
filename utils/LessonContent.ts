@@ -3,6 +3,7 @@ import * as parser from "@babel/parser";
 import generate from "@babel/generator";
 import toast from "react-hot-toast";
 import traverse from "@babel/traverse";
+import confettiCannon from "./ConfettiEffect";
 
 // Get the language from the file name for syntax highlighting
 export const getLanguageFromFilename = (filename: string) => {
@@ -32,6 +33,7 @@ export const compareSolution = (
     const solution = normalizeContent(solutionFileContent, language);
 
     if (current === solution) {
+      confettiCannon();
       setIsCorrect(true);
       notify("Correct! The content matches the solution.");
     } else {
@@ -82,6 +84,6 @@ const notify = (message: string, type: "success" | "error" = "success") => {
     color: "#fff",
   };
   type === "success"
-    ? toast.success(message, { style: styles, duration: 1500 })
+    ? toast.success(message, { style: styles, duration: 2000 })
     : toast.error(message, { style: styles, duration: 1000 });
 };
