@@ -7,6 +7,7 @@ import { Button } from "@nextui-org/button";
 import { Progress } from "@nextui-org/progress";
 import Link from "next/link";
 import Image from "next/image";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface Lesson {
   name: string;
@@ -103,9 +104,19 @@ export default function ModuleSelect() {
     }
   }, []);
 
+  const progressValues = modules.map((module, moduleIndex) =>
+    module.lessons.map((_, lessonIndex) => {
+      const [progressValue] = useLocalStorage({
+        module: (moduleIndex + 1).toString(),
+        lesson: (lessonIndex + 1).toString(),
+      });
+      return progressValue;
+    }),
+  );
+
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-2 px-2">
-      {modules.map((module) => (
+      {modules.map((module, moduleIndex) => (
         <Card
           className="sm:w-3/4 md:w-3/4 md:p-4 lg:w-2/5"
           isHoverable
@@ -129,16 +140,16 @@ export default function ModuleSelect() {
                 subtitle={module.description}
               >
                 <Accordion variant="splitted">
-                  {module.lessons.map((lesson, index) => (
+                  {module.lessons.map((lesson, lessonIndex) => (
                     <AccordionItem
-                      key={index}
+                      key={lessonIndex}
                       aria-label={lesson.name}
                       title={lesson.name}
                       subtitle={
                         <Progress
                           label={lesson.subtitle}
                           size="sm"
-                          value={0}
+                          value={progressValues[moduleIndex][lessonIndex]}
                           showValueLabel={true}
                         />
                       }
@@ -147,8 +158,8 @@ export default function ModuleSelect() {
                       <div className="mb-2 flex flex-col items-center justify-center">
                         <div className="mb-2">{lesson.description}</div>
                         <Button
-                          key={index}
-                          href={`/${module.number}/${index + 1}`}
+                          key={lessonIndex}
+                          href={`/${module.number}/${lessonIndex + 1}`}
                           as={Link}
                         >
                           Start

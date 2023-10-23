@@ -23,6 +23,7 @@ import {
   getLanguageFromFilename,
 } from "@/utils/LessonContent";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface LessonContentProps {
   routes: { module: string; lesson: string }[];
@@ -42,7 +43,11 @@ export default function LessonContent({
   route,
   lessonData,
 }: LessonContentProps) {
+  // Current page progress bar
   const [currentLessonIndex, setCurrentLessonIndex] = useSessionStorage(route);
+
+  // Modules page progress bar
+  const [_, setCurrentLessonProgress] = useLocalStorage(route);
 
   const { code, solution, mdx } = lessonData[currentLessonIndex];
 
@@ -94,6 +99,21 @@ export default function LessonContent({
     }
   };
 
+  const handleCheckAnswer = () => {
+    const currentFileContent = fileContents[currentFileIndex].content;
+    const solutionContent = solution[currentFileIndex].content;
+    const language = getLanguageFromFilename(
+      fileContents[currentFileIndex].name,
+    );
+
+    compareSolution(
+      currentFileContent,
+      solutionContent,
+      setIsCorrect,
+      language,
+    );
+  };
+
   // Toggle show/hide diff editor
   const toggleShowDiff = () => {
     setShowDiff((prevState) => !prevState);
@@ -121,6 +141,10 @@ export default function LessonContent({
 
   // Next Button Handler
   const onNextHandler = () => {
+    setCurrentLessonProgress(
+      ((currentLessonIndex + 1) / lessonData.length) * 100,
+    );
+
     setIsPrevDisabled(false);
     const isLastLesson = currentLessonIndex + 1 >= lessonData.length;
     isLastLesson ? navigateToNextLesson() : handleNavigation(1);
@@ -216,19 +240,7 @@ export default function LessonContent({
           <>
             <div className="mb-2 flex justify-center space-x-1">
               <ButtonGroup isDisabled={!hasSolution()} size="sm">
-                <Button
-                  color="primary"
-                  onClick={() =>
-                    compareSolution(
-                      fileContents[currentFileIndex].content,
-                      solution[currentFileIndex].content,
-                      setIsCorrect,
-                      getLanguageFromFilename(
-                        fileContents[currentFileIndex].name,
-                      ),
-                    )
-                  }
-                >
+                <Button color="primary" onClick={handleCheckAnswer}>
                   Check
                 </Button>
                 <Button onClick={toggleShowDiff}>Hint</Button>
