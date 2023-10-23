@@ -7,7 +7,6 @@ import { Button } from "@nextui-org/button";
 import { Progress } from "@nextui-org/progress";
 import Link from "next/link";
 import Image from "next/image";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface Lesson {
   name: string;
@@ -97,13 +96,6 @@ const modules: Module[] = [
   },
 ];
 
-const localStorageKeys = modules.flatMap((module, moduleIndex) =>
-  module.lessons.map((_, lessonIndex) => ({
-    module: (moduleIndex + 1).toString(),
-    lesson: (lessonIndex + 1).toString(),
-  })),
-);
-
 export default function ModuleSelect() {
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -111,20 +103,12 @@ export default function ModuleSelect() {
     }
   }, []);
 
-  const progressValues = localStorageKeys.map((key) => {
-    const [progressValue] = useLocalStorage(key);
-    return progressValue;
-  });
-
   const getProgressValue = (moduleIndex: number, lessonIndex: number) => {
-    const key = {
-      module: (moduleIndex + 1).toString(),
-      lesson: (lessonIndex + 1).toString(),
-    };
-    const index = localStorageKeys.findIndex(
-      (k) => k.module === key.module && k.lesson === key.lesson,
-    );
-    return progressValues[index] || 0;
+    if (typeof window !== "undefined") {
+      const key = `${moduleIndex + 1}-${lessonIndex + 1}`;
+      const progressValue = localStorage.getItem(key);
+      return progressValue ? JSON.parse(progressValue) : 0;
+    }
   };
 
   return (
