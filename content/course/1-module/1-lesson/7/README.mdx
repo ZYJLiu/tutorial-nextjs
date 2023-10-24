@@ -1,39 +1,25 @@
 # Airdrop SOL
 
-## Try It Yourself
+## Step 5: Get the Balance of the Account
 
-Open a terminal and run the following command to get the starter code:
+Lastly, we'll fetch the balance of `wallet_1` after the airdrop.
 
-```terminal
-npx solana-starter
+We can get the lamport balance of an account using the `getBalance` method on the connection.
+This method takes two argument:
+
+- The public key of the account to fetch the balance for
+- An optional commitment level for the request
+
+```ts
+getBalance(publicKey: PublicKey, commitmentOrConfig?: Commitment | GetBalanceConfig): Promise<number>;
 ```
-
-Once the command runs, open the `solana-starter` folder.
-You should see an `index.ts` and `utils.ts` file similiar to the code displayed in the editor to the right.
-
-The `utils` file includes a `getOrCreateKeypair` helper function.
-This function will either get an existing keypair from a `.env` file or generate a new one if it doesn't exist.
 
 ## Exercise
 
-Run `npm start` in the terminal to execute airdrop script in `index.ts`.
+Update the editor to get the balance of `wallet_1` after the airdrop request.
+Then log the balance, dividing by `LAMPORTS_PER_SOL` to convert to units of SOL.
 
-You should see an output similar to the following:
-
-```terminal
-wallet_1 address: 7PwT9a44C6tFuMUQr4PV29djxbafbQR9jTY44t1L5zc6
-wallet_1 prebalance: 0
-wallet_1 postbalance: 5
-Transaction Signature: https://explorer.solana.com/tx/8SnR3Uu4qJJHGB79kDHR9Q8p9P1CMvzv6Vr9XBy65X52AAFXjmpfNPZZafYMCpDEh1gpdHP8uVKE8DoTiBhDKf1?cluster=devnet
+```ts
+const postBalance = await connection.getBalance(wallet_1.publicKey);
+console.log("wallet_1 balance:", postBalance / LAMPORTS_PER_SOL);
 ```
-
-You should also see a `.env` file that contains the newly generated keypair similar to the following:
-
-```env
-wallet_1=[63,163,65,23,70,125,101,202,119,231,47,25,152,153,122,233,200,220,174,122,139,94,255,14,147,46,159,170,9,42,208,234,95,6,119,147,222,110,122,5,38,211,142,82,151,108,152,127,22,45,75,54,53,231,76,180,90,37,129,58,46,13,117,7]
-```
-
-Note that these are burner keypairs used for demonstration purposes only.
-Do not reuse them on mainnet.
-
-In the following sections, we will use this starter code as a base to build on.

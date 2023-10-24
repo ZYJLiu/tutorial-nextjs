@@ -1,0 +1,45 @@
+# Create Mint
+
+## Step 2: Initialize Mint Account
+
+In this step, we will initialize the mint account data by invoking the Token Program.
+
+Since the instruction in the previous step transfers ownership of the account to the Token Program, the Token Program is able to modify the data on the account as specified in this instruction.
+
+We can do this using the `createInitializeMint2Instruction` function from `@solana/spl-token`, which builds a `TransactionInstruction` that invokes the Token Program to initialize the mint account.
+
+```js
+/**
+ * Construct an InitializeMint2 instruction
+ *
+ * @param mint            Token mint account
+ * @param decimals        Number of decimals in token account amounts
+ * @param mintAuthority   Minting authority
+ * @param freezeAuthority Optional authority that can freeze token accounts
+ * @param programId       SPL Token program account
+ *
+ * @return Instruction to add to a transaction
+ */
+export function createInitializeMint2Instruction(
+    mint: PublicKey,
+    decimals: number,
+    mintAuthority: PublicKey,
+    freezeAuthority: PublicKey | null,
+    programId = TOKEN_PROGRAM_ID
+): TransactionInstruction {...}
+```
+
+## Exercise
+
+Create an instruction to invoke the Token Program to initialize the data on the mint account.
+
+```js
+const initializeMintInstruction = createInitializeMint2Instruction(
+  mint.publicKey,
+  2, // decimals
+  wallet_1.publicKey, // mint authority
+  wallet_1.publicKey, // freeze authority
+);
+```
+
+Here we are initializing the data of the new mint account with a decimal precision of 2, and setting both the mint and freeze authority as `wallet_1`.

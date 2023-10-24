@@ -5,7 +5,7 @@
 First, we need to create an instruction to transfer SOL from one account to another.
 
 We can do this using the `SystemProgram.transfer` method.
-Under the hood, this method creates an instruction to invoke the `transfer` instruction on the Systen Program.
+Under the hood, this method creates an instruction to invoke the `transfer` instruction on the System Program.
 
 ```ts
 static transfer(params: TransferParams | TransferWithSeedParams): TransactionInstruction;
@@ -24,7 +24,7 @@ type TransferParams = {
 };
 ```
 
-Note that the `fromPubkey` is required as a signer on the transaction since we are transferring SOL from this account.
+Note that the `fromPubkey` is required as a signer on the transaction since we are deducting the lamport balance from this account.
 
 ## Exercise
 

@@ -1,6 +1,6 @@
 # Transfer SOL
 
-In this lesson, we'll learn to build a transaction to transfer SOL from one wallet to another.
+In this lesson, we'll learn how to build a transaction to transfer SOL from one wallet to another.
 
 Before we get started, let's go over the concepts of transactions and instructions on Solana.
 
@@ -14,16 +14,16 @@ First, let’s expand on the details that make up a transaction:
    - **Feepayer**: Specifies the transaction fee payer.
 2. **Signers:** An array of signers included on the transaction.
 
-![](/course/1-transaction.png)
+![](/course/Transaction/1-transaction.png)
 
 By default, the first signer on the transaction is set as the fee payer unless otherwise specified.
 
 For simplicity, a transaction can be thought of a request to process one or multiple instructions.
 
-![](/course/2-transaction.png)
+![](/course/Transaction/2-transaction.png)
 
 Instructions in a transaction are processed sequentially, in the order they are added to a transaction.
-The network ensures that transactions are processed such that all instructions either complete successfully or, if one fails, the entire transaction is rejected.
+Transactions are processed "atomically", meaning that all instructions either complete successfully or, if one fails, the entire transaction is rejected.
 
 ## Instructions Overview
 
@@ -35,7 +35,7 @@ Each instruction must specify 3 pieces of information:
 - **Accounts**: Lists every account required by the instruction, including other programs
 - **Instruction Data**: Specifies the instruction within the program to invoke, plus any additional data required by the instruction
 
-![](/course/3-transaction.png)
+![](/course/Transaction/3-transaction.png)
 
 For every account required by an instruction, the following information must be specified:
 
@@ -45,7 +45,7 @@ For every account required by an instruction, the following information must be 
 
 This information is referred to as the `AccountMeta`.
 
-![](/course/4-transaction.png)
+![](/course/Transaction/4-transaction.png)
 
 By clearly identifying the accounts needed for an instruction and specifying whether each account is writable, transaction processing can be parallelized.
 This means that if two transactions do not include any accounts which write to the same state, then the transactions can be executed at the same time.
@@ -53,4 +53,4 @@ This means that if two transactions do not include any accounts which write to t
 Note that the details for building specific program instructions are often abstracted away by client libraries.
 However, it is helpful to understand the underlying structure of transactions and instructions.
 
-In the following sections, we'll learn to build a transaction to transfer SOL using the `@solana/web3.js` library.
+In the following sections, we'll learn how to build a transaction to transfer SOL using the `@solana/web3.js` library.

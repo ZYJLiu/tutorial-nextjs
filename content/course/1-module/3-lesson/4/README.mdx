@@ -1,0 +1,43 @@
+# Create Mint
+
+## Step 3: Create and Send Transaction
+
+Once we have both instructions, we can create a new transaction and add both instructions to the transaction.
+
+In this step we are building a single transaction that:
+
+- Invokes the System Program to create a new account with space for a Mint account
+- Invokes the Token Program to initialize the data for the new Mint account
+
+We can then sign and send the transaction to the network.
+
+## Exercise
+
+First, create a new `Transaction` and add both `createAccountInstruction` and `initializeMintInstruction` to the transaction.
+
+```js
+const transaction = new Transaction().add(
+  createAccountInstruction,
+  initializeMintInstruction,
+);
+```
+
+Next, sign and send the transaction to the network using `sendAndConfirmTransaction`.
+
+```js
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [
+    wallet_1, // payer
+    mint, // mint address keypair
+  ],
+);
+```
+
+Note that we include both `wallet_1` and the `mint` as signers on the transaction.
+
+- `wallet_1` is required as signer because it is the payer for the new mint account
+- `mint` is required as signer because we are using it's public key as the address of the new mint account.
+
+When creating accounts using the public key of a newly generately keypair, it is required to include the keypair as a signer on the transaction.

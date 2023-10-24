@@ -1,25 +1,89 @@
-# Airdrop SOL
+# Solana Account Model
 
-In this lesson, we'll walk through how to airdrop devnet SOL to fund a new wallet using the `@solana/web3.js` library.
+Before we begin, let's go over the Solana Account model.
 
-## Step 1: Establish a Connection
+## Accounts
 
-In order to interact with the Solana blockchain, we'll first need to establish a connection to a network.
+On Solana, all data is organized into what are referred to as "accounts.”
+An account is simply a buffer of bytes that can be used to store arbitrary data.
 
-Solana has 3 different networks:
+Each account is identifiable by its unique address, represented as 32-bytes in the format of a `PublicKey`.
 
-- **Mainnet-beta**: The live production Solana network
-- **Testnet**: A network reserved for validator testing
-- **Devnet**: A network that serves as a playground for developers
+![](/course/AccountModel/Account.png)
 
-Alternatively, you can also test locally by running the `solana-test-validator` command from the Solana CLI to start a local validator.
+This relationship between the account and its address can be thought of a key-value pair, where the address serves as the key to locate the corresponding on-chain data of the account.
 
-In this course, we'll be using the Devnet in the examples.
+## AccountInfo
 
-## Exercise
+Each account on Solana has the following data structure known as the `AccountInfo`.
 
-Update the editor to establish a connection to Devnet by referencing the code snippet below:
+![](/course/AccountModel/AccountInfo.png)
 
-```ts
-const connection = new Connection(clusterApiUrl("devnet"));
-```
+The `AccountInfo` of an account stores the following information:
+
+- **data**: A byte array which can be used to store any arbitrary data.
+- **executable**: A boolean flag that specifies if the account is an executable program.
+- **lamports**: A numeric representation of the account's balance in lamports.
+- **owner**: Identifies the program authorized to modify the account data.
+
+It's important to emphasize that every account on Solana has an "owner", specifically a program.
+This program, and only this program, can make modifications to the data stored on the account.
+
+Note that lamports are the smallest unit of SOL, where 1 SOL equals 1 billion lamports.
+
+To store data on-chain, an minimum amount of SOL must be transferred to an account proportional to the amount of data stored on the account.
+This concept is commonly referred to as “rent”.
+
+However, you can think of "rent" more like a "deposit" because the SOL allocated to an account can be fully recovered when the account is closed.
+
+## System Program
+
+By default, all new accounts are owned by the System Program.
+
+![](/course/AccountModel/WalletAccount.png)
+
+The System Program is one of Solana's "Native Programs", which performs several key tasks such as:
+
+- **New Account Creation**: Only the System Program can create new accounts.
+- **Space Allocation**: Sets the byte capacity for each account, which specifies the amount of data that can be stored on an account and determines the amount of SOL that must be allocated for “Rent”.
+- **Assign Ownership**: The System Program can reassignment the designated program owner of a new account.
+
+For instance, what we often call a "wallet" is an account owned by the System Program, where the executable flag of the account is set to false, indicating the account is not an executable program.
+
+It is important to note that only System Program owned accounts can be used as transaction fee payers.
+
+## Program Accounts
+
+On Solana, “smart contracts” are called programs. A program is simply an account where its “executable” flag set to true.
+
+![](/course/AccountModel/ProgramAccount.png)
+
+Programs themselves are owned by the BPF Loader program, another one of Solana's “Native Programs”. At a high-level, the BPF Loader program is simply the program that owns all other programs (other than Native Programs).
+
+When a program is deployed on Solana, technically two separate accounts are created.
+
+1. **Program Account**: The primary account representing the program.
+2. **Program Executable Data Account**: Dedicated to store the executable byte code of the program.
+
+However, for simplicity, you can think of the "Program Account" as synonymous with the program itself.
+
+Note that when we say "program," we're referring to the "Program Account". The address of the "Program Account" is commonly referred to as the “program ID”.
+
+## Data Accounts
+
+Solana's programs are designed to be "stateless", meaning that program accounts only store the executable byte code.
+
+To store and modify additional data, the program must create new accounts.
+These accounts are commonly referred to as “data accounts” and are owned by the program.
+
+For data accounts, the “executable” flag is set to false and the AccountInfo's data field can be used to store arbitrary data as defined by the program.
+
+![](/course/AccountModel/DataAccount.png)
+
+Note that only the System Program can create new accounts.
+Once the System Program creates an account, it can then transfer ownership of the new account to another program.
+
+In other words, creating a data account requires two instructions:
+
+- Invoke the System Program to create an account, which then transfer ownership to the custom program
+- Invoke the custom program, which now owns the account, to then initialize the account data as defined in the program logic

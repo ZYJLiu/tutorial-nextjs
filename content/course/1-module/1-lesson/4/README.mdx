@@ -1,37 +1,47 @@
 # Airdrop SOL
 
-## Step 3: Request an Airdrop
+## Step 2: Generate a Keypair
 
-SOL is the native token of the Solana network and is used to pay transaction fees, create on-chain accounts, and deploy programs.
-You can think of SOL as API credits required to use the Solana network.
+Next, we need to generate a keypair to represent a wallet.
+We can generate keypairs using the `Keypair` class from the `@solana/web3.js` library.
 
-We use the `requestAirdrop` method on the connection to request an airdrop.
-This method takes two arguments:
-
-- The public key of the account to receive the airdrop
-- The amount of SOL to request in lamports
+This generates a keypair on the Ed25519 curve, giving us a `publicKey` and a `secretKey`.
 
 ```ts
-requestAirdrop(to: PublicKey, lamports: number): Promise<TransactionSignature>;
+const keypair = new Keypair();
+
+console.log(keypair.publicKey.toBase58());
+console.log(keypair.secretKey);
 ```
 
-Lamports are the smallest unit of SOL, where 1 SOL = 1,000,000,000 lamports.
+The `publicKey` is 32 bytes and commonly base58 encoded:
 
-Under the hood, a devnet airdrop is simply a transfer of SOL from the faucet to your wallet.
-On devnet, you can request an airdrop of 5 SOL per request, but multiple requests may result in rate limiting.
+```text
+FYHeTDzrfRy4jpShuFvC5FH1mo7rApEUzPWC2uZBBdLJ;
+```
 
-When SOL is transferred to a newly generated keypair, a Solana account owned by the System Program is automatically created using the public key of the keypair.
-The System Program is one of Solana's [Native Programs](https://docs.solana.com/developing/runtime-facilities/programs).
+The `secretKey` is 64 bytes, where last 32 bytes are the public key:
 
-On Solana, what we refer to as "wallets" are simply accounts owned by the System Program.
+```text
+Uint8Array(64) [
+   35,  36, 204,  65, 255, 246, 180,  26,  99,  79, 192,
+  118, 126, 248,  90,  88, 143,  27,  77, 253, 117, 164,
+  228,  74, 153, 188,  90,  92, 128, 222,  48,  63, 216,
+    7, 113, 132, 215, 178, 202,  62,  98,  29, 214, 216,
+   93,  84, 198,   2, 109,  83, 107, 188,  21,  36, 251,
+   71, 110, 250, 211,  51,  24, 161,  86,  31
+]
+```
+
+On Solana, a public key is often used as the address of an on-chain account and the corresponding secret key is used for signing.
+
+However, note that generating a keypair does not automatically create an account on-chain.
+We'll cover how to create accounts programmatically in a later lesson.
 
 ## Exercise
 
-Update the editor to request an airdrop of 5 SOL for `wallet_1`.
+Update the editor to generate a keypair and store it in a variable called `wallet_1`.
 
 ```ts
-const transactionSignature = await connection.requestAirdrop(
-  wallet_1.publicKey,
-  5 * LAMPORTS_PER_SOL,
-);
+const wallet_1 = new Keypair();
 ```

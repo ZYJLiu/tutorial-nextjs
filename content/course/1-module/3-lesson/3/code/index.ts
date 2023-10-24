@@ -34,3 +34,5 @@ const createAccountInstruction = SystemProgram.createAccount({
   lamports: rentLamports,
   programId: TOKEN_PROGRAM_ID,
 });
+
+// Instruction to initialize mint account

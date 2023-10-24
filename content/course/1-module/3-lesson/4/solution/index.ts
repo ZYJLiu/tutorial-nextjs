@@ -34,3 +34,27 @@ const createAccountInstruction = SystemProgram.createAccount({
   lamports: rentLamports,
   programId: TOKEN_PROGRAM_ID,
 });
+
+// Instruction to initialize mint account
+const initializeMintInstruction = createInitializeMint2Instruction(
+  mint.publicKey,
+  2, // decimals
+  wallet_1.publicKey, // mint authority
+  wallet_1.publicKey, // freeze authority
+);
+
+// Build transaction with instructions to create new account and initialize mint account
+const transaction = new Transaction().add(
+  createAccountInstruction,
+  initializeMintInstruction,
+);
+
+// Sign and send transaction
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [
+    wallet_1, // payer
+    mint, // mint address keypair
+  ],
+);

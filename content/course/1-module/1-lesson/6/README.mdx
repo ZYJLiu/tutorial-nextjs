@@ -1,25 +1,38 @@
 # Airdrop SOL
 
-## Step 5: Get the Balance of the Account
+## Step 4: Confirm the Airdrop Transaction
 
-Lastly, we'll fetch the balance of `wallet_1` after the airdrop.
+In this step, we'll confirm the airdrop.
+This is to ensure that the transaction has been confirmed by the network before we fetch the account balance in the next step.
 
-We can get the lamport balance of an account using the `getBalance` method on the connection.
-This method takes two argument:
+Solana has 3 different transaction commitment levels:
 
-- The public key of the account to fetch the balance for
-- An optional commitment level for the request
+- **Processed**: The transaction has been processed by the leader and included in a block
+- **Confirmed**: The transaction has been included in a block that has been voted on by 66% of the stake weight of the cluster
+- **Finalized**: 31 confirmed blocks have been built on top of the block containing the transaction
 
-```ts
-getBalance(publicKey: PublicKey, commitmentOrConfig?: Commitment | GetBalanceConfig): Promise<number>;
-```
+The `getLatestBlockhash` method is first used to get a recent `blockhash` and `lastValidBlockHeight`.
+
+The `confirmTransaction` method is then used to confirm a transaction.
 
 ## Exercise
 
-Update the editor to get the balance of `wallet_1` after the airdrop request.
-Then log the balance, dividing by `LAMPORTS_PER_SOL` to convert to units of SOL.
+Update the editor to get the most recent blockhash.
 
 ```ts
-const postBalance = await connection.getBalance(wallet_1.publicKey);
-console.log("wallet_1 balance:", postBalance / LAMPORTS_PER_SOL);
+const { blockhash, lastValidBlockHeight } =
+  await connection.getLatestBlockhash();
+```
+
+Then confirm the airdrop transaction using the `transactionSignature`, with a commitment level of "confirmed".
+
+```ts
+await connection.confirmTransaction(
+  {
+    blockhash,
+    lastValidBlockHeight,
+    signature: transactionSignature,
+  },
+  "confirmed",
+);
 ```

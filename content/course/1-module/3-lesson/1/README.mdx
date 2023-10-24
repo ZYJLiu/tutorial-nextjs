@@ -1,3 +1,65 @@
-# M1 L3
+# Create Mint
 
-Placeholder
+Next, let's go over the basics of the Token Program to better understand how tokens are represented on Solana and to further illustration Solana's account model.
+
+On Solana, the Token Program stores the instructions logic for interacting with all tokens on the network.
+
+![](/course/Token/TokenProgram.png)
+
+All tokens are data accounts owned by the Token Program.
+
+Tokens on Solana are uniquely identified by the address of a “mint account” owned by the Token Program. This account is effectively a global counter for a specific token, and stores data such as:
+
+- Supply: Total supply of the token
+- Decimals: Decimal precision of the token
+- Mint authority: The account authorized to create new units of the token, and thus increasing the supply
+- Freeze authority: The account authorized to freeze tokens from being transferred from "token accounts", which we'll cover in following lessons.
+
+![](/course/Token/MintAccount.png)
+
+To create a new mint account, we can use the `createMint` helper function from `@solana/spl-token`.
+
+Under the hood, this function builds a transaction, sends it to the network, and returns the address of the newly created mint account.
+
+```js
+/**
+ * Create and initialize a new mint
+ *
+ * @param connection      Connection to use
+ * @param payer           Payer of the transaction and initialization fees
+ * @param mintAuthority   Account or multisig that will control minting
+ * @param freezeAuthority Optional account or multisig that can freeze token accounts
+ * @param decimals        Location of the decimal place
+ * @param keypair         Optional keypair, defaulting to a new random one
+ * @param confirmOptions  Options for confirming the transaction
+ * @param programId       SPL Token program account
+ *
+ * @return Address of the new mint
+ */
+export async function createMint(
+    connection: Connection,
+    payer: Signer,
+    mintAuthority: PublicKey,
+    freezeAuthority: PublicKey | null,
+    decimals: number,
+    keypair = Keypair.generate(),
+    confirmOptions?: ConfirmOptions,
+    programId = TOKEN_PROGRAM_ID
+): Promise<PublicKey> {...}
+```
+
+## Exercise
+
+Create a new mint account using the `createMint` function.
+
+```js
+const mint = await createMint(
+  connection,
+  wallet_1, // payer
+  wallet_1.publicKey, // mint authority
+  wallet_1.publicKey, // freeze authority
+  2, // decimals
+);
+```
+
+In the next following sections, we'll manually build the transaction to create a new mint account.
