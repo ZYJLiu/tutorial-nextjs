@@ -1,3 +1,69 @@
-# M1 L4
+# Create Token Account
 
-Placeholder
+To hold units of a specific token, another type of data account owned by the Token Program must be created.
+This account is referred to as a Token Account.
+
+![](/course/Token/TokenAccount.png)
+
+The Token Account stores data such as:
+
+- Mint: The type of token the Token Account holds units of
+- Owner: The account authorized to transfer tokens out of the Token Account
+- Amount: Units of the token the Token Account currently holds
+
+Note that each Token Account's data includes an “owner" field used to identify who has authority over that specific Token Account. This is separate from the program owner specified in the AccountInfo, which is the Token Program for all Token Accounts.
+
+For a wallet to hold units of a certain token, it needs to create a token account for a specific mint account that designates the wallet as the owner of the token account.
+
+A wallet can create multiple token accounts for the same mint account, but each token account can only be owned by one wallet.
+
+![](/course/Token/TokenAccount2.png)
+
+To create a new token account, we can use the `createAccount` helper function from `@solana/spl-token`.
+When using this function, we can optionally provide a keypair to use as the address for the new token account.
+
+If we do not provide a keypair, the function will create the associated token account for the mint and owner.
+We'll cover associated token accounts in the next lesson.
+
+Under the hood, this function builds a transaction, sends it to the network, and returns the address of the newly created token account.
+
+```js
+/**
+ * Create and initialize a new token account
+ *
+ * @param connection     Connection to use
+ * @param payer          Payer of the transaction and initialization fees
+ * @param mint           Mint for the account
+ * @param owner          Owner of the new account
+ * @param keypair        Optional keypair, defaulting to the associated token account for the `mint` and `owner`
+ * @param confirmOptions Options for confirming the transaction
+ * @param programId      SPL Token program account
+ *
+ * @return Address of the new token account
+ */
+export async function createAccount(
+    connection: Connection,
+    payer: Signer,
+    mint: PublicKey,
+    owner: PublicKey,
+    keypair?: Keypair,
+    confirmOptions?: ConfirmOptions,
+    programId = TOKEN_PROGRAM_ID
+): Promise<PublicKey> {...}
+```
+
+## Exercise
+
+Create a new token account using the `createAccount` function.
+
+```js
+const tokenAccountAddress = await createAccount(
+  connection,
+  wallet_1, // payer
+  mint, // mint address
+  wallet_1.publicKey, // token account owner
+  token, // keypair
+);
+```
+
+In the next following sections, we'll manually build the transaction to create a new token account.

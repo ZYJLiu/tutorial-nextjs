@@ -38,3 +38,36 @@ const createAccountInstruction = SystemProgram.createAccount({
   lamports: rentLamports,
   programId: TOKEN_PROGRAM_ID,
 });
+
+// Instruction to initialize token account
+const initializeAccountInstruction = createInitializeAccountInstruction(
+  token.publicKey, // token account address
+  mint, // mint address
+  wallet_1.publicKey, // token account owner
+);
+
+// Build transaction with instructions to create new account and initialize token account
+const transaction = new Transaction().add(
+  createAccountInstruction,
+  initializeAccountInstruction,
+);
+
+// Sign and send transaction
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [
+    wallet_1, // payer
+    token, // token address keypair
+  ],
+);
+
+console.log(
+  "Transaction Signature:",
+  `https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`,
+);
+
+console.log(
+  "Token Account:",
+  `https://explorer.solana.com/address/${token.publicKey.toString()}?cluster=devnet`,
+);

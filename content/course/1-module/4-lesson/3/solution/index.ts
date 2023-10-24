@@ -28,5 +28,20 @@ const token = Keypair.generate();
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 // Calculate minimum lamports for space required by token account
+const rentLamports = await getMinimumBalanceForRentExemptAccount(connection);
 
 // Instruction to create new account with space for new token account
+const createAccountInstruction = SystemProgram.createAccount({
+  fromPubkey: wallet_1.publicKey,
+  newAccountPubkey: token.publicKey,
+  space: ACCOUNT_SIZE,
+  lamports: rentLamports,
+  programId: TOKEN_PROGRAM_ID,
+});
+
+// Instruction to initialize token account
+const initializeAccountInstruction = createInitializeAccountInstruction(
+  token.publicKey, // token account address
+  mint, // mint address
+  wallet_1.publicKey, // token account owner
+);

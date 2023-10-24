@@ -9,16 +9,9 @@ const wallet_1 = getOrCreateKeypair("wallet_1");
 const mint = new PublicKey("3HHWdM5mGqBwTjF9E3nddjmzVRS7RonAVqFwuq7D4c2C");
 
 // Generate a new keypair for the token account
-const tokenKeypair = new Keypair();
+const token = new Keypair();
 
 // Establish a connection to the Solana devnet cluster
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
 // Create new token account using `createAccount` helper function
-const tokenAccount = await createAccount(
-  connection,
-  wallet_1, // payer
-  mint, // mint address
-  wallet_1.publicKey, // token account owner
-  tokenKeypair, // token address
-);
