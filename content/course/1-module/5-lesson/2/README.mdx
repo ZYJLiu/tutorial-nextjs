@@ -1,3 +1,58 @@
-# M1 L5
+# Associated Token Account
 
-Placeholder
+## Step 1: Create Associated Token Account
+
+Building the instruction to create an associated token account requires two steps:
+
+1. Derive the associated token account address
+2. Invoke the Associated Token Program to create the account
+
+When we invoke the Associated Token Program, the program handles the logic to both create the account and initialize the account data.
+This means we don't have to manually invoke the System Program to create the account.
+
+We can use the `createAssociatedTokenAccountInstruction` function from `@solana/spl-token` to create the instruction to invoke the Associated Token Program.
+
+```js
+/**
+ * Construct a CreateAssociatedTokenAccount instruction
+ *
+ * @param payer                    Payer of the initialization fees
+ * @param associatedToken          New associated token account
+ * @param owner                    Owner of the new account
+ * @param mint                     Token mint account
+ * @param programId                SPL Token program account
+ * @param associatedTokenProgramId SPL Associated Token program account
+ *
+ * @return Instruction to add to a transaction
+ */
+export function createAssociatedTokenAccountInstruction(
+    payer: PublicKey,
+    associatedToken: PublicKey,
+    owner: PublicKey,
+    mint: PublicKey,
+    programId = TOKEN_PROGRAM_ID,
+    associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID
+): TransactionInstruction {...}
+```
+
+## Exercise
+
+First, use the `getAssociatedTokenAddressSync` function from `@solana/spl-token` to derive the associated token account address.
+
+```js
+const associatedTokenAccountAddress = getAssociatedTokenAddressSync(
+  mint, // mint address
+  wallet_1.publicKey, // token account owner
+);
+```
+
+Next, create the instruction to invoke the Associated Token Program.
+
+```js
+const instruction = createAssociatedTokenAccountInstruction(
+  wallet_1.publicKey, // payer
+  associatedTokenAccountAddress, // token account address
+  wallet_1.publicKey, // owner
+  mint, // mint address
+);
+```

@@ -11,14 +11,4 @@ const mint = new PublicKey("3HHWdM5mGqBwTjF9E3nddjmzVRS7RonAVqFwuq7D4c2C");
 // Establish a connection to the Solana devnet cluster
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-const associatedTokenAccount = await getOrCreateAssociatedTokenAccount(
-  connection,
-  wallet_1, // payer
-  mint, // mint address
-  wallet_1.publicKey, // token account owner
-);
-
-console.log(
-  "Associated Token Account: ",
-  `https://explorer.solana.com/address/${associatedTokenAccount.toString()}?cluster=devnet`,
-);
+// Get or create an associated token account

@@ -1,0 +1,34 @@
+# Associated Token Account
+
+## Step 3: Create and Send Transaction
+
+Once we have the instruction, we can create a new transaction and send the transaction to the network.
+
+When using PDAs as the address of new accounts, we do not them as signers on the transaction.
+This is because the PDAs do not have a private key and therefore cannot sign transactions.
+
+However, a feature of PDAs is that the program from which a PDA is derived can "sign" transactions on behalf of the PDA.
+Since an associated token account address is derived using the Associated Token Program, the Associated Token Program can "sign" to use the PDA as the address of a new account.
+
+Under the hood, the Associated Token Program invokes the System Program to create a new account.
+This concept is where one program invokes another program is referred to as a "Cross Program Invocation" (CPI).
+
+## Exercise
+
+First, create a new `Transaction` and add the instruction to it.
+
+```js
+const transaction = new Transaction().add(instruction);
+```
+
+Next, sign and send the transaction to the network using `sendAndConfirmTransaction`.
+
+```js
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [
+    wallet_1, // payer
+  ],
+);
+```

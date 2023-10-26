@@ -1,3 +1,112 @@
-# M1 L5
+# Associated Token Account
 
-Placeholder
+To simplify the process of locating a token account's address, we often use Associated Token Accounts.
+It's important to understand that an Associated Token Account isn't a different kind of token account; it's just a token account with a specific address.
+
+An Associated Token Account is a token account whose address is deterministically derived using a wallet's address and the mint account's address.
+
+![](/course/Token/ATA.png)
+
+When transferring tokens between wallets, the tokens are generally sent to the recipient wallet's Associated Token Account.
+
+For example, if two wallets want to hold units of the same type of token, each wallet needs its own token account for the specific mint account.
+
+![](/course/Token/ATA2.png)
+
+This introduces a key concept in Solana development: Program Derived Address (PDA).
+Conceptually, a PDA provide a deterministic way to generate an address using some predefined inputs.
+This enables us to easily find the address of an account at a later time.
+
+## Associated Token Account Address
+
+The `getAssociatedTokenAddressSync` function from `@solana/spl-token` can be used to derive the address of an Associated Token Account.
+
+```js
+// Mint account address
+const mint = new PublicKey("...");
+
+// Get associated token account address
+const associatedTokenAccountAddress = getAssociatedTokenAddressSync(
+  mint, // mint address
+  wallet_1.publicKey, // token account owner
+);
+```
+
+Under the hood, `getAssociatedTokenAddressSync` derives the PDA using `PublicKey.findProgramAddressSync` which returns two values:
+
+- A derived address
+- A bump seed
+
+The bump seed is a number between 0 and 255 that is used to ensure the derived address falls off the ed25519 curve.
+This means PDAs are addresses without a corresponding private key.
+
+```js
+// Manually derive associated token account address
+const [PDA, bump] = PublicKey.findProgramAddressSync(
+  [
+    wallet_1.publicKey.toBuffer(), // token account owner
+    TOKEN_PROGRAM_ID.toBuffer(), // token program address
+    mint.toBuffer(), // mint address
+  ],
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+);
+```
+
+The `findProgramAddressSync` invokes `createProgramAddressSync` in a loop by changing the bump seed until a valid PDA is found.
+The bump starts at 255 and is decremented by 1 until the address derived falls off the ed25519 curve.
+
+```js
+const PDA = PublicKey.createProgramAddressSync(
+  [
+    wallet_1.publicKey.toBuffer(), // token account owner
+    TOKEN_PROGRAM_ID.toBuffer(), // token program address
+    mint.toBuffer(),
+    Buffer.from([bump]),
+  ],
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+);
+```
+
+We can use the `getOrCreateAssociatedTokenAccount` helper function from `@solana/spl-token` to either get an existing account or create one if it doesn't exist.
+
+```js
+/**
+ * Retrieve the associated token account, or create it if it doesn't exist
+ *
+ * @param connection               Connection to use
+ * @param payer                    Payer of the transaction and initialization fees
+ * @param mint                     Mint associated with the account to set or verify
+ * @param owner                    Owner of the account to set or verify
+ * @param allowOwnerOffCurve       Allow the owner account to be a PDA (Program Derived Address)
+ * @param commitment               Desired level of commitment for querying the state
+ * @param confirmOptions           Options for confirming the transaction
+ * @param programId                SPL Token program account
+ * @param associatedTokenProgramId SPL Associated Token program account
+ *
+ * @return Address of the new associated token account
+ */
+export async function getOrCreateAssociatedTokenAccount(
+    connection: Connection,
+    payer: Signer,
+    mint: PublicKey,
+    owner: PublicKey,
+    allowOwnerOffCurve = false,
+    commitment?: Commitment,
+    confirmOptions?: ConfirmOptions,
+    programId = TOKEN_PROGRAM_ID,
+    associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID
+): Promise<Account> {...}
+```
+
+## Exercise
+
+Use the `getOrCreateAssociatedTokenAccount` function to create an Associated Token Account for the `mint` and `wallet_1`.
+
+```js
+const associatedTokenAccount = await getOrCreateAssociatedTokenAccount(
+  connection,
+  wallet_1, // payer
+  mint, // mint address
+  wallet_1.publicKey, // token account owner
+);
+```

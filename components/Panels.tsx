@@ -46,7 +46,7 @@ export default function Panels({
         <div className="mb-2 w-full overflow-auto px-5">{LeftPanel}</div>
       </Panel>
       <ResizeHandle />
-      <Panel collapsible>
+      <Panel collapsible defaultSize={50}>
         <PanelGroup direction="vertical">
           <Panel
             defaultSize={70}

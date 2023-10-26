@@ -22,5 +22,19 @@ const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 const mint = new PublicKey("3HHWdM5mGqBwTjF9E3nddjmzVRS7RonAVqFwuq7D4c2C");
 
 // Get associated token account address
+const associatedTokenAccountAddress = await getAssociatedTokenAddress(
+  mint, // mint address
+  wallet_1.publicKey, // token account owner
+);
 
 // Instruction to create associated token account
+const instruction = createAssociatedTokenAccountInstruction(
+  wallet_1.publicKey, // payer
+  associatedTokenAccountAddress, // token account address
+  wallet_1.publicKey, // owner
+  mint, // mint address
+);
+
+// Create transaction with instruction
+
+// Sign and send transaction
