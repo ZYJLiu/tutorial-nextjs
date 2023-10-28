@@ -38,6 +38,7 @@ const destinationTokenAccount = await getOrCreateAssociatedTokenAccount(
   wallet_2.publicKey, // token account owner
 );
 
+// Mint tokens to wallet_1
 await mintTo(
   connection,
   wallet_1, // payer
@@ -47,16 +48,4 @@ await mintTo(
   100, // amount
 );
 
-const transactionSignature = await transfer(
-  connection,
-  wallet_1, // payer
-  sourceTokenAccount.address, // transfer from
-  destinationTokenAccount.address, // transfer to
-  wallet_1.publicKey, // source token account owner
-  100,
-);
-
-console.log(
-  "Transaction Signature:",
-  `https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`,
-);
+// Transfer tokens from wallet_1 to wallet_2

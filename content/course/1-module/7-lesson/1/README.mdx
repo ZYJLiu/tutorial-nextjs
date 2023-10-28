@@ -1,3 +1,51 @@
-# M1 L7
+# Transfer Tokens
 
-Placeholder
+In this lesson we'll learn how to transfer tokens between token accounts.
+In order to transfer tokens, both the sender and receiver must have a token account for the token (mint) they are transferring.
+
+To transfer tokens we can use the `transfer` function from the `spl-token` library.
+
+```js
+/**
+ * Transfer tokens from one account to another
+ *
+ * @param connection     Connection to use
+ * @param payer          Payer of the transaction fees
+ * @param source         Source account
+ * @param destination    Destination account
+ * @param owner          Owner of the source account
+ * @param amount         Number of tokens to transfer
+ * @param multiSigners   Signing accounts if `owner` is a multisig
+ * @param confirmOptions Options for confirming the transaction
+ * @param programId      SPL Token program account
+ *
+ * @return Signature of the confirmed transaction
+ */
+export async function transfer(
+    connection: Connection,
+    payer: Signer,
+    source: PublicKey,
+    destination: PublicKey,
+    owner: Signer | PublicKey,
+    amount: number | bigint,
+    multiSigners: Signer[] = [],
+    confirmOptions?: ConfirmOptions,
+    programId = TOKEN_PROGRAM_ID
+): Promise<TransactionSignature> {...}
+```
+
+## Exercise
+
+Transfer 1 token from the `sourceTokenAccount` to the `destinationTokenAccount`.
+Just like with minting, the amount must be adjusted by the decimals of the mint account.
+
+```js
+const transactionSignature = await transfer(
+  connection,
+  wallet_1, // payer
+  sourceTokenAccount.address, // transfer from
+  destinationTokenAccount.address, // transfer to
+  wallet_1.publicKey, // source token account owner
+  100,
+);
+```

@@ -1,3 +1,56 @@
-# M1 L6
+# Mint Tokens
 
-Placeholder
+In this lesson we'll learn how to mint tokens.
+Token minting refers to the creation of new units of a token, resulting in an increase in the total supply.
+
+Minting tokens is can only be done by the specified mint authority for a mint account.
+If the mint authority is has been set to null, then no new units of the token can be created.
+
+To mint tokens we can use the `mintTo` function from the `spl-token` library.
+
+```js
+/**
+ * Mint tokens to an account
+ *
+ * @param connection     Connection to use
+ * @param payer          Payer of the transaction fees
+ * @param mint           Mint for the account
+ * @param destination    Address of the account to mint to
+ * @param authority      Minting authority
+ * @param amount         Amount to mint
+ * @param multiSigners   Signing accounts if `authority` is a multisig
+ * @param confirmOptions Options for confirming the transaction
+ * @param programId      SPL Token program account
+ *
+ * @return Signature of the confirmed transaction
+ */
+export async function mintTo(
+    connection: Connection,
+    payer: Signer,
+    mint: PublicKey,
+    destination: PublicKey,
+    authority: Signer | PublicKey,
+    amount: number | bigint,
+    multiSigners: Signer[] = [],
+    confirmOptions?: ConfirmOptions,
+    programId = TOKEN_PROGRAM_ID
+): Promise<TransactionSignature> {...}
+```
+
+## Exercise
+
+Mint 1 token to the associated token account.
+
+```js
+const transactionSignature = await mintTo(
+  connection,
+  wallet_1, // payer
+  mint, // mint address
+  associatedTokenAccount, // destination
+  wallet_1.publicKey, // mint authority
+  100, // amount
+);
+```
+
+Note that the amount must be adjusted by the decimals of the mint.
+If the mint has 2 decimals, then the amount of 100 will mint 1 token.

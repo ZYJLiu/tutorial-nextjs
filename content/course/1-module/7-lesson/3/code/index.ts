@@ -54,3 +54,13 @@ await mintTo(
 );
 
 // Create instruction to transfer tokens
+const instruction = await createTransferInstruction(
+  sourceTokenAccount.address, // transfer from
+  destinationTokenAccount.address, // transfer to
+  wallet_1.publicKey, // source token account owner
+  100, // amount
+);
+
+// Create transaction
+
+// Send transaction

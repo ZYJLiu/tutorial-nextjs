@@ -1,8 +1,7 @@
 import {
+  createAccount,
   createMint,
-  createTransferInstruction,
-  getOrCreateAssociatedTokenAccount,
-  mintTo,
+  createMintToInstruction,
 } from "@solana/spl-token";
 import {
   Connection,
@@ -14,11 +13,11 @@ import { getOrCreateKeypair } from "./utils";
 
 // Use existing keypairs or generate new ones if they don't exist
 const wallet_1 = getOrCreateKeypair("wallet_1");
-const wallet_2 = getOrCreateKeypair("wallet_2");
 
 // Establish a connection to the Solana devnet cluster
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
+// Create a mint
 const mint = await createMint(
   connection,
   wallet_1, // payer
@@ -27,30 +26,35 @@ const mint = await createMint(
   2, // decimals
 );
 
-// Create associated token account for wallet_1
-const sourceTokenAccount = await getOrCreateAssociatedTokenAccount(
+// Create associated token account
+const associatedTokenAccount = await createAccount(
   connection,
   wallet_1, // payer
   mint, // mint address
   wallet_1.publicKey, // token account owner
 );
 
-// Create associated token account for wallet_2
-const destinationTokenAccount = await getOrCreateAssociatedTokenAccount(
-  connection,
-  wallet_1, // payer
-  mint,
-  wallet_2.publicKey, // token account owner
-);
-
-// Mint tokens to wallet_1
-await mintTo(
-  connection,
-  wallet_1, // payer
+// Create instruction to mint tokens
+const instruction = createMintToInstruction(
   mint, // mint address
-  sourceTokenAccount.address, // destination
+  associatedTokenAccount, // destination
   wallet_1.publicKey, // mint authority
   100, // amount
 );
 
-// Create instruction to transfer tokens
+// Create a transaction
+const transaction = new Transaction().add(instruction);
+
+// Send the transaction
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [
+    wallet_1, // payer
+  ],
+);
+
+console.log(
+  "Transaction Signature:",
+  `https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`,
+);

@@ -1,3 +1,42 @@
-# M1 L7
+# Transfer Tokens
 
-Placeholder
+## Step 1: Create Instruction to Transfer Tokens
+
+We can use the `createTransferInstruction` function from `@solana/spl-token` to create the instruction to transfer tokens.
+
+```js
+/**
+ * Construct a Transfer instruction
+ *
+ * @param source       Source account
+ * @param destination  Destination account
+ * @param owner        Owner of the source account
+ * @param amount       Number of tokens to transfer
+ * @param multiSigners Signing accounts if `owner` is a multisig
+ * @param programId    SPL Token program account
+ *
+ * @return Instruction to add to a transaction
+ */
+export function createTransferInstruction(
+    source: PublicKey,
+    destination: PublicKey,
+    owner: PublicKey,
+    amount: number | bigint,
+    multiSigners: (Signer | PublicKey)[] = [],
+    programId = TOKEN_PROGRAM_ID
+): TransactionInstruction {...}
+```
+
+## Exercise
+
+Create an instruction to transfer 1 token from the `sourceTokenAccount` to the `destinationTokenAccount`.
+Just as before, the amount must be adjusted by the decimals of the token.
+
+```js
+const instruction = await createTransferInstruction(
+  sourceTokenAccount.address, // transfer from
+  destinationTokenAccount.address, // transfer to
+  wallet_1.publicKey, // source token account owner
+  100, // amount
+);
+```

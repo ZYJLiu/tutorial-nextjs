@@ -6,6 +6,9 @@ import { Nav } from "@/components/Navbar";
 import NextTopLoader from "nextjs-toploader";
 import { Provider } from "./provider";
 import { Suspense } from "react";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
-      <body suppressHydrationWarning={true}>
+    <html lang="en">
+      <body className={`${inter.className} antialiased`}>
         <base target="_blank"></base>
         <Provider>
           <NextTopLoader color="#005BC4" showSpinner={false} />

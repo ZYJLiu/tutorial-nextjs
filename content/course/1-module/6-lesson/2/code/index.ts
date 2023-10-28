@@ -17,6 +17,7 @@ const wallet_1 = getOrCreateKeypair("wallet_1");
 // Establish a connection to the Solana devnet cluster
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
+// Create a mint
 const mint = await createMint(
   connection,
   wallet_1, // payer
@@ -25,6 +26,7 @@ const mint = await createMint(
   2, // decimals
 );
 
+// Create associated token account
 const associatedTokenAccount = await createAccount(
   connection,
   wallet_1, // payer
@@ -32,24 +34,4 @@ const associatedTokenAccount = await createAccount(
   wallet_1.publicKey, // token account owner
 );
 
-const instruction = createMintToInstruction(
-  mint, // mint address
-  associatedTokenAccount, // destination
-  wallet_1.publicKey, // mint authority
-  100, // amount
-);
-
-const transaction = new Transaction().add(instruction);
-
-const transactionSignature = await sendAndConfirmTransaction(
-  connection,
-  transaction,
-  [
-    wallet_1, // payer
-  ],
-);
-
-console.log(
-  "Transaction Signature:",
-  `https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`,
-);
+// Create instruction to mint tokens

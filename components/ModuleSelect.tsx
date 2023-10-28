@@ -38,62 +38,62 @@ const modules: Module[] = [
       {
         name: "Lesson 2",
         subtitle: "Transfer SOL",
-        description: "Description for Lesson 2...",
+        description: "Learn how to transfer SOL between accounts",
       },
       {
         name: "Lesson 3",
         subtitle: "Create Mint Account",
-        description: "Description for Lesson 3...",
+        description: "Learn how to create a new token on the Solana blockchain",
       },
       {
         name: "Lesson 4",
         subtitle: "Create Token Account",
-        description: "Description for Lesson 4...",
+        description: "Learn how to create token accounts to hold your tokens",
       },
       {
         name: "Lesson 5",
         subtitle: "Create Associated Token Account",
-        description: "Description for Lesson 5...",
+        description: "Learn about the details of associated token accounts",
       },
       {
         name: "Lesson 6",
         subtitle: "Mint Tokens",
-        description: "Description for Lesson 6...",
+        description: "Learn how to create new units of your token",
       },
       {
         name: "Lesson 7",
         subtitle: "Transfer Tokens",
-        description: "Description for Lesson 7...",
+        description: "Learn how to transfer tokens between token accounts",
       },
     ],
   },
-  {
-    number: "2",
-    label: "Anchor Module",
-    description:
-      "Learn the basics of writing Solana programs using the Anchor Framework.",
-    image: "/icons/DeveloperToolkit.png",
-    lessons: [
-      {
-        name: "Lesson 1",
-        subtitle: "Subtitle",
-        description: "Description for Lesson 1...",
-      },
-      {
-        name: "Lesson 2",
-        subtitle: "Subtitle",
-        description: "Description for Lesson 2...",
-      },
-    ],
-  },
-  {
-    number: "3",
-    label: "Frontend Module",
-    description:
-      "Learn how to build a frontend to interact with your Solana program.",
-    image: "/icons/SagaPhone.png",
-    lessons: [],
-  },
+  // {
+  //   number: "2",
+  //   label: "Anchor Module",
+  //   description:
+  //     "Learn the basics of writing Solana programs using the Anchor Framework.",
+  //   image: "/icons/DeveloperToolkit.png",
+  //   lessons: [
+  //     {
+  //       name: "Lesson 1",
+  //       subtitle: "Subtitle",
+  //       description: "Description for Lesson 1...",
+  //     },
+  //     {
+  //       name: "Lesson 2",
+  //       subtitle: "Subtitle",
+  //       description: "Description for Lesson 2...",
+  //     },
+  //   ],
+  // },
+  // {
+  //   number: "3",
+  //   label: "Frontend Module",
+  //   description:
+  //     "Learn how to build a frontend to interact with your Solana program.",
+  //   image: "/icons/SagaPhone.png",
+  //   lessons: [],
+  // },
 ];
 
 export default function ModuleSelect() {

@@ -1,0 +1,25 @@
+# Mint Tokens
+
+## Step 2: Create and Send Transaction
+
+Once we have the instruction, we can create a new transaction and send the transaction to the network.
+
+## Exercise
+
+First, create a new `Transaction` and add the instruction to it.
+
+```js
+const transaction = new Transaction().add(instruction);
+```
+
+Next, sign and send the transaction to the network using `sendAndConfirmTransaction`.
+
+```js
+const transactionSignature = await sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [
+    wallet_1, // payer
+  ],
+);
+```
